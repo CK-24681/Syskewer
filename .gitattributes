@@ -1,0 +1,12 @@
+# Padroniza a quebra de linha para o formato universal (LF)
+* text=auto eol=lf
+
+# Marca arquivos binários para o Git não tentar ler como texto
+*.jar binary
+*.zip binary
+*.class binary
+
+# Esconde arquivos gerados automaticamente das estatísticas do GitHub
+mvnw linguist-generated
+mvnw.cmd linguist-generated
+.mvn/** linguist-generated
