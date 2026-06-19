@@ -19,7 +19,7 @@ public class StoreSettingsController {
         this.service = service;
     }
 
-    /** @return status atualizado (aberto/fechado) */
+    // Alterna o status de funcionamento do bar (aberto/fechado)
     @PostMapping("/toggle")
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<StoreSettings> toggleStore() {

@@ -18,10 +18,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-/**
- * Segurança stateless com JWT.
- * Leitura liberada para autenticados; escrita só para ADMINISTRADOR.
- */
+// Configuracao de seguranca do Spring Security e JWT
 @Configuration
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
@@ -32,23 +29,19 @@ public class SecurityConfig {
         this.securityFilter = securityFilter;
     }
 
-    /** @return codificador BCrypt para senhas */
+    // Codificador de senhas usando BCrypt
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    /**
-     * @param authConfig configuração de autenticação do Spring
-     * @return gerenciador de autenticação
-     * @throws Exception falha ao obter o bean
-     */
+    // Configura o gerenciador de autenticacao do Spring Security
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
 
-    /** Libera front local (dev) com credenciais no header Authorization. */
+    // Configura as permissoes de CORS para desenvolvimento local
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -62,11 +55,7 @@ public class SecurityConfig {
         return source;
     }
 
-    /**
-     * @param http builder do Spring Security
-     * @return cadeia de filtros configurada
-     * @throws Exception erro na montagem da cadeia
-     */
+    // Configura os filtros e as rotas que precisam de autenticacao
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -82,7 +71,7 @@ public class SecurityConfig {
 	                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/swagger-resources/**", "/webjars/**").permitAll()
 
                         // REGRAS DE NEGÓCIO
-                        .requestMatchers(HttpMethod.POST, "/users/register").hasRole("ADMINISTRADOR")
+                        .requestMatchers(HttpMethod.POST, "/users").hasRole("ADMINISTRADOR")
                         .requestMatchers(HttpMethod.POST, "/tables").hasRole("ADMINISTRADOR")
                         .requestMatchers(HttpMethod.DELETE, "/tables/**").hasRole("ADMINISTRADOR")
                         .requestMatchers(HttpMethod.POST, "/categories", "/products", "/prep-locations")

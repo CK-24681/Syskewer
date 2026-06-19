@@ -25,6 +25,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.syskewer.api.dto.salon.TabOpenDto;
 import com.syskewer.api.dto.salon.TabSummaryDto;
+import com.syskewer.api.dto.salon.TabUpdateDto;
 import com.syskewer.api.exception.BusinessRuleException;
 import com.syskewer.api.model.salon.ConsumptionType;
 import com.syskewer.api.model.salon.Tab;
@@ -120,5 +121,88 @@ class TabServiceTest {
 
         assertEquals(TabStatus.OPEN, oldTab.getStatus());
         assertEquals(null, oldTab.getTable()); 
+    }
+
+    @Test
+    @DisplayName("Atualizar nome do cliente da comanda com patchTab")
+    void patchTab_UpdatesCustomerName() {
+        Tab tab = new Tab();
+        tab.setId(1);
+        tab.setCustomerName("Cliente Original");
+        tab.setConsumptionType(ConsumptionType.MESA);
+
+        when(tabRepository.findById(1)).thenReturn(Optional.of(tab));
+        when(tabRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);
+
+        TabUpdateDto dto = new TabUpdateDto("Cliente Atualizado");
+        TabSummaryDto result = tabService.patchTab(1, dto);
+
+        assertEquals("Cliente Atualizado", result.customerName());
+        assertEquals("Cliente Atualizado", tab.getCustomerName());
+    }
+
+    @Test
+    @DisplayName("Pagamento com desconto maior que o saldo falha")
+    void registerPayment_DiscountGreaterThanBalance_Throws() {
+        mockSecurityRole("ROLE_ADMINISTRADOR");
+        Tab tab = new Tab();
+        tab.setTotalAmount(new BigDecimal("50.00"));
+        tab.setPaidAmount(new BigDecimal("10.00")); // saldo = 40
+        tab.setStatus(TabStatus.OPEN);
+
+        when(tabRepository.findById(1)).thenReturn(Optional.of(tab));
+
+        assertThrows(BusinessRuleException.class, () -> 
+            tabService.registerPayment(1, new BigDecimal("10.00"), new BigDecimal("45.00"))
+        );
+    }
+
+    @Test
+    @DisplayName("Arquivar comanda sem saldo devedor falha")
+    void archiveAsCredit_NoBalance_Throws() {
+        Tab tab = new Tab();
+        tab.setTotalAmount(new BigDecimal("50.00"));
+        tab.setPaidAmount(new BigDecimal("50.00"));
+        tab.setStatus(TabStatus.OPEN);
+
+        when(tabRepository.findById(1)).thenReturn(Optional.of(tab));
+
+        assertThrows(BusinessRuleException.class, () -> 
+            tabService.archiveAsCredit(1, "123456789")
+        );
+    }
+
+    @Test
+    @DisplayName("Cancelar comanda fechada falha")
+    void cancelTab_ClosedTab_Throws() {
+        Tab tab = new Tab();
+        tab.setStatus(TabStatus.CLOSED);
+
+        when(tabRepository.findById(1)).thenReturn(Optional.of(tab));
+
+        assertThrows(BusinessRuleException.class, () -> 
+            tabService.cancelTab(1)
+        );
+    }
+
+    @Test
+    @DisplayName("Transferir comanda fechada falha")
+    void transferTab_ClosedTab_Throws() {
+        Tab tab = new Tab();
+        tab.setStatus(TabStatus.CLOSED);
+
+        when(tabRepository.findById(1)).thenReturn(Optional.of(tab));
+
+        assertThrows(BusinessRuleException.class, () -> 
+            tabService.transferTab(1, 2)
+        );
+    }
+
+    @Test
+    @DisplayName("Pagamento agrupado com valor zerado/negativo falha")
+    void payGroupedTabs_ZeroAmount_Throws() {
+        assertThrows(BusinessRuleException.class, () -> 
+            tabService.payGroupedTabs(List.of(1, 2), BigDecimal.ZERO)
+        );
     }
 }

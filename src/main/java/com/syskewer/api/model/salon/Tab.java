@@ -43,6 +43,9 @@ public class Tab extends BaseEntity<Integer> {
     @Column(name = "delivery_address")
     private String deliveryAddress;
 
+    @Column(name = "customer_doc_or_phone", length = 100)
+    private String customerDocOrPhone;
+
     @Column(name = "apply_cover_charge", nullable = false)
     private Boolean applyCoverCharge = false;
 
@@ -86,4 +89,7 @@ public class Tab extends BaseEntity<Integer> {
 
     public LocalDateTime getDeferredDate() { return deferredDate; }
     public void setDeferredDate(LocalDateTime deferredDate) { this.deferredDate = deferredDate; }
+
+    public String getCustomerDocOrPhone() { return customerDocOrPhone; }
+    public void setCustomerDocOrPhone(String customerDocOrPhone) { this.customerDocOrPhone = customerDocOrPhone; }
 }

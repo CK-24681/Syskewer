@@ -43,7 +43,7 @@ public class CategoryController {
 
     @PatchMapping("/{id}")
     @Operation(summary = "Atualizar categoria existente")
-    public ResponseEntity<Category> update(@PathVariable Integer id, @RequestBody CategoryUpdateDto dto) {
+    public ResponseEntity<Category> update(@PathVariable Integer id, @RequestBody @Valid CategoryUpdateDto dto) {
         return ResponseEntity.ok(service.update(id, dto));
     }
 }

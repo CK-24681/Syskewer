@@ -30,17 +30,14 @@ public class ProductService {
         this.prepLocationRepository = prepLocationRepository;
     }
 
-    /** @return cardápio completo */
+    // Retorna o cardapio completo
     public List<ProductResponseDto> listAll() {
         return repository.findAll().stream()
                 .map(ProductResponseDto::new)
                 .toList();
     }
 
-    /**
-     * @param dto dados do produto
-     * @return produto criado
-     */
+    // Salva um novo produto no cardapio
     public Product saveProduct(ProductRecordDto dto) {
         Category category = categoryRepository.findById(dto.categoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada!"));
@@ -66,17 +63,16 @@ public class ProductService {
         return repository.save(product);
     }
 
-    /**
-     * @param id id do produto
-     * @param dto campos a atualizar
-     * @return produto atualizado
-     */
+    // Atualiza os dados de um produto existente
     public Product patchProduct(Integer id, ProductUpdateDto dto) {
         Product existingProduct = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado!"));
 
         if (dto.name() != null) {
             String cleanedName = dto.name().trim().replaceAll(" +", " ");
+            if (cleanedName.isEmpty()) {
+                throw new BusinessRuleException("O nome do produto não pode ser vazio.");
+            }
             if (!cleanedName.equalsIgnoreCase(existingProduct.getName()) &&
                     repository.existsByNameIgnoreCase(cleanedName)) {
                 throw new BusinessRuleException("Já existe um produto com o nome: " + cleanedName);
@@ -85,6 +81,9 @@ public class ProductService {
         }
 
         if (dto.price() != null) {
+            if (dto.price().compareTo(java.math.BigDecimal.ZERO) <= 0) {
+                throw new BusinessRuleException("O preço do produto deve ser maior que zero.");
+            }
             existingProduct.setPrice(dto.price());
         }
 
@@ -107,7 +106,7 @@ public class ProductService {
         return repository.save(existingProduct);
     }
 
-    /** Soft delete — pedidos antigos mantêm referência ao produto. */
+    // Desativa o produto para nao aparecer no cardapio (soft delete)
     public void deactivateProduct(Integer id) {
         Product product = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado!"));

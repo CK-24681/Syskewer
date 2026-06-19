@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.syskewer.api.dto.salon.KitchenItemDto;
 import com.syskewer.api.dto.salon.KitchenOrderDto;
+import com.syskewer.api.exception.BusinessRuleException;
 import com.syskewer.api.exception.ResourceNotFoundException;
 import com.syskewer.api.model.salon.Order;
 import com.syskewer.api.model.salon.OrderItem;
@@ -15,6 +16,7 @@ import com.syskewer.api.model.salon.PrepStatus;
 import com.syskewer.api.repository.salon.OrderItemRepository;
 import com.syskewer.api.repository.salon.OrderRepository;
 
+// Servico para gerenciar a fila e preparo dos pedidos na cozinha
 @Service
 public class KitchenService {
 
@@ -26,6 +28,7 @@ public class KitchenService {
         this.orderItemRepository = orderItemRepository;
     }
 
+    // Retorna a fila de pedidos ativos com base na praca de preparo
     public List<KitchenOrderDto> getKitchenQueue(String location) {
         List<PrepStatus> activeStatuses = Arrays.asList(PrepStatus.QUEUED, PrepStatus.PREPARING);
         List<Order> orders = orderRepository.findByPrepStatusInOrderByCreatedAtAsc(activeStatuses);
@@ -79,6 +82,15 @@ public class KitchenService {
     public void advanceOrderStatus(Long orderId, PrepStatus newStatus) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Pedido " + orderId + " não encontrado na cozinha!"));
+
+        if (newStatus == null) {
+            throw new BusinessRuleException("O novo status não pode ser nulo.");
+        }
+
+        if (order.getPrepStatus().ordinal() > newStatus.ordinal()) {
+            throw new BusinessRuleException("Não é permitido retroceder o status de preparo do pedido de " 
+                    + order.getPrepStatus() + " para " + newStatus + ".");
+        }
 
         order.setPrepStatus(newStatus);
         orderRepository.save(order);

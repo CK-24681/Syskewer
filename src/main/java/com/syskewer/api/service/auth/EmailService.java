@@ -18,10 +18,7 @@ public class EmailService {
         this.mailSender = mailSender;
     }
 
-    /**
-     * @param to e-mail do destinatário
-     * @param resetLink URL com token de 15 minutos
-     */
+    // Envia o link de recuperacao de senha por e-mail
     public void sendPasswordResetEmail(String to, String resetLink) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
@@ -49,7 +46,7 @@ public class EmailService {
         }
     }
 
-    /** @param to e-mail do usuário que redefiniu a senha */
+    // Envia e-mail confirmando que a senha foi alterada
     public void sendPasswordResetConfirmation(String to) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();

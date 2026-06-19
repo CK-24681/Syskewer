@@ -29,10 +29,7 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    /**
-     * @param dto comanda, itens e observações
-     * @return confirmação — pedido vai para a fila da cozinha
-     */
+    // Lanca um novo pedido em uma comanda aberta
     @PostMapping
     public ResponseEntity<String> placeOrder(@RequestBody @Valid OrderRecordDto dto) {
         orderService.placeOrder(dto);
@@ -40,7 +37,7 @@ public class OrderController {
                 .body("Pedido lançado com sucesso, calculado e enviado para a fila!");
     }
 
-    /** @param itemId id do item a ser excluído */
+    // Cancela um item especifico de um pedido
     @DeleteMapping("/items/{itemId}")
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GARCOM')")
     public ResponseEntity<Void> cancelOrderItem(@PathVariable Long itemId) {

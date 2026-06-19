@@ -26,13 +26,13 @@ public class TableController {
         this.tableService = tableService;
     }
 
-    /** @param dto número da mesa */
+    // Cadastra uma nova mesa no salao
     @PostMapping
     public ResponseEntity<TableResponseDto> create(@RequestBody @Valid TableRecordDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(tableService.createTable(dto));
     }
 
-    /** @return mapa de mesas com status de ocupação */
+    // Lista todas as mesas e seus status de ocupacao
     @GetMapping
     public ResponseEntity<List<TableResponseDto>> list() {
         return ResponseEntity.ok(tableService.listAll());

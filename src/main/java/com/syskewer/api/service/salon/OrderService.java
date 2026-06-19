@@ -25,6 +25,7 @@ import com.syskewer.api.repository.salon.OrderItemRepository;
 import com.syskewer.api.repository.salon.OrderRepository;
 import com.syskewer.api.repository.salon.TabRepository;
 
+// Servico para gerenciar os pedidos e itens de consumo
 @Service
 public class OrderService {
 
@@ -44,6 +45,7 @@ public class OrderService {
         this.storeSettingsService = storeSettingsService;
     }
 
+    // Registra um novo pedido com os itens desejados na comanda
     @Transactional
     public void placeOrder(OrderRecordDto dto) {
         if (!storeSettingsService.isStoreOpen()) {
@@ -104,6 +106,7 @@ public class OrderService {
         tabRepository.save(tab);
     }
 
+    // Cancela um item de um pedido e atualiza o total da comanda
     @Transactional
     public void cancelOrderItem(Long itemId) {
         OrderItem item = orderItemRepository.findById(itemId)
@@ -137,8 +140,13 @@ public class OrderService {
         orderItemRepository.delete(item);
     }
 
+    // Reduz a quantidade de um item especifico do pedido
     @Transactional
     public void reduceItemQuantity(Long itemId, Integer quantityToRemove) {
+        if (quantityToRemove == null || quantityToRemove <= 0) {
+            throw new BusinessRuleException("A quantidade a ser removida deve ser maior que zero.");
+        }
+
         OrderItem item = orderItemRepository.findById(itemId)
                 .orElseThrow(() -> new ResourceNotFoundException("Item não encontrado!"));
         
@@ -169,6 +177,7 @@ public class OrderService {
         orderItemRepository.save(item);
     }
 
+    // Divide o valor de um item de consumo entre varias comandas
     @Transactional
     public void splitItem(Long itemId, List<Integer> targetTabIds) {
         OrderItem item = orderItemRepository.findById(itemId)

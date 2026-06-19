@@ -15,7 +15,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-/** Valida o Bearer JWT e popula o SecurityContext antes dos controllers. */
+// Filtro para validar o token JWT e autenticar a requisicao
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
 

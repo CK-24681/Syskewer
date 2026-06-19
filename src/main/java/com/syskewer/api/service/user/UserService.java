@@ -15,6 +15,7 @@ import com.syskewer.api.model.user.User;
 import com.syskewer.api.repository.user.RoleRepository;
 import com.syskewer.api.repository.user.UserRepository;
 
+// Servico para gerenciar as regras de negocio de usuarios
 @Service
 public class UserService {
 
@@ -28,6 +29,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    // Retorna a lista de todos os usuarios cadastrados
     public List<UserResponseDto> listAll() {
         return userRepository.findAll()
                 .stream()
@@ -35,6 +37,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    // Cadastra um novo usuario validando se o username e email ja existem
     public UserResponseDto registerUser(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new BusinessRuleException("Este nome de usuário já está em uso!");
@@ -57,18 +60,26 @@ public class UserService {
         return convertToResponseDto(savedUser);
     }
 
+    // Atualiza de forma parcial os dados de um usuario
     public UserResponseDto patchUser(Integer id, UserUpdateDto dto) {
         User existingUser = userRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
 
         if (dto.name() != null) {
-            existingUser.setName(dto.name());
+            if (dto.name().trim().isEmpty()) {
+                throw new BusinessRuleException("O nome do usuário não pode ser vazio.");
+            }
+            existingUser.setName(dto.name().trim());
         }
         if (dto.email() != null) {
-            if (!existingUser.getEmail().equals(dto.email()) && userRepository.existsByEmail(dto.email())) {
+            String trimmedEmail = dto.email().trim();
+            if (trimmedEmail.isEmpty()) {
+                throw new BusinessRuleException("O e-mail do usuário não pode ser vazio.");
+            }
+            if (!existingUser.getEmail().equalsIgnoreCase(trimmedEmail) && userRepository.existsByEmail(trimmedEmail)) {
                 throw new BusinessRuleException("Este e-mail já está em uso!");
             }
-            existingUser.setEmail(dto.email());
+            existingUser.setEmail(trimmedEmail);
         }
         if (dto.roleId() != null) {
             Role role = roleRepository.findById(dto.roleId())
@@ -80,6 +91,7 @@ public class UserService {
         return convertToResponseDto(updatedUser);
     }
 
+    // Desativa o usuario (soft delete)
     public void deactivateUser(Integer id) {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
@@ -87,16 +99,19 @@ public class UserService {
         userRepository.save(user);
     }
 
+    // Busca um usuario pelo e-mail
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
     }
 
+    // Atualiza a senha do usuario no banco
     public void updatePassword(User user, String newEncodedPassword) {
         user.setPassword(newEncodedPassword);
         userRepository.save(user);
     }
 
+    // Converte a entidade User para o DTO de resposta
     private UserResponseDto convertToResponseDto(User user) {
         return new UserResponseDto(
             user.getId(),

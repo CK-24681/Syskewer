@@ -32,7 +32,7 @@ O Syskewer vai além de um sistema CRUD básico, abordando a complexidade real d
 *   **Autenticação JWT:** O sistema utiliza JSON Web Tokens para autenticação, garantindo uma API stateless. Tokens são gerados com `id`, `email` e `role` do usuário.
 *   **Autorização Baseada em Papéis:** As rotas são protegidas por papéis (`ADMINISTRADOR`, `GARCOM`), definidos via `@PreAuthorize` no Spring Security.
 *   **Criação de Usuários:** Usuários podem ser registrados com validação de unicidade de username e e-mail. Senhas são criptografadas usando BCrypt.
-*   **Recuperação de Senha:** Fluxo para recuperação de senha via e-mail, gerando um token único e enviando um link para redefinição.
+*   **Recuperação de Senha:** Fluxo para recuperação de senha via e-mail, gerando um token único armazenado de forma segura com hash SHA-256 e enviando um link para redefinição.
 
 ### 4. Configurações da Loja
 
@@ -58,7 +58,7 @@ src/main/java/com/syskewer/api/
   └── ApiApplication.java # Classe principal da aplicação Spring Boot
 ```
 
-## 📊 Modelagem de Dados (Diagrama Físico)
+## Modelagem de Dados (Diagrama Físico)
 
 O diagrama abaixo ilustra a estrutura de domínio da aplicação e os relacionamentos entre as entidades, gerenciados automaticamente via JPA/Hibernate:
 
@@ -136,7 +136,7 @@ classDiagram
     StoreSettings "1" -- "1" ApiApplication : configurações da loja
 ```
 
-## 🚀 Como Configurar e Executar
+## Como Configurar e Executar
 
 ### Pré-requisitos
 

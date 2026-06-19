@@ -24,13 +24,13 @@ public class KitchenController {
         this.kitchenService = kitchenService;
     }
 
-    /** Fila ativa — o tablet da cozinha faz polling aqui. */
+    // Retorna a fila de pedidos pendentes para a cozinha
     @GetMapping("/queue")
     public ResponseEntity<List<KitchenOrderDto>> getQueue(@RequestParam(required = false) String location) {
         return ResponseEntity.ok(kitchenService.getKitchenQueue(location));
     }
 
-    /** @param status próximo status (QUEUED → PREPARING → READY) */
+    // Atualiza o status de preparo do pedido
     @PatchMapping("/orders/{id}/status")
     public ResponseEntity<String> updateStatus(@PathVariable Long id, @RequestParam PrepStatus status) {
         kitchenService.advanceOrderStatus(id, status);

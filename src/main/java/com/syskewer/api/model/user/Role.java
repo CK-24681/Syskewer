@@ -6,7 +6,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
-/** Perfil de acesso vinculado ao usuário (ex: Administrador, Garçom). */
+// Perfil de acesso do usuario (Administrador, Garcom)
 @Entity
 @Table(name = "tb_role")
 public class Role extends BaseEntity<Integer> {

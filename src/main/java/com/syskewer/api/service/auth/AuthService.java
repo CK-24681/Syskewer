@@ -16,11 +16,7 @@ public class AuthService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
-    /**
-     * @param username login do usuário
-     * @return usuário com perfil e senha para o Spring Security
-     * @throws UsernameNotFoundException login inexistente
-     */
+    // Busca o usuario pelo login para o Spring Security
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)

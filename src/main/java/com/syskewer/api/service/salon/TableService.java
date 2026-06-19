@@ -10,6 +10,7 @@ import com.syskewer.api.exception.BusinessRuleException;
 import com.syskewer.api.model.salon.Table;
 import com.syskewer.api.repository.salon.TableRepository;
 
+// Servico para gerenciar as mesas do salao
 @Service
 public class TableService {
 
@@ -19,6 +20,7 @@ public class TableService {
         this.tableRepository = tableRepository;
     }
 
+    // Cadastra uma nova mesa validando se o numero ja existe
     public TableResponseDto createTable(TableRecordDto dto) {
         if (tableRepository.existsByNumber(dto.number())) {
             throw new BusinessRuleException("Já existe uma mesa cadastrada com o número " + dto.number());
@@ -32,6 +34,7 @@ public class TableService {
         return new TableResponseDto(table);
     }
 
+    // Lista todas as mesas cadastradas
     public List<TableResponseDto> listAll() {
         return tableRepository.findAll().stream()
                 .map(TableResponseDto::new)

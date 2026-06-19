@@ -11,6 +11,7 @@ import com.syskewer.api.model.auth.PasswordResetToken;
 import com.syskewer.api.model.user.User;
 import com.syskewer.api.repository.auth.PasswordResetTokenRepository;
 import com.syskewer.api.service.user.UserService;
+import com.syskewer.api.exception.ResourceNotFoundException;
 
 @Service
 public class PasswordResetService {
@@ -30,33 +31,34 @@ public class PasswordResetService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    /**
-     * @param email e-mail cadastrado no sistema
-     */
+    // Cria o token de recuperacao de senha e envia por e-mail
     public void generateResetToken(String email) {
-        User user = userService.findByEmail(email);
+        try {
+            User user = userService.findByEmail(email);
 
-        String token = UUID.randomUUID().toString();
-        LocalDateTime expiryDate = LocalDateTime.now().plusMinutes(TOKEN_EXPIRY_MINUTES);
+            String token = UUID.randomUUID().toString();
+            LocalDateTime expiryDate = LocalDateTime.now().plusMinutes(TOKEN_EXPIRY_MINUTES);
 
-        PasswordResetToken resetToken = new PasswordResetToken(token, user, expiryDate);
-        tokenRepository.save(resetToken);
+            String hashedToken = hashToken(token);
+            PasswordResetToken resetToken = new PasswordResetToken(hashedToken, user, expiryDate);
+            tokenRepository.save(resetToken);
 
-        String resetLink = "http://localhost:3000/reset-password?token=" + token;
-        emailService.sendPasswordResetEmail(user.getEmail(), resetLink);
+            String resetLink = "http://localhost:3000/reset-password?token=" + token;
+            emailService.sendPasswordResetEmail(user.getEmail(), resetLink);
+        } catch (ResourceNotFoundException e) {
+            // Abafa para evitar enumeração de usuários
+        }
     }
 
-    /**
-     * @param token token recebido por e-mail
-     * @param newPassword nova senha em texto plano
-     */
+    // Valida o token e altera a senha do usuario
     @Transactional
     public void resetPassword(String token, String newPassword) {
-        PasswordResetToken resetToken = tokenRepository.findByToken(token)
+        String hashedToken = hashToken(token);
+        PasswordResetToken resetToken = tokenRepository.findByToken(hashedToken)
                 .orElseThrow(() -> new RuntimeException("Token de recuperação inválido!"));
 
         if (resetToken.isExpired()) {
-            tokenRepository.deleteByToken(token);
+            tokenRepository.deleteByToken(hashedToken);
             throw new RuntimeException("Token de recuperação expirou!");
         }
 
@@ -66,6 +68,22 @@ public class PasswordResetService {
 
         emailService.sendPasswordResetConfirmation(user.getEmail());
 
-        tokenRepository.deleteByToken(token);
+        tokenRepository.deleteByToken(hashedToken);
+    }
+
+    private String hashToken(String token) {
+        try {
+            java.security.MessageDigest digest = java.security.MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(token.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (java.security.NoSuchAlgorithmException e) {
+            throw new RuntimeException("Erro ao gerar hash do token", e);
+        }
     }
 }

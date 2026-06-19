@@ -24,10 +24,7 @@ public class PasswordResetController {
         this.passwordResetService = passwordResetService;
     }
 
-    /**
-     * @param request e-mail cadastrado
-     * @return confirmação de envio
-     */
+    // Envia o link de recuperacao de senha por e-mail
     @PostMapping("/forgot")
     public ResponseEntity<ForgotPasswordResponse> forgotPassword(@RequestBody @Valid ForgotPasswordRequest request) {
         try {
@@ -39,10 +36,7 @@ public class PasswordResetController {
         }
     }
 
-    /**
-     * @param request token + nova senha
-     * @return confirmação da troca
-     */
+    // Redefine a senha com base no token recebido
     @PostMapping("/reset")
     public ResponseEntity<ResetPasswordResponse> resetPassword(@RequestBody @Valid ResetPasswordRequest request) {
         try {

@@ -34,15 +34,16 @@ public class UserController {
         this.userService = userService;
     }
 
-    /** @return lista de usuários (somente admin) */
+    // Lista todos os usuarios cadastrados
     @GetMapping
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<List<UserResponseDto>> listAll() {
         return ResponseEntity.ok(userService.listAll());
     }
 
-    /** @param userDto dados do novo usuário */
+    // Cadastra um novo usuario no sistema
     @PostMapping
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<UserResponseDto> register(@RequestBody @Valid UserRecordDto userDto) {
         User userEntity = new User();
         userEntity.setName(userDto.name());
@@ -50,7 +51,7 @@ public class UserController {
         userEntity.setEmail(userDto.email());
         userEntity.setPassword(userDto.password());
         
-        // Cria uma instância de Role apenas com o ID que veio do DTO
+        // Associa o perfil pelo ID que veio da requisicao
         Role role = new Role();
         role.setId(userDto.roleId());
         userEntity.setRole(role);
@@ -61,14 +62,14 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
-    /** @param id id do usuário */
+    // Atualiza os dados de um usuario existente
     @PatchMapping("/{id}")
     @PreAuthorize("hasRole('ADMINISTRADOR')")
-    public ResponseEntity<UserResponseDto> patch(@PathVariable Integer id, @RequestBody UserUpdateDto dto) {
+    public ResponseEntity<UserResponseDto> patch(@PathVariable Integer id, @RequestBody @Valid UserUpdateDto dto) {
         return ResponseEntity.ok(userService.patchUser(id, dto));
     }
 
-    /** Soft delete — desativa o usuário. */
+    // Desativa o usuario no sistema (soft delete)
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {

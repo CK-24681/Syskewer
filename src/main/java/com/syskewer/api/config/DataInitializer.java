@@ -7,8 +7,10 @@ import org.springframework.stereotype.Component;
 
 import com.syskewer.api.model.user.Role;
 import com.syskewer.api.model.user.User;
+import com.syskewer.api.model.store.StoreSettings;
 import com.syskewer.api.repository.user.RoleRepository;
 import com.syskewer.api.repository.user.UserRepository;
+import com.syskewer.api.repository.store.StoreSettingsRepository;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
@@ -16,14 +18,16 @@ public class DataInitializer implements CommandLineRunner {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final StoreSettingsRepository storeSettingsRepository;
 
     @Value("${api.security.admin.default-password:admin123}")
     private String defaultAdminPassword;
 
-    public DataInitializer(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    public DataInitializer(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, StoreSettingsRepository storeSettingsRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.storeSettingsRepository = storeSettingsRepository;
     }
 
     @Override
@@ -52,6 +56,12 @@ public class DataInitializer implements CommandLineRunner {
             admin.setRole(adminRole);
             admin.setActive(true);
             userRepository.save(admin);
+        }
+
+        if (storeSettingsRepository.count() == 0) {
+            StoreSettings settings = new StoreSettings();
+            settings.setIsOpen(true);
+            storeSettingsRepository.save(settings);
         }
     }
 }

@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGenericException(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Ocorreu um erro interno no servidor. Detalhes: " + ex.getMessage());
+                .body("Ocorreu um erro interno no servidor. Por favor, contate o administrador.");
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)

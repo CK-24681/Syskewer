@@ -18,7 +18,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-/** Usuário autenticável; o perfil define o que ele pode fazer no salão. */
+// Entidade que representa os usuarios e funcionarios do estabelecimento
 @Entity
 @Table(name = "tb_user")
 public class User extends BaseEntity<Integer> implements UserDetails {
@@ -106,7 +106,7 @@ public class User extends BaseEntity<Integer> implements UserDetails {
         this.active = active;
     }
 
-    // Spring exige prefixo ROLE_ e ASCII — acento no perfil quebraria o hasRole()
+    // Normaliza o nome do perfil em uppercase sem acentos e com o prefixo ROLE_
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

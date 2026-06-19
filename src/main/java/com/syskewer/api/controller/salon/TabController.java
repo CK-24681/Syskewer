@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.syskewer.api.dto.salon.TabPartialDto;
 import com.syskewer.api.dto.salon.TabPaymentDto;
 import com.syskewer.api.dto.salon.TabSummaryDto;
+import com.syskewer.api.dto.salon.TabUpdateDto;
 import com.syskewer.api.service.salon.TabService;
 
 import jakarta.validation.Valid;
@@ -34,40 +35,40 @@ public class TabController {
         this.tabService = tabService;
     }
 
-    /** @return comandas abertas no salão */
+    // Lista as comandas abertas no salao
     @GetMapping("/open")
     public ResponseEntity<List<TabSummaryDto>> getOpenTabs() {
         return ResponseEntity.ok(tabService.getOpenTabs());
     }
 
-    /** @param id id da comanda */
+    // Retorna a parcial de consumo da comanda
     @GetMapping("/{id}/partial")
     public ResponseEntity<TabPartialDto> getTabPartial(@PathVariable Integer id) {
         return ResponseEntity.ok(tabService.getTabPartial(id));
     }
 
-    /** @param id id da comanda */
+    // Fecha a comanda liberando a mesa
     @PatchMapping("/{id}/close")
     public ResponseEntity<String> closeTab(@PathVariable Integer id) {
         tabService.closeTab(id);
         return ResponseEntity.ok("Conta recebida com sucesso! A comanda foi fechada e a mesa está livre.");
     }
 
-    /** Couvert artístico fixo rateado pela mesa. */
+    // Adiciona o couvert artistico na comanda
     @PatchMapping("/{id}/couvert")
     public ResponseEntity<String> toggleCoverCharge(@PathVariable Integer id) {
         tabService.toggleCoverCharge(id);
         return ResponseEntity.ok("Couvert artístico processado com sucesso na mesa/comanda!");
     }
 
-    /** Taxa de entrega fixa. */
+    // Abre uma nova comanda de delivery
     @PostMapping("/delivery")
     public ResponseEntity<com.syskewer.api.dto.salon.TabSummaryDto> openDeliveryTab(
             @RequestBody @Valid com.syskewer.api.dto.salon.TabDeliveryDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(tabService.openDeliveryTab(dto));
     }
 
-    /** @param doc CPF ou telefone do devedor */
+    // Arquiva a comanda como fiado
     @PatchMapping("/{id}/fiado")
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<String> archiveAsCredit(@PathVariable Integer id, @RequestParam String doc) {
@@ -75,14 +76,20 @@ public class TabController {
         return ResponseEntity.ok("Comanda arquivada como Fiado/Inadimplente. Mesa liberada!");
     }
 
-    /** @param dto dados de abertura no salão */
+    // Abre uma nova comanda de mesa ou balcao
     @PostMapping
     public ResponseEntity<com.syskewer.api.dto.salon.TabSummaryDto> openTab(
             @RequestBody @Valid com.syskewer.api.dto.salon.TabOpenDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(tabService.openTab(dto));
     }
 
-    /** @param dto valor pago (parcial ou total) */
+    @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GARCOM')")
+    public ResponseEntity<TabSummaryDto> patchTab(@PathVariable Integer id, @RequestBody TabUpdateDto dto) {
+        return ResponseEntity.ok(tabService.patchTab(id, dto));
+    }
+
+    // Registra pagamento parcial ou total da comanda
     @PatchMapping("/{id}/pay")
     public ResponseEntity<String> registerPayment(@PathVariable Integer id, @RequestBody @Valid TabPaymentDto dto) {
         String message = tabService.registerPayment(id, dto.amount(), dto.discount());

@@ -32,13 +32,13 @@ public class ProductController {
         this.service = service;
     }
 
-    /** @return cardápio */
+    // Retorna o cardapio com todos os produtos
     @GetMapping
     public ResponseEntity<List<ProductResponseDto>> listAll() {
         return ResponseEntity.ok(service.listAll());
     }
 
-    /** @param dto novo produto */
+    // Cadastra um novo produto no cardapio
     @PostMapping
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<ProductResponseDto> create(@RequestBody @Valid ProductRecordDto dto) {
@@ -46,15 +46,15 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new ProductResponseDto(savedProduct));
     }
 
-    /** @param id id do produto */
+    // Atualiza dados de um produto existente
     @PatchMapping("/{id}")
     @PreAuthorize("hasRole('ADMINISTRADOR')")
-    public ResponseEntity<ProductResponseDto> patch(@PathVariable Integer id, @RequestBody ProductUpdateDto dto) {
+    public ResponseEntity<ProductResponseDto> patch(@PathVariable Integer id, @RequestBody @Valid ProductUpdateDto dto) {
         Product updatedProduct = service.patchProduct(id, dto);
         return ResponseEntity.ok(new ProductResponseDto(updatedProduct));
     }
 
-    /** @param id id do produto */
+    // Desativa um produto do cardapio (soft delete)
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {

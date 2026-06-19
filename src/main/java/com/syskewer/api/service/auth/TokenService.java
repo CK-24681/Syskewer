@@ -21,10 +21,7 @@ public class TokenService {
     @Value("${api.security.token.expiration:172800}")
     private long expirationSeconds;
 
-    /**
-     * @param user usuário autenticado
-     * @return JWT assinado com id, email e perfil
-     */
+    // Gera um token JWT assinado para o usuario
     public String generateToken(User user) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
@@ -41,10 +38,7 @@ public class TokenService {
         }
     }
 
-    /**
-     * @param token JWT do header Authorization
-     * @return username ou string vazia se inválido/expirado
-     */
+    // Valida o token JWT e retorna o username do usuario
     public String validateToken(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);

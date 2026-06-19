@@ -28,10 +28,7 @@ public class AuthenticationController {
         this.tokenService = tokenService;
     }
 
-    /**
-     * @param data credenciais
-     * @return JWT para o header Authorization
-     */
+    // Realiza o login do usuario e retorna o token JWT
     @PostMapping
     public ResponseEntity<TokenResponseDto> login(@RequestBody @Valid AuthenticationDto data) {
         var authToken = new UsernamePasswordAuthenticationToken(data.username(), data.password());
