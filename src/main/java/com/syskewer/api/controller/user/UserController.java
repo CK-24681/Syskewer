@@ -25,6 +25,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
+@io.swagger.v3.oas.annotations.tags.Tag(name = "Usuários", description = "Gestão de usuários e permissões")
 public class UserController {
 
     private final UserService userService;

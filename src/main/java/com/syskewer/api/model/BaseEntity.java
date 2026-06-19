@@ -1,5 +1,6 @@
 package com.syskewer.api.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -7,7 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 
 @MappedSuperclass
-public abstract class BaseEntity<T> {
+public abstract class BaseEntity<T> implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -25,6 +25,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/tabs")
+@io.swagger.v3.oas.annotations.tags.Tag(name = "Comandas", description = "Operações de abertura, pagamento e fechamento de comandas")
 public class TabController {
 
     private final TabService tabService;
