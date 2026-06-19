@@ -4,7 +4,7 @@ Bem-vindo ao repositório backend do **Syskewer**. Este projeto representa o nú
 
 Desenvolvido com foco em **Java 21** e **Spring Boot 3**, o Syskewer utiliza **PostgreSQL** como banco de dados e implementa autenticação e autorização baseadas em **JWT (JSON Web Tokens)**. A gestão de dependências é feita via **Maven**, e o projeto é conteinerizável com **Docker** e **Docker Compose**.
 
-## 🎯 Regras de Negócio e Funcionalidades Detalhadas
+## Regras de Negócio e Funcionalidades Detalhadas
 
 O Syskewer vai além de um sistema CRUD básico, abordando a complexidade real de um ambiente de restaurante através de regras de negócio rigorosas e funcionalidades específicas:
 
@@ -42,7 +42,7 @@ O Syskewer vai além de um sistema CRUD básico, abordando a complexidade real d
 
 *   **GlobalExceptionHandler:** A API possui um manipulador global de exceções que converte erros internos em respostas HTTP padronizadas e amigáveis (e.g., `400 Bad Request` para `BusinessRuleException`, `404 Not Found` para `ResourceNotFoundException`).
 
-## 🏗️ Arquitetura e Estrutura de Pastas
+## Arquitetura e Estrutura de Pastas
 
 A estrutura de pacotes foi projetada para modularidade e escalabilidade, seguindo o padrão de camadas de uma aplicação Spring Boot:
 
@@ -247,14 +247,14 @@ docker-compose up --build
 
 Isso irá construir as imagens e iniciar os contêineres do banco de dados PostgreSQL e da API Syskewer. A API estará disponível em `http://localhost:8080`.
 
-## 🛡️ Segurança e Inicialização Padrão
+## Segurança e Inicialização Padrão
 
 Na primeira execução com um banco de dados vazio, o `DataInitializer` criará automaticamente os perfis (`Role`) de "Administrador" e "Garçom", além de um **Usuário Administrador Mestre** com `username: admin` e a senha definida em `api.security.admin.default-password` no `application.properties`.
 
-## 🤝 Contribuição
+## Contribuição
 
 Contribuições são bem-vindas! Para propor melhorias, correções ou novas funcionalidades, por favor, abra uma *issue* e/ou envie um *pull request*.
 
-## 📄 Licença
+## Licença
 
 Este projeto está licenciado sob a [MIT License](LICENSE).
