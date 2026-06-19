@@ -78,8 +78,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/password/forgot").permitAll()
                         .requestMatchers(HttpMethod.POST, "/password/reset").permitAll()
 
-                        // SWAGGER
-                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+// SWAGGER
+	                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/swagger-resources/**", "/webjars/**").permitAll()
 
                         // REGRAS DE NEGÓCIO
                         .requestMatchers(HttpMethod.POST, "/users/register").hasRole("ADMINISTRADOR")

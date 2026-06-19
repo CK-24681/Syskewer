@@ -46,6 +46,7 @@ api.security.admin.default-password=sua-senha-aqui
 # ===============================
 logging.level.org.springdoc=INFO
 logging.level.io.swagger.v3=INFO
+logging.level.org.springframework.web=INFO
 
 # BLINDAGEM DO SWAGGER
 springdoc.packages-to-scan=com.syskewer.api.controller
