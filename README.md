@@ -251,48 +251,6 @@ Isso irá construir as imagens e iniciar os contêineres do banco de dados Postg
 
 Na primeira execução com um banco de dados vazio, o `DataInitializer` criará automaticamente os perfis (`Role`) de "Administrador" e "Garçom", além de um **Usuário Administrador Mestre** com `username: admin` e a senha definida em `api.security.admin.default-password` no `application.properties`.
 
-## 🚨 Análise de Segurança e Pontos de Atenção
-
-Durante a análise do código, foram identificados alguns pontos críticos relacionados à segurança, privacidade e robustez das regras de negócio. É crucial revisar e mitigar esses aspectos para garantir a integridade e a segurança do sistema.
-
-### 1. Falha de Autorização na Criação de Usuários
-
-*   **Problema:** O endpoint `POST /users` no `UserController` não possui uma anotação `@PreAuthorize` local, permitindo que qualquer usuário autenticado (mesmo sem privilégios de administrador) crie novos usuários e atribua a eles qualquer `roleId` existente, incluindo o papel de `ADMINISTRADOR`. Embora o `SecurityConfig` proteja `POST /users/register`, a rota real exposta é `POST /users`, criando uma vulnerabilidade de escalonamento de privilégios.
-*   **Impacto:** Um atacante pode criar uma conta de administrador, comprometendo todo o sistema.
-*   **Recomendação:** Adicionar `@PreAuthorize("hasRole(\'ADMINISTRADOR\')")` ao método `register` no `UserController` e garantir que a criação de usuários seja feita apenas por administradores ou através de um fluxo de registro bem controlado.
-
-### 2. Vulnerabilidades no Fluxo de Recuperação de Senha
-
-O `PasswordResetService` e o `PasswordResetController` apresentam diversas fragilidades:
-
-*   **Enumeração de Usuários:** O método `userService.findByEmail(email)` no `generateResetToken` retorna uma `ResourceNotFoundException` se o e-mail não for encontrado. Isso permite que um atacante determine quais e-mails estão cadastrados no sistema, facilitando ataques de força bruta ou phishing.
-*   **Armazenamento de Tokens em Texto Puro:** O `PasswordResetToken` armazena o token de recuperação em texto puro (`UUID.randomUUID().toString()`) no banco de dados. Em caso de comprometimento do banco, todos os tokens de reset ativos seriam expostos, permitindo que um atacante redefina senhas de usuários.
-*   **Múltiplos Tokens Válidos:** O sistema não invalida tokens de reset anteriores quando um novo é gerado para o mesmo usuário. Isso significa que múltiplos links de reset podem ser válidos simultaneamente, aumentando a janela de oportunidade para um atacante.
-*   **Exposição de Mensagens de Erro Detalhadas:** O `PasswordResetController` captura `RuntimeException` e retorna mensagens como `"Erro: " + e.getMessage()`, expondo detalhes internos do erro ao cliente, o que pode auxiliar atacantes na engenharia reversa do fluxo.
-*   **Impacto:** Comprometimento de contas de usuário, facilitação de ataques de phishing e exposição de informações sensíveis.
-*   **Recomendação:**
-    *   Implementar uma resposta neutra para e-mails não encontrados no fluxo de recuperação de senha.
-    *   Armazenar hashes dos tokens de reset (e.g., SHA-256) em vez do token em texto puro.
-    *   Invalidar todos os tokens de reset anteriores de um usuário ao gerar um novo.
-    *   Generalizar as mensagens de erro para evitar a exposição de detalhes internos.
-
-### 3. Vazamento de Dados Pessoais (Privacidade)
-
-*   **Problema:** No método `archiveAsCredit` do `TabService`, o CPF ou telefone do cliente (`customerDocOrPhone`) é concatenado diretamente no campo `customerName` da comanda (`tab.setCustomerName(tab.getCustomerName() + " (Devedor - Contato: " + customerDocOrPhone + ")")`).
-*   **Impacto:** Mistura dados pessoais sensíveis (CPF/telefone) com um campo de exibição, o que pode levar à exposição indevida desses dados em interfaces de usuário ou logs, além de dificultar a anonimização e o cumprimento de regulamentações de privacidade (LGPD).
-*   **Recomendação:** Criar campos específicos para armazenar CPF/telefone ou outras informações de contato do cliente, separando-os do nome de exibição. Implementar políticas de acesso e exibição adequadas para esses dados.
-
-### 4. Erros e Comportamentos Inesperados nas Regras de Negócio
-
-*   **Pagamento Agrupado (`payGroupedTabs`):** O método `payGroupedTabs` no `TabService` fecha múltiplas comandas marcando `paidAmount = totalAmount` e `status = CLOSED`. No entanto, ele não registra o valor `amountReceived` efetivamente pago se este for maior que o `totalBalance` das comandas. Isso significa que trocos ou pagamentos a maior não são contabilizados, podendo levar a inconsistências financeiras.
-*   **Reabertura de Comandas (`reopenTab`):** O método `reopenTab` no `TabService` permite reabrir comandas fechadas. Se a mesa original da comanda estiver ocupada, o sistema simplesmente desassocia a comanda da mesa (`tab.setTable(null)`) sem notificar o usuário ou bloquear a operação. Isso pode levar a uma comanda de mesa se tornando uma comanda de balcão silenciosamente, gerando confusão e inconsistências na gestão do salão.
-*   **Exposição de Detalhes de Exceção Genéricos:** O `GlobalExceptionHandler` possui um fallback genérico (`handleGenericException`) que retorna `500 Internal Server Error` com o texto `Detalhes: ` concatenado a `ex.getMessage()`. Embora seja um fallback, a exposição de `ex.getMessage()` em um erro genérico pode revelar informações internas da aplicação que não deveriam ser visíveis ao cliente.
-*   **Impacto:** Inconsistências financeiras, erros operacionais, perda de dados de auditoria e potencial exposição de informações de depuração.
-*   **Recomendação:**
-    *   Para `payGroupedTabs`, registrar o valor exato recebido e gerenciar o troco ou saldo credor de forma explícita.
-    *   Para `reopenTab`, implementar uma validação mais robusta: se a mesa estiver ocupada, impedir a reabertura ou exigir que o usuário especifique uma nova mesa disponível.
-    *   No `GlobalExceptionHandler`, garantir que as mensagens de erro genéricas não exponham detalhes sensíveis da implementação.
-
 ## 🤝 Contribuição
 
 Contribuições são bem-vindas! Para propor melhorias, correções ou novas funcionalidades, por favor, abra uma *issue* e/ou envie um *pull request*.
