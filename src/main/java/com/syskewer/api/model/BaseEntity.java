@@ -11,6 +11,7 @@ public abstract class BaseEntity<T> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @io.swagger.v3.oas.annotations.media.Schema(hidden = true)
     private T id;
 
     public T getId() { return id; }

@@ -53,3 +53,6 @@ springdoc.packages-to-scan=com.syskewer.api.controller
 springdoc.paths-to-match=/**
 springdoc.default-produces-media-type=application/json
 springdoc.show-actuator=false
+# Evita recursão e problemas com tipos genéricos
+springdoc.model-and-view-allowed=false
+springdoc.override-with-generic-response=true

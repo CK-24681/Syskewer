@@ -19,6 +19,7 @@ public class Category extends BaseEntity<Integer> {
     @ManyToOne
     @JoinColumn(name = "parent_id")
     @JsonIgnore
+    @io.swagger.v3.oas.annotations.media.Schema(hidden = true)
     private Category parent;
 
     public Category() {}
