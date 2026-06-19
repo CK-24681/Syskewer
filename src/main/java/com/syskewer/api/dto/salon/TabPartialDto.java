@@ -7,5 +7,6 @@ public record TabPartialDto(
         Integer tabId,
         String customerName,
         BigDecimal totalAmount,
-        List<PartialItemDto> items
+        List<PartialItemDto> timeline,
+        List<PartialItemDto> groupedItems
 ) {}

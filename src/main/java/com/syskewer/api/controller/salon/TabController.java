@@ -1,10 +1,12 @@
 package com.syskewer.api.controller.salon;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,12 +52,18 @@ public class TabController {
         return ResponseEntity.ok("Conta recebida com sucesso! A comanda foi fechada e a mesa está livre.");
     }
 
-    /** Couvert artístico (R$ 5,00) — somente admin. */
+    /** Couvert artístico fixo rateado pela mesa. */
     @PatchMapping("/{id}/couvert")
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<String> toggleCoverCharge(@PathVariable Integer id) {
         tabService.toggleCoverCharge(id);
-        return ResponseEntity.ok("Couvert artístico atualizado com sucesso!");
+        return ResponseEntity.ok("Couvert artístico processado com sucesso na mesa/comanda!");
+    }
+
+    /** Taxa de entrega fixa. */
+    @PostMapping("/delivery")
+    public ResponseEntity<com.syskewer.api.dto.salon.TabSummaryDto> openDeliveryTab(
+            @RequestBody @Valid com.syskewer.api.dto.salon.TabDeliveryDto dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(tabService.openDeliveryTab(dto));
     }
 
     /** @param doc CPF ou telefone do devedor */
@@ -76,14 +84,35 @@ public class TabController {
     /** @param dto valor pago (parcial ou total) */
     @PatchMapping("/{id}/pay")
     public ResponseEntity<String> registerPayment(@PathVariable Integer id, @RequestBody @Valid TabPaymentDto dto) {
-        String message = tabService.registerPayment(id, dto.amount());
+        String message = tabService.registerPayment(id, dto.amount(), dto.discount());
         return ResponseEntity.ok(message);
     }
 
-    /** Taxa de entrega (R$ 5,00) já incluída no total. */
-    @PostMapping("/delivery")
-    public ResponseEntity<com.syskewer.api.dto.salon.TabSummaryDto> openDeliveryTab(
-            @RequestBody @Valid com.syskewer.api.dto.salon.TabDeliveryDto dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(tabService.openDeliveryTab(dto));
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GARCOM')")
+    public ResponseEntity<Void> cancelTab(@PathVariable Integer id) {
+        tabService.cancelTab(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/transfer")
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GARCOM')")
+    public ResponseEntity<String> transferTable(@PathVariable Integer id, @RequestParam Integer newTable) {
+        return ResponseEntity.ok(tabService.transferTab(id, newTable));
+    }
+
+    @PatchMapping("/pay-group")
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GARCOM')")
+    public ResponseEntity<String> payGroupedTabs(
+            @RequestParam List<Integer> tabIds, 
+            @RequestParam BigDecimal amountReceived) {
+        return ResponseEntity.ok(tabService.payGroupedTabs(tabIds, amountReceived));
+    }
+
+    @PatchMapping("/{id}/remove-couvert")
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GARCOM')")
+    public ResponseEntity<String> removeCoverCharge(@PathVariable Integer id) {
+        tabService.removeCoverCharge(id);
+        return ResponseEntity.ok("Couvert removido apenas desta comanda.");
     }
 }

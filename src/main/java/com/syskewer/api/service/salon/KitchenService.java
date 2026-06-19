@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 
 import com.syskewer.api.dto.salon.KitchenItemDto;
 import com.syskewer.api.dto.salon.KitchenOrderDto;
+import com.syskewer.api.exception.ResourceNotFoundException;
 import com.syskewer.api.model.salon.Order;
 import com.syskewer.api.model.salon.OrderItem;
 import com.syskewer.api.model.salon.PrepStatus;
 import com.syskewer.api.repository.salon.OrderItemRepository;
 import com.syskewer.api.repository.salon.OrderRepository;
 
-/** Fila da cozinha — só pedidos em QUEUED ou PREPARING. */
 @Service
 public class KitchenService {
 
@@ -26,18 +26,32 @@ public class KitchenService {
         this.orderItemRepository = orderItemRepository;
     }
 
-    /** @return pedidos ativos ordenados por chegada */
-    public List<KitchenOrderDto> getKitchenQueue() {
+    public List<KitchenOrderDto> getKitchenQueue(String location) {
         List<PrepStatus> activeStatuses = Arrays.asList(PrepStatus.QUEUED, PrepStatus.PREPARING);
         List<Order> orders = orderRepository.findByPrepStatusInOrderByCreatedAtAsc(activeStatuses);
 
         return orders.stream().map(order -> {
-
             String destination = order.getTab().getTable() != null
                     ? "Mesa " + order.getTab().getTable().getNumber()
                     : "Comanda " + order.getTab().getId() + " (" + order.getTab().getCustomerName() + ")";
 
+            // Identifica quem pediu
+            String waiterName = order.getWaiter() != null ? order.getWaiter().getName() : "Autoatendimento/Delivery";
+
             List<OrderItem> orderItems = orderItemRepository.findByOrderId(order.getId());
+
+            // Filtro de Roteamento Inteligente (Cozinha vs Churrasqueira)
+            if (location != null && !location.isBlank()) {
+                orderItems = orderItems.stream()
+                        .filter(item -> item.getProduct().getPrepLocation() != null &&
+                                item.getProduct().getPrepLocation().getName().equalsIgnoreCase(location))
+                        .collect(Collectors.toList());
+            }
+
+            // Se o pedido não tiver itens para esta praça de preparo, não exibe o card
+            if (orderItems.isEmpty()) {
+                return null;
+            }
 
             List<KitchenItemDto> items = orderItems.stream().map(item -> new KitchenItemDto(
                     item.getProduct().getName(),
@@ -54,18 +68,17 @@ public class KitchenService {
                     destination,
                     order.getPrepStatus().name(),
                     order.getCreatedAt(),
+                    waiterName, // <-- Injetado aqui
                     items
             );
-        }).collect(Collectors.toList());
+        })
+        .filter(java.util.Objects::nonNull) // Remove os nulos do roteamento
+        .collect(Collectors.toList());
     }
 
-    /**
-     * @param orderId id do pedido
-     * @param newStatus próximo status (QUEUED → PREPARING → READY)
-     */
     public void advanceOrderStatus(Long orderId, PrepStatus newStatus) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Pedido " + orderId + " não encontrado!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Pedido " + orderId + " não encontrado na cozinha!"));
 
         order.setPrepStatus(newStatus);
         orderRepository.save(order);

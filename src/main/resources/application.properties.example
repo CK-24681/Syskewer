@@ -1,0 +1,54 @@
+# ===============================
+# CONFIGURAÇÃO DE BANCO DE DADOS E SPRING
+# ===============================
+spring.application.name=api
+
+# Altere "seu_usuario" e "sua_senha" para as credenciais do seu PostgreSQL local
+spring.datasource.url=jdbc:postgresql://localhost:5432/syskewer_db
+spring.datasource.username=seu_usuario
+spring.datasource.password=sua_senha
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+# JPA e Hibernate
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+# "update" faz o Spring Boot ler as classes @Entity e criar as tabelas automaticamente
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+
+# ===============================
+# CONFIGURAÇÕES DE SEGURANÇA (JWT)
+# ===============================
+# Token hash MD5 para ambiente de desenvolvimento local
+api.security.token.secret=510ecb4ec50e9d20ef398226058c2643
+api.security.token.expiration=172800
+
+# ===============================
+# CONFIGURAÇÕES DE E-MAIL (Recuperação de Senha)
+# ===============================
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+# Insira um e-mail válido e uma senha de aplicativo (App Password)
+spring.mail.username=seu-email-aqui@gmail.com
+spring.mail.password=sua_senha_de_app_gerada
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+spring.mail.properties.mail.smtp.starttls.required=true
+
+# ===============================
+# ACESSO PADRÃO DO SISTEMA
+# ===============================
+# Define a senha para o primeiro usuário Administrador criado pela inicialização automática
+api.security.admin.default-password=sua-senha-aqui
+
+# ===============================
+# SWAGGER
+# ===============================
+logging.level.org.springdoc=DEBUG
+logging.level.io.swagger.v3=DEBUG
+
+# BLINDAGEM DO SWAGGER
+springdoc.packages-to-scan=com.syskewer.api.controller
+springdoc.paths-to-match=/**
+springdoc.default-produces-media-type=application/json
+springdoc.show-actuator=false

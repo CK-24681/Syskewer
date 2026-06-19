@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.syskewer.api.model.auth.PasswordResetToken;
 import com.syskewer.api.model.user.User;
@@ -49,6 +50,7 @@ public class PasswordResetService {
      * @param token token recebido por e-mail
      * @param newPassword nova senha em texto plano
      */
+    @Transactional
     public void resetPassword(String token, String newPassword) {
         PasswordResetToken resetToken = tokenRepository.findByToken(token)
                 .orElseThrow(() -> new RuntimeException("Token de recuperação inválido!"));

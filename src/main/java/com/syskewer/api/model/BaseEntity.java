@@ -1,22 +1,13 @@
 package com.syskewer.api.model;
 
-import java.io.Serializable;
 import java.util.Objects;
-
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 
-/**
- * ID auto-incremento compartilhado pelas entidades.
- *
- * @param <T> tipo do identificador
- */
 @MappedSuperclass
-public abstract class BaseEntity<T extends Serializable> implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public abstract class BaseEntity<T> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +17,6 @@ public abstract class BaseEntity<T extends Serializable> implements Serializable
 
     public void setId(T id) { this.id = id; }
 
-    // Igualdade só por ID — entidade nova (id null) nunca colide com outra
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

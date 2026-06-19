@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.syskewer.api.dto.user.UserResponseDto;
 import com.syskewer.api.dto.user.UserUpdateDto;
+import com.syskewer.api.exception.BusinessRuleException;
+import com.syskewer.api.exception.ResourceNotFoundException;
 import com.syskewer.api.model.user.Role;
 import com.syskewer.api.model.user.User;
 import com.syskewer.api.repository.user.RoleRepository;
@@ -26,7 +28,6 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    /** @return todos os usuários (ativos e inativos) */
     public List<UserResponseDto> listAll() {
         return userRepository.findAll()
                 .stream()
@@ -34,23 +35,19 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * @param user dados do novo usuário (senha em texto plano)
-     * @return usuário persistido
-     */
     public UserResponseDto registerUser(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
-            throw new RuntimeException("Este nome de usuário já está em uso!");
+            throw new BusinessRuleException("Este nome de usuário já está em uso!");
         }
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("Este e-mail já está cadastrado!");
+            throw new BusinessRuleException("Este e-mail já está cadastrado!");
         }
 
         if (user.getRole() == null || user.getRole().getId() == null) {
-            throw new RuntimeException("O perfil (Role) do usuário é obrigatório!");
+            throw new BusinessRuleException("O perfil (Role) do usuário é obrigatório!");
         }
         Role role = roleRepository.findById(user.getRole().getId())
-                .orElseThrow(() -> new RuntimeException("Perfil não encontrado no sistema!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Perfil não encontrado no sistema!"));
         user.setRole(role);
 
         String senhaCriptografada = passwordEncoder.encode(user.getPassword());
@@ -60,27 +57,22 @@ public class UserService {
         return convertToResponseDto(savedUser);
     }
 
-    /**
-     * @param id id do usuário
-     * @param dto campos a atualizar (null = mantém)
-     * @return usuário atualizado
-     */
     public UserResponseDto patchUser(Integer id, UserUpdateDto dto) {
         User existingUser = userRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
+            .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
 
         if (dto.name() != null) {
             existingUser.setName(dto.name());
         }
         if (dto.email() != null) {
             if (!existingUser.getEmail().equals(dto.email()) && userRepository.existsByEmail(dto.email())) {
-                throw new RuntimeException("Este e-mail já está em uso!");
+                throw new BusinessRuleException("Este e-mail já está em uso!");
             }
             existingUser.setEmail(dto.email());
         }
         if (dto.roleId() != null) {
             Role role = roleRepository.findById(dto.roleId())
-                .orElseThrow(() -> new RuntimeException("Perfil não encontrado!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Perfil não encontrado!"));
             existingUser.setRole(role);
         }
 
@@ -88,24 +80,18 @@ public class UserService {
         return convertToResponseDto(updatedUser);
     }
 
-    /** Desativa sem apagar — mantém histórico de pedidos vinculados. */
     public void deactivateUser(Integer id) {
         User user = userRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
+            .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
         user.setActive(false);
         userRepository.save(user);
     }
 
-    /**
-     * @param email e-mail do usuário
-     * @return entidade encontrada
-     */
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
     }
 
-    /** @param newEncodedPassword senha já criptografada */
     public void updatePassword(User user, String newEncodedPassword) {
         user.setPassword(newEncodedPassword);
         userRepository.save(user);
@@ -117,7 +103,7 @@ public class UserService {
             user.getName(),
             user.getUsername(),
             user.getEmail(),
-            user.getRole(),
+            user.getRole().getAuthority(),
             user.getActive()
         );
     }

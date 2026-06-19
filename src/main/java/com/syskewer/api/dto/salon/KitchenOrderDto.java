@@ -9,5 +9,6 @@ public record KitchenOrderDto(
         String destination,
         String status,
         LocalDateTime createdAt,
+        String waiterName,
         List<KitchenItemDto> items
 ) {}

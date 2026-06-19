@@ -2,6 +2,7 @@ package com.syskewer.api.model.salon;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.syskewer.api.model.BaseEntity;
 import com.syskewer.api.model.user.User;
 
@@ -19,6 +20,7 @@ public class Order extends BaseEntity<Long> {
 
     @ManyToOne
     @JoinColumn(name = "tab_id", nullable = false)
+    @JsonIgnore
     private Tab tab;
 
     @ManyToOne(fetch = FetchType.LAZY)

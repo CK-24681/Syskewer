@@ -9,7 +9,6 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "tb_prep_location")
 public class PrepLocation extends BaseEntity<Integer> {
-    private static final long serialVersionUID = 1L;
 
     @Column(nullable = false, unique = true, length = 50)
     private String name;

@@ -7,5 +7,6 @@ public record PartialItemDto(
         Integer quantity,
         BigDecimal unitPrice,
         BigDecimal totalPrice,
-        Boolean isToGo
+        Boolean isToGo,
+        String status
 ) {}

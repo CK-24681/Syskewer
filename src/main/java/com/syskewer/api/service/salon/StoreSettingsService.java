@@ -2,6 +2,7 @@ package com.syskewer.api.service.salon;
 
 import org.springframework.stereotype.Service;
 
+import com.syskewer.api.exception.ResourceNotFoundException;
 import com.syskewer.api.model.store.StoreSettings;
 import com.syskewer.api.repository.store.StoreSettingsRepository;
 
@@ -16,10 +17,9 @@ public class StoreSettingsService {
 
     public StoreSettings getSettings() {
         return repository.findById(1)
-                .orElseThrow(() -> new RuntimeException("Configurações da loja não encontradas!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Configurações da loja não encontradas! O banco de dados foi inicializado corretamente?"));
     }
 
-    /** Alterna aberto/fechado — bloqueia novos pedidos no front quando fechado. */
     public StoreSettings toggleStore() {
         StoreSettings settings = getSettings();
         settings.setIsOpen(!settings.getIsOpen());

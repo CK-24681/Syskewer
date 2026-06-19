@@ -69,22 +69,29 @@ public class SecurityConfig {
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+        return http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
+                .authorizeHttpRequests(authorize -> authorize
+                        // ROTAS PÚBLICAS (Sem token)
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/password/forgot").permitAll()
                         .requestMatchers(HttpMethod.POST, "/password/reset").permitAll()
-                        .requestMatchers("/error").permitAll()
-                        .requestMatchers(HttpMethod.GET).authenticated()
-                        .requestMatchers(HttpMethod.POST).hasRole("ADMINISTRADOR")
-                        .requestMatchers(HttpMethod.PUT).hasRole("ADMINISTRADOR")
-                        .requestMatchers(HttpMethod.PATCH).hasRole("ADMINISTRADOR")
-                        .requestMatchers(HttpMethod.DELETE).hasRole("ADMINISTRADOR")
+
+                        // SWAGGER
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+
+                        // REGRAS DE NEGÓCIO
+                        .requestMatchers(HttpMethod.POST, "/users/register").hasRole("ADMINISTRADOR")
+                        .requestMatchers(HttpMethod.POST, "/tables").hasRole("ADMINISTRADOR")
+                        .requestMatchers(HttpMethod.DELETE, "/tables/**").hasRole("ADMINISTRADOR")
+                        .requestMatchers(HttpMethod.POST, "/categories", "/products", "/prep-locations")
+                        .hasRole("ADMINISTRADOR")
+                        .requestMatchers(HttpMethod.PATCH, "/categories/**", "/products/**").hasRole("ADMINISTRADOR")
+                        .requestMatchers(HttpMethod.PUT, "/categories/**", "/products/**").hasRole("ADMINISTRADOR")
+                        .requestMatchers(HttpMethod.DELETE, "/categories/**", "/products/**").hasRole("ADMINISTRADOR")
                         .anyRequest().authenticated())
-                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
-        return http.build();
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 }

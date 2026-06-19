@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.syskewer.api.dto.user.UserRecordDto;
 import com.syskewer.api.dto.user.UserResponseDto;
 import com.syskewer.api.dto.user.UserUpdateDto;
+import com.syskewer.api.model.user.Role;
 import com.syskewer.api.model.user.User;
 import com.syskewer.api.service.user.UserService;
 
@@ -47,7 +48,12 @@ public class UserController {
         userEntity.setUsername(userDto.username());
         userEntity.setEmail(userDto.email());
         userEntity.setPassword(userDto.password());
-        userEntity.setRole(userDto.role());
+        
+        // Cria uma instância de Role apenas com o ID que veio do DTO
+        Role role = new Role();
+        role.setId(userDto.roleId());
+        userEntity.setRole(role);
+        
         userEntity.setActive(true);
 
         UserResponseDto savedUser = userService.registerUser(userEntity);

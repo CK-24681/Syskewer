@@ -26,8 +26,8 @@ public class KitchenController {
 
     /** Fila ativa — o tablet da cozinha faz polling aqui. */
     @GetMapping("/queue")
-    public ResponseEntity<List<KitchenOrderDto>> getQueue() {
-        return ResponseEntity.ok(kitchenService.getKitchenQueue());
+    public ResponseEntity<List<KitchenOrderDto>> getQueue(@RequestParam(required = false) String location) {
+        return ResponseEntity.ok(kitchenService.getKitchenQueue(location));
     }
 
     /** @param status próximo status (QUEUED → PREPARING → READY) */

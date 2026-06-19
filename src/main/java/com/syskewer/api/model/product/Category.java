@@ -1,5 +1,6 @@
 package com.syskewer.api.model.product;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.syskewer.api.model.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -17,6 +18,7 @@ public class Category extends BaseEntity<Integer> {
 
     @ManyToOne
     @JoinColumn(name = "parent_id")
+    @JsonIgnore
     private Category parent;
 
     public Category() {}

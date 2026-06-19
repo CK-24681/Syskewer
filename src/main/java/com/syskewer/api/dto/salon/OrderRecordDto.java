@@ -4,13 +4,20 @@ import java.util.List;
 
 import com.syskewer.api.model.salon.OrderOrigin;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public record OrderRecordDto(
-        @NotNull(message = "O ID da comanda (Tab) é obrigatório")
-        Integer tabId,
-        OrderOrigin origin,
-        @NotEmpty(message = "O pedido deve conter pelo menos um item")
-        List<OrderItemRecordDto> items
+    @NotNull(message = "O ID da comanda é obrigatório")
+    @Positive(message = "O ID da comanda deve ser maior que zero")
+    Integer tabId,
+
+    @NotNull(message = "A origem do pedido é obrigatória")
+    OrderOrigin origin,
+
+    @NotEmpty(message = "O pedido deve conter pelo menos um item")
+    @Valid 
+    List<OrderItemRecordDto> items
 ) {}

@@ -1,6 +1,5 @@
 package com.syskewer.api.dto.user;
 
-import com.syskewer.api.model.user.Role;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -20,7 +19,7 @@ public record UserRecordDto(
         @NotBlank(message = "A senha não pode estar em branco")
         String password,
 
-        @NotNull(message = "O cargo (role) é obrigatório")
-        Role role
+        @NotNull(message = "O ID do cargo é obrigatório") 
+        Integer roleId
 ) {
 }

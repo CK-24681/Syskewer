@@ -1,67 +1,56 @@
 package com.syskewer.api.exception;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.NoHandlerFoundException;
 
-/** Respostas JSON padronizadas — RuntimeException com "não encontrado" vira 404. */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    // Trata erros 404 (Não Encontrado)
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<String> handleResourceNotFound(ResourceNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    // Trata erros 400 (Regras de Negócio violadas)
+    @ExceptionHandler(BusinessRuleException.class)
+    public ResponseEntity<String> handleBusinessRule(BusinessRuleException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    // Trata os erros das anotações @NotBlank, @NotNull, etc (Passo 2)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, Object> response = new HashMap<>();
-        response.put("status", HttpStatus.BAD_REQUEST.value());
-        response.put("timestamp", LocalDateTime.now());
-        response.put("message", "Erro de validação");
-
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getFieldErrors()
-                .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
-        response.put("errors", errors);
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    public ResponseEntity<List<ValidationErrorData>> handleValidation(MethodArgumentNotValidException ex) {
+        List<ValidationErrorData> errors = ex.getFieldErrors().stream()
+                .map(ValidationErrorData::new)
+                .toList();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 
-    @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleNotFound(NoHandlerFoundException ex) {
-        Map<String, Object> response = new HashMap<>();
-        response.put("status", HttpStatus.NOT_FOUND.value());
-        response.put("timestamp", LocalDateTime.now());
-        response.put("message", "Recurso não encontrado");
-        response.put("path", ex.getRequestURL());
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-    }
-
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<Map<String, Object>> handleRuntimeException(RuntimeException ex) {
-        Map<String, Object> response = new HashMap<>();
-
-        if (ex.getMessage() != null && ex.getMessage().contains("não encontrado")) {
-            response.put("status", HttpStatus.NOT_FOUND.value());
-            response.put("timestamp", LocalDateTime.now());
-            response.put("message", ex.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    // DTO interno exclusivo para formatar a resposta de validação
+    public record ValidationErrorData(String campo, String mensagem) {
+        public ValidationErrorData(FieldError error) {
+            this(error.getField(), error.getDefaultMessage());
         }
-
-        response.put("status", HttpStatus.BAD_REQUEST.value());
-        response.put("timestamp", LocalDateTime.now());
-        response.put("message", ex.getMessage() != null ? ex.getMessage() : "Erro ao processar requisição");
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
+    // Tratamento genérico para qualquer outro erro não mapeado (Fallback)
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleGeneralException(Exception e) {
+    public ResponseEntity<String> handleGenericException(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Erro interno no servidor: " + e.getMessage());
+                .body("Ocorreu um erro interno no servidor. Detalhes: " + ex.getMessage());
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<String> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body("Conflito de dados: O registro que você tentou criar já existe (ex: número de mesa ou e-mail duplicado).");
     }
 }

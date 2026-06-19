@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import com.syskewer.api.dto.product.ProductRecordDto;
 import com.syskewer.api.dto.product.ProductResponseDto;
 import com.syskewer.api.dto.product.ProductUpdateDto;
+import com.syskewer.api.exception.BusinessRuleException;
+import com.syskewer.api.exception.ResourceNotFoundException;
 import com.syskewer.api.model.product.Category;
 import com.syskewer.api.model.product.PrepLocation;
 import com.syskewer.api.model.product.Product;
@@ -41,12 +43,12 @@ public class ProductService {
      */
     public Product saveProduct(ProductRecordDto dto) {
         Category category = categoryRepository.findById(dto.categoryId())
-                .orElseThrow(() -> new RuntimeException("Categoria não encontrada!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada!"));
 
         PrepLocation prepLocation = null;
         if (dto.prepLocationId() != null) {
             prepLocation = prepLocationRepository.findById(dto.prepLocationId())
-                    .orElseThrow(() -> new RuntimeException("Local de preparo não encontrado!"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Local de preparo não encontrado!"));
         }
 
         Product product = new Product();
@@ -55,10 +57,10 @@ public class ProductService {
         product.setCategory(category);
         product.setPrepLocation(prepLocation);
         product.setActive(true);
-        product.setInStock(dto.inStock() != null ? dto.inStock() : Boolean.TRUE);
+        product.setInStock(dto.inStock());
 
         if (repository.existsByNameIgnoreCase(product.getName())) {
-            throw new RuntimeException("Já existe um produto com o nome: " + product.getName());
+            throw new BusinessRuleException("Já existe um produto com o nome: " + product.getName());
         }
 
         return repository.save(product);
@@ -71,13 +73,13 @@ public class ProductService {
      */
     public Product patchProduct(Integer id, ProductUpdateDto dto) {
         Product existingProduct = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado!"));
 
         if (dto.name() != null) {
             String cleanedName = dto.name().trim().replaceAll(" +", " ");
             if (!cleanedName.equalsIgnoreCase(existingProduct.getName()) &&
                     repository.existsByNameIgnoreCase(cleanedName)) {
-                throw new RuntimeException("Já existe um produto com o nome: " + cleanedName);
+                throw new BusinessRuleException("Já existe um produto com o nome: " + cleanedName);
             }
             existingProduct.setName(cleanedName);
         }
@@ -88,13 +90,13 @@ public class ProductService {
 
         if (dto.categoryId() != null) {
             Category category = categoryRepository.findById(dto.categoryId())
-                    .orElseThrow(() -> new RuntimeException("Categoria não encontrada!"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada!"));
             existingProduct.setCategory(category);
         }
 
         if (dto.prepLocationId() != null) {
             PrepLocation prepLocation = prepLocationRepository.findById(dto.prepLocationId())
-                    .orElseThrow(() -> new RuntimeException("Local de preparo não encontrado!"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Local de preparo não encontrado!"));
             existingProduct.setPrepLocation(prepLocation);
         }
 
@@ -108,7 +110,7 @@ public class ProductService {
     /** Soft delete — pedidos antigos mantêm referência ao produto. */
     public void deactivateProduct(Integer id) {
         Product product = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado!"));
 
         product.setActive(false);
         repository.save(product);

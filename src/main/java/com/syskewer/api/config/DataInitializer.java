@@ -10,7 +10,6 @@ import com.syskewer.api.model.user.User;
 import com.syskewer.api.repository.user.RoleRepository;
 import com.syskewer.api.repository.user.UserRepository;
 
-/** Cria o admin padrão na primeira subida, se ainda não existir. */
 @Component
 public class DataInitializer implements CommandLineRunner {
 
@@ -29,8 +28,20 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        
         Role adminRole = roleRepository.findByAuthority("Administrador")
-                .orElseThrow(() -> new RuntimeException("Role Administrador não encontrada no banco. Verifique o Flyway."));
+                .orElseGet(() -> {
+                    Role role = new Role();
+                    role.setAuthority("Administrador");
+                    return roleRepository.save(role);
+                });
+
+        roleRepository.findByAuthority("Garçom")
+                .orElseGet(() -> {
+                    Role role = new Role();
+                    role.setAuthority("Garçom");
+                    return roleRepository.save(role);
+                });
 
         if (userRepository.findByUsername("admin").isEmpty()) {
             User admin = new User();
@@ -40,7 +51,6 @@ public class DataInitializer implements CommandLineRunner {
             admin.setPassword(passwordEncoder.encode(defaultAdminPassword));
             admin.setRole(adminRole);
             admin.setActive(true);
-
             userRepository.save(admin);
         }
     }

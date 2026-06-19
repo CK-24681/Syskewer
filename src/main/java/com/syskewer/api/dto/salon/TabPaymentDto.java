@@ -8,5 +8,6 @@ import jakarta.validation.constraints.Positive;
 public record TabPaymentDto(
         @NotNull(message = "O valor do pagamento é obrigatório")
         @Positive(message = "O valor deve ser maior que zero")
-        BigDecimal amount
+        BigDecimal amount,
+        BigDecimal discount
 ) {}

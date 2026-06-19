@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.syskewer.api.model.BaseEntity;
 import com.syskewer.api.model.product.Product;
 
@@ -20,6 +21,7 @@ public class OrderItem extends BaseEntity<Long> {
 
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
+    @JsonIgnore
     private Order order;
 
     @ManyToOne
