@@ -3,8 +3,8 @@ package com.syskewer.api.dto.salon;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record KitchenComandaItemDto(
-        Long comandaItemId,
+public record KitchenOrderDto(
+        Long orderId,
         String origin,
         String destination,
         String status,

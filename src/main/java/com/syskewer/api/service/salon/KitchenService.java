@@ -7,45 +7,45 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.syskewer.api.dto.salon.KitchenItemDto;
-import com.syskewer.api.dto.salon.KitchenComandaItemDto;
+import com.syskewer.api.dto.salon.KitchenOrderDto;
 import com.syskewer.api.exception.BusinessRuleException;
 import com.syskewer.api.exception.ResourceNotFoundException;
-import com.syskewer.api.model.salon.ComandaItem;
-import com.syskewer.api.model.salon.ComandaItemDetail;
+import com.syskewer.api.model.salon.Order;
+import com.syskewer.api.model.salon.OrderDetail;
 import com.syskewer.api.model.salon.PrepStatus;
-import com.syskewer.api.repository.salon.ComandaItemDetailRepository;
-import com.syskewer.api.repository.salon.ComandaItemRepository;
+import com.syskewer.api.repository.salon.OrderDetailRepository;
+import com.syskewer.api.repository.salon.OrderRepository;
 
 @Service
 public class KitchenService {
 
-    private final ComandaItemRepository comandaItemRepository;
-    private final ComandaItemDetailRepository comandaItemDetailRepository;
+    private final OrderRepository orderRepository;
+    private final OrderDetailRepository orderDetailRepository;
 
-    public KitchenService(ComandaItemRepository comandaItemRepository, ComandaItemDetailRepository comandaItemDetailRepository) {
-        this.comandaItemRepository = comandaItemRepository;
-        this.comandaItemDetailRepository = comandaItemDetailRepository;
+    public KitchenService(OrderRepository orderRepository, OrderDetailRepository orderDetailRepository) {
+        this.orderRepository = orderRepository;
+        this.orderDetailRepository = orderDetailRepository;
     }
 
     // Retorna a fila de pedidos ativos com base na praca de preparo
-    public List<KitchenComandaItemDto> getKitchenQueue(String location) {
+    public List<KitchenOrderDto> getKitchenQueue(String location) {
         List<PrepStatus> activeStatuses = Arrays.asList(PrepStatus.QUEUED, PrepStatus.PREPARING);
-        List<ComandaItem> itemsComanda = comandaItemRepository.findByPrepStatusInOrderByCreatedAtAsc(activeStatuses);
+        List<Order> orders = orderRepository.findByPrepStatusInOrderByCreatedAtAsc(activeStatuses);
 
-        return itemsComanda.stream().map(comandaItem -> {
+        return orders.stream().map(order -> {
             String destination;
-            if (!comandaItem.getComanda().getTables().isEmpty()) {
-                destination = "Mesa " + comandaItem.getComanda().getTables().stream()
+            if (!order.getBill().getTables().isEmpty()) {
+                destination = "Mesa " + order.getBill().getTables().stream()
                         .map(t -> String.valueOf(t.getNumber()))
                         .collect(Collectors.joining(", "));
             } else {
-                destination = "Comanda " + comandaItem.getComanda().getId() + " (" + comandaItem.getComanda().getCustomerName() + ")";
+                destination = "Tab " + order.getBill().getId() + " (" + order.getBill().getCustomerName() + ")";
             }
 
             // Identifica quem pediu
-            String waiterName = comandaItem.getWaiter() != null ? comandaItem.getWaiter().getName() : "Autoatendimento/Delivery";
+            String waiterName = order.getWaiter() != null ? order.getWaiter().getName() : "Autoatendimento/Delivery";
 
-            List<ComandaItemDetail> details = comandaItemDetailRepository.findByComandaItemId(comandaItem.getId());
+            List<OrderDetail> details = orderDetailRepository.findByOrderId(order.getId());
 
             // Filtro de Roteamento Inteligente (Cozinha vs Churrasqueira)
             if (location != null && !location.isBlank()) {
@@ -69,12 +69,12 @@ public class KitchenService {
                     item.getSideDishes()
             )).collect(Collectors.toList());
 
-            return new KitchenComandaItemDto(
-                    comandaItem.getId(),
-                    comandaItem.getOrigin().name(),
+            return new KitchenOrderDto(
+                    order.getId(),
+                    order.getOrigin().name(),
                     destination,
-                    comandaItem.getPrepStatus().name(),
-                    comandaItem.getCreatedAt(),
+                    order.getPrepStatus().name(),
+                    order.getCreatedAt(),
                     waiterName,
                     items
             );
@@ -84,19 +84,19 @@ public class KitchenService {
     }
 
     public void advanceOrderStatus(Long orderId, PrepStatus newStatus) {
-        ComandaItem comandaItem = comandaItemRepository.findById(orderId)
-                .orElseThrow(() -> new ResourceNotFoundException("Pedido " + orderId + " não encontrado na cozinha!"));
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order " + orderId + " not found in the kitchen!"));
 
         if (newStatus == null) {
-            throw new BusinessRuleException("O novo status não pode ser nulo.");
+            throw new BusinessRuleException("New status cannot be null.");
         }
 
-        if (comandaItem.getPrepStatus().ordinal() > newStatus.ordinal()) {
-            throw new BusinessRuleException("Não é permitido retroceder o status de preparo do pedido de " 
-                    + comandaItem.getPrepStatus() + " para " + newStatus + ".");
+        if (order.getPrepStatus().ordinal() > newStatus.ordinal()) {
+            throw new BusinessRuleException("Not allowed to revert prep status from " 
+                    + order.getPrepStatus() + " to " + newStatus + ".");
         }
 
-        comandaItem.setPrepStatus(newStatus);
-        comandaItemRepository.save(comandaItem);
+        order.setPrepStatus(newStatus);
+        orderRepository.save(order);
     }
 }

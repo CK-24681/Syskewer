@@ -22,22 +22,22 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.syskewer.api.exception.BusinessRuleException;
-import com.syskewer.api.model.salon.ComandaItem;
-import com.syskewer.api.model.salon.ComandaItemDetail;
+import com.syskewer.api.model.salon.Order;
+import com.syskewer.api.model.salon.OrderDetail;
 import com.syskewer.api.model.salon.PrepStatus;
-import com.syskewer.api.model.salon.Comanda;
-import com.syskewer.api.model.salon.ComandaStatus;
-import com.syskewer.api.repository.salon.ComandaItemDetailRepository;
-import com.syskewer.api.repository.salon.ComandaRepository;
-import com.syskewer.api.service.salon.ComandaItemService;
+import com.syskewer.api.model.salon.Bill;
+import com.syskewer.api.model.salon.BillStatus;
+import com.syskewer.api.repository.salon.OrderDetailRepository;
+import com.syskewer.api.repository.salon.BillRepository;
+import com.syskewer.api.service.salon.OrderService;
 
 @ExtendWith(MockitoExtension.class)
-class ComandaItemServiceTest {
+class OrderServiceTest {
 
-    @Mock private ComandaItemDetailRepository comandaItemDetailRepository;
-    @Mock private ComandaRepository comandaRepository; 
+    @Mock private OrderDetailRepository orderDetailRepository;
+    @Mock private BillRepository billRepository; 
 
-    @InjectMocks private ComandaItemService comandaItemService;
+    @InjectMocks private OrderService orderService;
 
     private void mockSecurityRole(String role) {
         Authentication auth = mock(Authentication.class);
@@ -54,25 +54,25 @@ class ComandaItemServiceTest {
     void reduceItemQuantity_Success() {
         mockSecurityRole("ROLE_GARCOM");
 
-        Comanda comanda = new Comanda();
-        comanda.setTotalAmount(new BigDecimal("100.00")); 
-        comanda.setStatus(ComandaStatus.OPEN);
+        Bill bill = new Bill();
+        bill.setTotalAmount(new BigDecimal("100.00")); 
+        bill.setStatus(BillStatus.OPEN);
 
-        ComandaItem comandaItem = new ComandaItem();
-        comandaItem.setPrepStatus(PrepStatus.QUEUED);
-        comandaItem.setComanda(comanda);
+        Order order = new Order();
+        order.setPrepStatus(PrepStatus.QUEUED);
+        order.setBill(bill);
 
-        ComandaItemDetail item = new ComandaItemDetail();
+        OrderDetail item = new OrderDetail();
         item.setId(1L);
-        item.setComandaItem(comandaItem);
+        item.setOrder(order);
         item.setQuantity(10);
         item.setSoldPrice(new BigDecimal("10.00"));
 
-        when(comandaItemDetailRepository.findById(1L)).thenReturn(Optional.of(item));
+        when(orderDetailRepository.findById(1L)).thenReturn(Optional.of(item));
 
-        comandaItemService.reduceItemQuantity(1L, 2);
+        orderService.reduceItemQuantity(1L, 2);
 
-        assertEquals(new BigDecimal("80.00"), comanda.getTotalAmount());
+        assertEquals(new BigDecimal("80.00"), bill.getTotalAmount());
         assertEquals(8, item.getQuantity());
     }
 
@@ -81,26 +81,26 @@ class ComandaItemServiceTest {
     void cancelOrderItem_ByAdmin_WhenTabClosed() {
         mockSecurityRole("ROLE_ADMINISTRADOR");
 
-        Comanda comanda = new Comanda();
-        comanda.setStatus(ComandaStatus.CLOSED);
-        comanda.setTotalAmount(new BigDecimal("100.00"));
-        comanda.setPaidAmount(new BigDecimal("100.00"));
+        Bill bill = new Bill();
+        bill.setStatus(BillStatus.CLOSED);
+        bill.setTotalAmount(new BigDecimal("100.00"));
+        bill.setPaidAmount(new BigDecimal("100.00"));
 
-        ComandaItem comandaItem = new ComandaItem();
-        comandaItem.setPrepStatus(PrepStatus.DELIVERED);
-        comandaItem.setComanda(comanda);
+        Order order = new Order();
+        order.setPrepStatus(PrepStatus.DELIVERED);
+        order.setBill(bill);
 
-        ComandaItemDetail item = new ComandaItemDetail();
-        item.setComandaItem(comandaItem);
+        OrderDetail item = new OrderDetail();
+        item.setOrder(order);
         item.setQuantity(1);
         item.setSoldPrice(new BigDecimal("15.00")); 
 
-        when(comandaItemDetailRepository.findById(1L)).thenReturn(Optional.of(item));
+        when(orderDetailRepository.findById(1L)).thenReturn(Optional.of(item));
 
-        comandaItemService.cancelOrderItem(1L);
+        orderService.cancelOrderItem(1L);
 
-        assertEquals(new BigDecimal("85.00"), comanda.getTotalAmount());
-        assertEquals(new BigDecimal("85.00"), comanda.getPaidAmount());
+        assertEquals(new BigDecimal("85.00"), bill.getTotalAmount());
+        assertEquals(new BigDecimal("85.00"), bill.getPaidAmount());
     }
 
     @Test
@@ -108,14 +108,14 @@ class ComandaItemServiceTest {
     void cancelOrderItem_ThrowsException_WhenGarcomCancelsPreppingItem() {
         mockSecurityRole("ROLE_GARCOM");
 
-        ComandaItem comandaItem = new ComandaItem();
-        comandaItem.setPrepStatus(PrepStatus.PREPARING); 
-        ComandaItemDetail item = new ComandaItemDetail();
-        item.setComandaItem(comandaItem);
+        Order order = new Order();
+        order.setPrepStatus(PrepStatus.PREPARING); 
+        OrderDetail item = new OrderDetail();
+        item.setOrder(order);
 
-        when(comandaItemDetailRepository.findById(1L)).thenReturn(Optional.of(item));
+        when(orderDetailRepository.findById(1L)).thenReturn(Optional.of(item));
 
-        BusinessRuleException exception = assertThrows(BusinessRuleException.class, () -> comandaItemService.cancelOrderItem(1L));
+        BusinessRuleException exception = assertThrows(BusinessRuleException.class, () -> orderService.cancelOrderItem(1L));
         assertNotNull(exception);
     }
 }

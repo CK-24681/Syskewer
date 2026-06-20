@@ -17,13 +17,13 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tb_comanda_item_detail")
-public class ComandaItemDetail extends BaseEntity<Long> {
+@Table(name = "tb_order_detail")
+public class OrderDetail extends BaseEntity<Long> {
 
     @ManyToOne
-    @JoinColumn(name = "comanda_item_id", nullable = false)
+    @JoinColumn(name = "order_id", nullable = false)
     @JsonIgnore
-    private ComandaItem comandaItem;
+    private Order order;
 
     @ManyToOne
     @JoinColumn(name = "menu_id", nullable = false)
@@ -45,14 +45,14 @@ public class ComandaItemDetail extends BaseEntity<Long> {
     private String notes;
 
     @ElementCollection
-    @CollectionTable(name = "tb_order_item_sides", joinColumns = @JoinColumn(name = "order_item_id"))
+    @CollectionTable(name = "tb_order_detail_sides", joinColumns = @JoinColumn(name = "order_detail_id"))
     @Column(name = "side_dish")
     private List<String> sideDishes = new ArrayList<>();
 
-    public ComandaItemDetail() {}
+    public OrderDetail() {}
 
-    public ComandaItem getComandaItem() { return comandaItem; }
-    public void setComandaItem(ComandaItem comandaItem) { this.comandaItem = comandaItem; }
+    public Order getOrder() { return order; }
+    public void setOrder(Order order) { this.order = order; }
 
     public Menu getMenu() { return menu; }
     public void setMenu(Menu menu) { this.menu = menu; }

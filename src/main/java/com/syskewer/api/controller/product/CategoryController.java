@@ -1,18 +1,20 @@
 package com.syskewer.api.controller.product;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable; // <-- Import novo
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.syskewer.api.dto.product.CategoryRequestDto;
+import com.syskewer.api.dto.product.CategoryResponseDto;
 import com.syskewer.api.dto.product.CategoryUpdateDto;
 import com.syskewer.api.model.product.Category;
 import com.syskewer.api.service.product.CategoryService;
@@ -31,19 +33,24 @@ public class CategoryController {
 
     @PostMapping
     @Operation(summary = "Criar nova categoria")
-    public ResponseEntity<Category> create(@RequestBody @Valid CategoryRequestDto dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto.name(), dto.parentId()));
+    public ResponseEntity<CategoryResponseDto> create(@RequestBody @Valid CategoryRequestDto dto) {
+        Category saved = service.create(dto.name(), dto.parentId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(new CategoryResponseDto(saved));
     }
 
     @GetMapping
     @Operation(summary = "Listar todas as categorias")
-    public ResponseEntity<List<Category>> listAll() {
-        return ResponseEntity.ok(service.listAll());
+    public ResponseEntity<List<CategoryResponseDto>> listAll() {
+        List<CategoryResponseDto> list = service.listAll().stream()
+                .map(CategoryResponseDto::new)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(list);
     }
 
     @PatchMapping("/{id}")
     @Operation(summary = "Atualizar categoria existente")
-    public ResponseEntity<Category> update(@PathVariable Integer id, @RequestBody @Valid CategoryUpdateDto dto) {
-        return ResponseEntity.ok(service.update(id, dto));
+    public ResponseEntity<CategoryResponseDto> update(@PathVariable Integer id, @RequestBody @Valid CategoryUpdateDto dto) {
+        Category updated = service.update(id, dto);
+        return ResponseEntity.ok(new CategoryResponseDto(updated));
     }
 }

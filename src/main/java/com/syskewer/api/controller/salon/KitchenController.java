@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.syskewer.api.dto.salon.KitchenComandaItemDto;
+import com.syskewer.api.dto.salon.KitchenOrderDto;
 import com.syskewer.api.model.salon.PrepStatus;
 import com.syskewer.api.service.salon.KitchenService;
 
@@ -26,7 +26,7 @@ public class KitchenController {
 
     // Retorna a fila de pedidos pendentes para a cozinha
     @GetMapping("/queue")
-    public ResponseEntity<List<KitchenComandaItemDto>> getQueue(@RequestParam(required = false) String location) {
+    public ResponseEntity<List<KitchenOrderDto>> getQueue(@RequestParam(required = false) String location) {
         return ResponseEntity.ok(kitchenService.getKitchenQueue(location));
     }
 

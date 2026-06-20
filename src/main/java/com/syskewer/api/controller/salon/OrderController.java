@@ -14,48 +14,48 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.syskewer.api.dto.salon.ComandaItemRecordDto;
-import com.syskewer.api.service.salon.ComandaItemService;
+import com.syskewer.api.dto.salon.OrderRecordDto;
+import com.syskewer.api.service.salon.OrderService;
 
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/pedidos")
-public class ComandaItemController {
+@RequestMapping("/api/orders")
+public class OrderController {
 
-    private final ComandaItemService comandaItemService;
+    private final OrderService orderService;
 
-    public ComandaItemController(ComandaItemService comandaItemService) {
-        this.comandaItemService = comandaItemService;
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
     }
 
-    // Lanca um novo pedido em uma comanda aberta
+    // Launch a new order in an open bill
     @PostMapping
-    public ResponseEntity<String> placeOrder(@RequestBody @Valid ComandaItemRecordDto dto) {
-        comandaItemService.placeOrder(dto);
+    public ResponseEntity<String> placeOrder(@RequestBody @Valid OrderRecordDto dto) {
+        orderService.placeOrder(dto);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body("Pedido lançado com sucesso, calculado e enviado para a fila!");
+                .body("Order placed successfully, calculated and sent to queue!");
     }
 
-    // Cancela um item especifico de um pedido
+    // Cancel a specific item of an order
     @DeleteMapping("/items/{itemId}")
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GARCOM')")
     public ResponseEntity<Void> cancelOrderItem(@PathVariable Long itemId) {
-        comandaItemService.cancelOrderItem(itemId);
+        orderService.cancelOrderItem(itemId);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/items/{itemId}/reduce")
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GARCOM')")
     public ResponseEntity<String> reduceQuantity(@PathVariable Long itemId, @RequestParam Integer quantityToRemove) {
-        comandaItemService.reduceItemQuantity(itemId, quantityToRemove);
-        return ResponseEntity.ok("Quantidade reduzida e conta atualizada.");
+        orderService.reduceItemQuantity(itemId, quantityToRemove);
+        return ResponseEntity.ok("Quantity reduced and bill updated.");
     }
 
     @PostMapping("/items/{itemId}/split")
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'GARCOM')")
-    public ResponseEntity<String> splitItem(@PathVariable Long itemId, @RequestBody List<Integer> targetComandaIds) {
-        comandaItemService.splitItem(itemId, targetComandaIds);
-        return ResponseEntity.ok("O item foi rachado com sucesso entre as comandas.");
+    public ResponseEntity<String> splitItem(@PathVariable Long itemId, @RequestBody List<Integer> targetBillIds) {
+        orderService.splitItem(itemId, targetBillIds);
+        return ResponseEntity.ok("The item was successfully split among the bills.");
     }
 }

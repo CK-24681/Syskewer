@@ -1,6 +1,6 @@
 package com.syskewer.api.model.salon;
 
-public enum ComandaStatus {
+public enum BillStatus {
     OPEN,
     CLOSED,
     IN_DEBT

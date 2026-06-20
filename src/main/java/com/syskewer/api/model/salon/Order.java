@@ -1,11 +1,14 @@
 package com.syskewer.api.model.salon;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.syskewer.api.model.BaseEntity;
 import com.syskewer.api.model.user.User;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,16 +16,17 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tb_comanda_item")
-public class ComandaItem extends BaseEntity<Long> {
+@Table(name = "tb_order")
+public class Order extends BaseEntity<Long> {
 
     @ManyToOne
-    @JoinColumn(name = "comanda_id", nullable = false)
+    @JoinColumn(name = "bill_id", nullable = false)
     @JsonIgnore
-    private Comanda comanda;
+    private Bill bill;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "waiter_id")
@@ -39,10 +43,14 @@ public class ComandaItem extends BaseEntity<Long> {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    public ComandaItem() {}
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<OrderDetail> details = new ArrayList<>();
 
-    public Comanda getComanda() { return comanda; }
-    public void setComanda(Comanda comanda) { this.comanda = comanda; }
+    public Order() {}
+
+    public Bill getBill() { return bill; }
+    public void setBill(Bill bill) { this.bill = bill; }
 
     public User getWaiter() { return waiter; }
     public void setWaiter(User waiter) { this.waiter = waiter; }
@@ -55,4 +63,7 @@ public class ComandaItem extends BaseEntity<Long> {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public List<OrderDetail> getDetails() { return details; }
+    public void setDetails(List<OrderDetail> details) { this.details = details; }
 }

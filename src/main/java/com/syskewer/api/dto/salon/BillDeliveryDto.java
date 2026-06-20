@@ -2,7 +2,7 @@ package com.syskewer.api.dto.salon;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record ComandaDeliveryDto(
+public record BillDeliveryDto(
         @NotBlank(message = "O nome do cliente é obrigatório no Delivery.")
         String customerName,
 

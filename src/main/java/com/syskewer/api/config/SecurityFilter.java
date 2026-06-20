@@ -38,8 +38,10 @@ public class SecurityFilter extends OncePerRequestFilter {
 
             if (!login.isEmpty()) {
                 userRepository.findByUsername(login).ifPresent(user -> {
-                    var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    if (Boolean.TRUE.equals(user.getActive())) {
+                        var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    }
                 });
             }
         }

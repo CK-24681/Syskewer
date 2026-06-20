@@ -5,7 +5,7 @@ import com.syskewer.api.model.salon.ConsumptionType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-public record ComandaOpenDto(
+public record BillOpenDto(
     String customerName,
 
     @NotNull(message = "O número da mesa é obrigatório")

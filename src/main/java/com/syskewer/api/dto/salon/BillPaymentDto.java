@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 
-public record ComandaPaymentDto(
+public record BillPaymentDto(
         @NotNull(message = "O valor do pagamento é obrigatório")
         @Positive(message = "O valor deve ser maior que zero")
         BigDecimal amount,
