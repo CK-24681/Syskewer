@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrderController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">com.syskewer.api.controller.salon</a> &gt; <span class="el_source">OrderController.java</span></div><h1>OrderController.java</h1><pre class="source lang-java linenums">package com.syskewer.api.controller.salon;
+
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.syskewer.api.dto.salon.OrderRecordDto;
+import com.syskewer.api.service.salon.OrderService;
+
+import jakarta.validation.Valid;
+
+@RestController
+@RequestMapping(&quot;/api/orders&quot;)
+public class OrderController {
+
+    private final OrderService orderService;
+
+<span class="fc" id="L28">    public OrderController(OrderService orderService) {</span>
+<span class="fc" id="L29">        this.orderService = orderService;</span>
+<span class="fc" id="L30">    }</span>
+
+    // Launch a new order in an open bill
+    @PostMapping
+    public ResponseEntity&lt;String&gt; placeOrder(@RequestBody @Valid OrderRecordDto dto) {
+<span class="fc" id="L35">        orderService.placeOrder(dto);</span>
+<span class="fc" id="L36">        return ResponseEntity.status(HttpStatus.CREATED)</span>
+<span class="fc" id="L37">                .body(&quot;Order placed successfully, calculated and sent to queue!&quot;);</span>
+    }
+
+    // Cancel a specific item of an order
+    @DeleteMapping(&quot;/items/{itemId}&quot;)
+    @PreAuthorize(&quot;hasAnyRole('ADMINISTRADOR', 'GARCOM')&quot;)
+    public ResponseEntity&lt;Void&gt; cancelOrderItem(@PathVariable Long itemId) {
+<span class="nc" id="L44">        orderService.cancelOrderItem(itemId);</span>
+<span class="nc" id="L45">        return ResponseEntity.noContent().build();</span>
+    }
+
+    @PatchMapping(&quot;/items/{itemId}/reduce&quot;)
+    @PreAuthorize(&quot;hasAnyRole('ADMINISTRADOR', 'GARCOM')&quot;)
+    public ResponseEntity&lt;String&gt; reduceQuantity(@PathVariable Long itemId, @RequestParam Integer quantityToRemove) {
+<span class="nc" id="L51">        orderService.reduceItemQuantity(itemId, quantityToRemove);</span>
+<span class="nc" id="L52">        return ResponseEntity.ok(&quot;Quantity reduced and bill updated.&quot;);</span>
+    }
+
+    @PostMapping(&quot;/items/{itemId}/split&quot;)
+    @PreAuthorize(&quot;hasAnyRole('ADMINISTRADOR', 'GARCOM')&quot;)
+    public ResponseEntity&lt;String&gt; splitItem(@PathVariable Long itemId, @RequestBody List&lt;Integer&gt; targetBillIds) {
+<span class="nc" id="L58">        orderService.splitItem(itemId, targetBillIds);</span>
+<span class="nc" id="L59">        return ResponseEntity.ok(&quot;The item was successfully split among the bills.&quot;);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

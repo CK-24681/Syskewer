@@ -1,0 +1,4348 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="../style.css">
+</head>
+<body>
+
+
+<h1>OrderService.java</h1>
+
+<table class="src">
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_1'/>
+1
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_1'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>package com.syskewer.api.service.salon;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_2'/>
+2
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_2'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_3'/>
+3
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_3'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import java.math.BigDecimal;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_4'/>
+4
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_4'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import java.util.List;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_5'/>
+5
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_5'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_6'/>
+6
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_6'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import org.springframework.security.core.Authentication;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_7'/>
+7
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_7'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import org.springframework.security.core.context.SecurityContextHolder;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_8'/>
+8
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_8'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import org.springframework.stereotype.Service;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_9'/>
+9
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_9'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import org.springframework.transaction.annotation.Transactional;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_10'/>
+10
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_10'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_11'/>
+11
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_11'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import com.syskewer.api.dto.salon.OrderDetailRecordDto;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_12'/>
+12
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_12'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import com.syskewer.api.dto.salon.OrderRecordDto;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_13'/>
+13
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_13'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import com.syskewer.api.exception.BusinessRuleException;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_14'/>
+14
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_14'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import com.syskewer.api.exception.ResourceNotFoundException;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_15'/>
+15
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_15'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import com.syskewer.api.model.product.Menu;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_16'/>
+16
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_16'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import com.syskewer.api.model.salon.Order;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_17'/>
+17
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_17'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import com.syskewer.api.model.salon.OrderDetail;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_18'/>
+18
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_18'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import com.syskewer.api.model.salon.OrderOrigin;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_19'/>
+19
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_19'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import com.syskewer.api.model.salon.PrepStatus;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_20'/>
+20
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_20'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import com.syskewer.api.model.salon.Bill;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_21'/>
+21
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_21'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import com.syskewer.api.model.salon.BillStatus;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_22'/>
+22
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_22'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import com.syskewer.api.model.user.User;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_23'/>
+23
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_23'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import com.syskewer.api.repository.product.MenuRepository;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_24'/>
+24
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_24'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import com.syskewer.api.repository.salon.OrderDetailRepository;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_25'/>
+25
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_25'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import com.syskewer.api.repository.salon.OrderRepository;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_26'/>
+26
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_26'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import com.syskewer.api.repository.salon.BillRepository;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_27'/>
+27
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_27'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_28'/>
+28
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_28'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>@Service</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_29'/>
+29
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_29'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>public class OrderService {</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_30'/>
+30
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_30'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_31'/>
+31
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_31'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    private final OrderRepository orderRepository;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_32'/>
+32
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_32'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    private final OrderDetailRepository orderDetailRepository;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_33'/>
+33
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_33'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    private final BillRepository billRepository;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_34'/>
+34
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_34'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    private final MenuRepository menuRepository;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_35'/>
+35
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_35'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    private final StoreSettingsService storeSettingsService;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_36'/>
+36
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_36'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_37'/>
+37
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_37'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>    public OrderService(OrderRepository orderRepository, OrderDetailRepository orderDetailRepository,</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_38'/>
+38
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_38'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>            BillRepository billRepository, MenuRepository menuRepository,</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_39'/>
+39
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_39'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>            StoreSettingsService storeSettingsService) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_40'/>
+40
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_40'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        this.orderRepository = orderRepository;</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_41'/>
+41
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_41'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        this.orderDetailRepository = orderDetailRepository;</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_42'/>
+42
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_42'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        this.billRepository = billRepository;</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_43'/>
+43
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_43'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        this.menuRepository = menuRepository;</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_44'/>
+44
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_44'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        this.storeSettingsService = storeSettingsService;</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_45'/>
+45
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_45'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_46'/>
+46
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_46'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_47'/>
+47
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_47'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    // Launch a new order ticket on a bill</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_48'/>
+48
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_48'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    @Transactional</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_49'/>
+49
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_49'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    public void placeOrder(OrderRecordDto dto) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_50'/>
+50
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_50'>1</a>
+<span>
+1. placeOrder : negated conditional &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (!storeSettingsService.isStoreOpen()) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_51'/>
+51
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_51'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>            throw new BusinessRuleException(&#34;The store is closed! Order placement is suspended.&#34;);</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_52'/>
+52
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_52'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_53'/>
+53
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_53'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        Bill bill = billRepository.findById(dto.billId())</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_54'/>
+54
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_54'>1</a>
+<span>
+1. lambda$0 : replaced return value with null for com/syskewer/api/service/salon/OrderService::lambda$0 &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>                .orElseThrow(() -&#62; new ResourceNotFoundException(&#34;Bill not found!&#34;));</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_55'/>
+55
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_55'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        </span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_56'/>
+56
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_56'>2</a>
+<span>
+1. placeOrder : negated conditional &rarr; KILLED<br/>
+2. placeOrder : negated conditional &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (bill.getStatus() == BillStatus.CLOSED || bill.getStatus() == BillStatus.IN_DEBT) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_57'/>
+57
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_57'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>            throw new BusinessRuleException(</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_58'/>
+58
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_58'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>                    &#34;Cannot place orders on a closed bill or a bill marked as deferred debt.&#34;);</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_59'/>
+59
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_59'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_60'/>
+60
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_60'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_61'/>
+61
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_61'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_62'/>
+62
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_62'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        User waiter = null;</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_63'/>
+63
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_63'>1</a>
+<span>
+1. placeOrder : negated conditional &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (principal instanceof User user) {</span></pre></td></tr>
+
+<tr>
+<td class='uncovered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_64'/>
+64
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_64'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='uncovered'><pre><span  class=''>            waiter = user;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_65'/>
+65
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_65'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_66'/>
+66
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_66'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_67'/>
+67
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_67'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        Order order = new Order();</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_68'/>
+68
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_68'>1</a>
+<span>
+1. placeOrder : removed call to com/syskewer/api/model/salon/Order::setBill &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>        order.setBill(bill);</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_69'/>
+69
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_69'>1</a>
+<span>
+1. placeOrder : removed call to com/syskewer/api/model/salon/Order::setWaiter &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>        order.setWaiter(waiter);</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_70'/>
+70
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_70'>1</a>
+<span>
+1. placeOrder : removed call to com/syskewer/api/model/salon/Order::setOrigin &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        order.setOrigin(dto.origin());</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_71'/>
+71
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_71'>1</a>
+<span>
+1. placeOrder : removed call to com/syskewer/api/model/salon/Order::setPrepStatus &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>        order.setPrepStatus(PrepStatus.QUEUED);</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_72'/>
+72
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_72'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        order = orderRepository.save(order);</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_73'/>
+73
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_73'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_74'/>
+74
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_74'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        BigDecimal totalOrderAmount = BigDecimal.ZERO;</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_75'/>
+75
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_75'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        for (OrderDetailRecordDto itemDto : dto.items()) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_76'/>
+76
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_76'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>            Menu menu = menuRepository.findById(itemDto.menuId())</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_77'/>
+77
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_77'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>                    .orElseThrow(() -&#62; new ResourceNotFoundException(</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_78'/>
+78
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_78'>1</a>
+<span>
+1. lambda$1 : replaced return value with null for com/syskewer/api/service/salon/OrderService::lambda$1 &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>                            &#34;Product ID &#34; + itemDto.menuId() + &#34; not found in the menu!&#34;));</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_79'/>
+79
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_79'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>            </span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_80'/>
+80
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_80'>1</a>
+<span>
+1. placeOrder : negated conditional &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>            if (Boolean.FALSE.equals(menu.getActive())) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_81'/>
+81
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_81'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>                throw new BusinessRuleException(&#34;The product &#39;&#34; + menu.getName() + &#34;&#39; is inactive and cannot be sold.&#34;);</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_82'/>
+82
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_82'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_83'/>
+83
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_83'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_84'/>
+84
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_84'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>            // A menu item is in stock if all its physical ingredients are in stock</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_85'/>
+85
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_85'>4</a>
+<span>
+1. lambda$2 : replaced boolean return with false for com/syskewer/api/service/salon/OrderService::lambda$2 &rarr; SURVIVED<br/>
+2. placeOrder : negated conditional &rarr; KILLED<br/>
+3. lambda$2 : replaced boolean return with true for com/syskewer/api/service/salon/OrderService::lambda$2 &rarr; KILLED<br/>
+4. placeOrder : negated conditional &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>            boolean inStock = menu.getProducts().isEmpty() || menu.getProducts().stream().allMatch(p -&#62; Boolean.TRUE.equals(p.getInStock()));</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_86'/>
+86
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_86'>1</a>
+<span>
+1. placeOrder : negated conditional &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>            if (!inStock) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_87'/>
+87
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_87'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>                throw new BusinessRuleException(&#34;The product &#39;&#34; + menu.getName() + &#34;&#39; is currently out of stock.&#34;);</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_88'/>
+88
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_88'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_89'/>
+89
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_89'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_90'/>
+90
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_90'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>            OrderDetail detail = new OrderDetail();</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_91'/>
+91
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_91'>1</a>
+<span>
+1. placeOrder : removed call to com/syskewer/api/model/salon/OrderDetail::setOrder &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>            detail.setOrder(order);</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_92'/>
+92
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_92'>1</a>
+<span>
+1. placeOrder : removed call to com/syskewer/api/model/salon/OrderDetail::setMenu &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>            detail.setMenu(menu);</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_93'/>
+93
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_93'>1</a>
+<span>
+1. placeOrder : removed call to com/syskewer/api/model/salon/OrderDetail::setQuantity &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>            detail.setQuantity(itemDto.quantity());</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_94'/>
+94
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_94'>1</a>
+<span>
+1. placeOrder : removed call to com/syskewer/api/model/salon/OrderDetail::setSoldPrice &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>            detail.setSoldPrice(menu.getPrice());</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_95'/>
+95
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_95'>1</a>
+<span>
+1. placeOrder : removed call to com/syskewer/api/model/salon/OrderDetail::setIsToGo &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>            detail.setIsToGo(Boolean.TRUE.equals(itemDto.isToGo()));</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_96'/>
+96
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_96'>1</a>
+<span>
+1. placeOrder : removed call to com/syskewer/api/model/salon/OrderDetail::setPackagingInstructions &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>            detail.setPackagingInstructions(itemDto.packagingInstructions());</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_97'/>
+97
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_97'>1</a>
+<span>
+1. placeOrder : removed call to com/syskewer/api/model/salon/OrderDetail::setNotes &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>            detail.setNotes(itemDto.notes());</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_98'/>
+98
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_98'>1</a>
+<span>
+1. placeOrder : negated conditional &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>            if (itemDto.sideDishes() != null) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_99'/>
+99
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_99'>1</a>
+<span>
+1. placeOrder : removed call to com/syskewer/api/model/salon/OrderDetail::setSideDishes &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>                detail.setSideDishes(itemDto.sideDishes());</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_100'/>
+100
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_100'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_101'/>
+101
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_101'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_102'/>
+102
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_102'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>            orderDetailRepository.save(detail);</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_103'/>
+103
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_103'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>            BigDecimal itemTotal = menu.getPrice().multiply(new BigDecimal(itemDto.quantity()));</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_104'/>
+104
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_104'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>            totalOrderAmount = totalOrderAmount.add(itemTotal);</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_105'/>
+105
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_105'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_106'/>
+106
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_106'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_107'/>
+107
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_107'>1</a>
+<span>
+1. placeOrder : removed call to com/syskewer/api/model/salon/Bill::setTotalAmount &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        bill.setTotalAmount(bill.getTotalAmount().add(totalOrderAmount));</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_108'/>
+108
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_108'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        billRepository.save(bill);</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_109'/>
+109
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_109'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_110'/>
+110
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_110'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_111'/>
+111
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_111'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    // Cancel an item from an order and update the bill total</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_112'/>
+112
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_112'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    @Transactional</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_113'/>
+113
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_113'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    public void cancelOrderItem(Long itemId) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_114'/>
+114
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_114'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        OrderDetail detail = orderDetailRepository.findById(itemId)</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_115'/>
+115
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_115'>1</a>
+<span>
+1. lambda$3 : replaced return value with null for com/syskewer/api/service/salon/OrderService::lambda$3 &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>                .orElseThrow(() -&#62; new ResourceNotFoundException(&#34;Item not found!&#34;));</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_116'/>
+116
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_116'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        Order order = detail.getOrder();</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_117'/>
+117
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_117'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        Bill bill = order.getBill();</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_118'/>
+118
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_118'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_119'/>
+119
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_119'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        Authentication auth = SecurityContextHolder.getContext().getAuthentication();</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_120'/>
+120
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_120'>2</a>
+<span>
+1. lambda$4 : replaced boolean return with true for com/syskewer/api/service/salon/OrderService::lambda$4 &rarr; KILLED<br/>
+2. lambda$4 : replaced boolean return with false for com/syskewer/api/service/salon/OrderService::lambda$4 &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        boolean isAdmin = auth.getAuthorities().stream().anyMatch(a -&#62; a.getAuthority().equals(&#34;ROLE_ADMINISTRADOR&#34;));</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_121'/>
+121
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_121'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_122'/>
+122
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_122'>2</a>
+<span>
+1. cancelOrderItem : negated conditional &rarr; KILLED<br/>
+2. cancelOrderItem : negated conditional &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (order.getPrepStatus() != PrepStatus.QUEUED &#38;&#38; !isAdmin) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_123'/>
+123
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_123'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>            throw new BusinessRuleException(&#34;Only items with &#39;QUEUED&#39; status can be canceled by waiters. Call manager to refund item currently in prep or delivered.&#34;);</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_124'/>
+124
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_124'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_125'/>
+125
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_125'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_126'/>
+126
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_126'>2</a>
+<span>
+1. cancelOrderItem : negated conditional &rarr; KILLED<br/>
+2. cancelOrderItem : negated conditional &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (bill.getStatus() == BillStatus.CLOSED &#38;&#38; !isAdmin) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_127'/>
+127
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_127'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>            throw new BusinessRuleException(&#34;The bill is closed. Only managers can refund items from a closed bill.&#34;);</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_128'/>
+128
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_128'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_129'/>
+129
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_129'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_130'/>
+130
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_130'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        BigDecimal itemTotal = detail.getSoldPrice().multiply(new BigDecimal(detail.getQuantity()));</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_131'/>
+131
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_131'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        </span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_132'/>
+132
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_132'>1</a>
+<span>
+1. cancelOrderItem : removed call to com/syskewer/api/model/salon/Bill::setTotalAmount &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        bill.setTotalAmount(bill.getTotalAmount().subtract(itemTotal));</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_133'/>
+133
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_133'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_134'/>
+134
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_134'>1</a>
+<span>
+1. cancelOrderItem : negated conditional &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (bill.getStatus() == BillStatus.CLOSED) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_135'/>
+135
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_135'>1</a>
+<span>
+1. cancelOrderItem : removed call to com/syskewer/api/model/salon/Bill::setPaidAmount &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>            bill.setPaidAmount(bill.getPaidAmount().subtract(itemTotal));</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_136'/>
+136
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_136'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_137'/>
+137
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_137'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_138'/>
+138
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_138'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        billRepository.save(bill);</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_139'/>
+139
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_139'>1</a>
+<span>
+1. cancelOrderItem : removed call to com/syskewer/api/repository/salon/OrderDetailRepository::delete &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        orderDetailRepository.delete(detail);</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_140'/>
+140
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_140'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_141'/>
+141
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_141'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_142'/>
+142
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_142'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    // Reduce quantity of a specific item from the order</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_143'/>
+143
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_143'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    @Transactional</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_144'/>
+144
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_144'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    public void reduceItemQuantity(Long itemId, Integer quantityToRemove) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_145'/>
+145
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_145'>3</a>
+<span>
+1. reduceItemQuantity : changed conditional boundary &rarr; KILLED<br/>
+2. reduceItemQuantity : negated conditional &rarr; KILLED<br/>
+3. reduceItemQuantity : negated conditional &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (quantityToRemove == null || quantityToRemove &#60;= 0) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_146'/>
+146
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_146'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>            throw new BusinessRuleException(&#34;Quantity to remove must be greater than zero.&#34;);</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_147'/>
+147
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_147'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_148'/>
+148
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_148'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_149'/>
+149
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_149'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        OrderDetail detail = orderDetailRepository.findById(itemId)</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_150'/>
+150
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_150'>1</a>
+<span>
+1. lambda$5 : replaced return value with null for com/syskewer/api/service/salon/OrderService::lambda$5 &rarr; NO_COVERAGE<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>                .orElseThrow(() -&#62; new ResourceNotFoundException(&#34;Item not found!&#34;));</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_151'/>
+151
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_151'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        </span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_152'/>
+152
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_152'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        Order order = detail.getOrder();</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_153'/>
+153
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_153'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        Authentication auth = SecurityContextHolder.getContext().getAuthentication();</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_154'/>
+154
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_154'>2</a>
+<span>
+1. lambda$6 : replaced boolean return with false for com/syskewer/api/service/salon/OrderService::lambda$6 &rarr; KILLED<br/>
+2. lambda$6 : replaced boolean return with true for com/syskewer/api/service/salon/OrderService::lambda$6 &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        boolean isAdmin = auth.getAuthorities().stream().anyMatch(a -&#62; a.getAuthority().equals(&#34;ROLE_ADMINISTRADOR&#34;));</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_155'/>
+155
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_155'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_156'/>
+156
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_156'>2</a>
+<span>
+1. reduceItemQuantity : negated conditional &rarr; KILLED<br/>
+2. reduceItemQuantity : negated conditional &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (order.getPrepStatus() != PrepStatus.QUEUED &#38;&#38; !isAdmin) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_157'/>
+157
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_157'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>            throw new BusinessRuleException(&#34;Preparation already started. Only managers can decrease quantity now.&#34;);</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_158'/>
+158
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_158'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_159'/>
+159
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_159'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_160'/>
+160
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_160'>2</a>
+<span>
+1. reduceItemQuantity : negated conditional &rarr; KILLED<br/>
+2. reduceItemQuantity : changed conditional boundary &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (quantityToRemove &#62;= detail.getQuantity()) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_161'/>
+161
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_161'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>            throw new BusinessRuleException(&#34;To remove all items, use the cancel item function.&#34;);</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_162'/>
+162
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_162'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_163'/>
+163
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_163'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_164'/>
+164
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_164'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        BigDecimal refundAmount = detail.getSoldPrice().multiply(new BigDecimal(quantityToRemove));</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_165'/>
+165
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_165'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        Bill bill = order.getBill();</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_166'/>
+166
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_166'>1</a>
+<span>
+1. reduceItemQuantity : removed call to com/syskewer/api/model/salon/Bill::setTotalAmount &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        bill.setTotalAmount(bill.getTotalAmount().subtract(refundAmount));</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_167'/>
+167
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_167'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        </span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_168'/>
+168
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_168'>1</a>
+<span>
+1. reduceItemQuantity : negated conditional &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (bill.getStatus() == BillStatus.CLOSED) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_169'/>
+169
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_169'>1</a>
+<span>
+1. reduceItemQuantity : removed call to com/syskewer/api/model/salon/Bill::setPaidAmount &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>            bill.setPaidAmount(bill.getPaidAmount().subtract(refundAmount));</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_170'/>
+170
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_170'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_171'/>
+171
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_171'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        billRepository.save(bill);</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_172'/>
+172
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_172'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_173'/>
+173
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_173'>2</a>
+<span>
+1. reduceItemQuantity : removed call to com/syskewer/api/model/salon/OrderDetail::setQuantity &rarr; KILLED<br/>
+2. reduceItemQuantity : Replaced integer subtraction with addition &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        detail.setQuantity(detail.getQuantity() - quantityToRemove);</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_174'/>
+174
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_174'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        orderDetailRepository.save(detail);</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_175'/>
+175
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_175'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_176'/>
+176
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_176'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_177'/>
+177
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_177'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    // Split the cost of an item among multiple bills</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_178'/>
+178
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_178'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    @Transactional</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_179'/>
+179
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_179'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    public void splitItem(Long itemId, List&#60;Integer&#62; targetBillIds) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_180'/>
+180
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_180'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        OrderDetail detail = orderDetailRepository.findById(itemId)</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_181'/>
+181
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_181'>1</a>
+<span>
+1. lambda$7 : replaced return value with null for com/syskewer/api/service/salon/OrderService::lambda$7 &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>                .orElseThrow(() -&#62; new ResourceNotFoundException(&#34;Item not found!&#34;));</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_182'/>
+182
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_182'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        </span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_183'/>
+183
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_183'>1</a>
+<span>
+1. splitItem : negated conditional &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (targetBillIds.isEmpty()) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_184'/>
+184
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_184'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>            throw new BusinessRuleException(&#34;No target bills selected for splitting.&#34;);</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_185'/>
+185
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_185'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_186'/>
+186
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_186'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_187'/>
+187
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_187'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        Bill originalBill = detail.getOrder().getBill();</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_188'/>
+188
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_188'>1</a>
+<span>
+1. splitItem : Replaced integer addition with subtraction &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        int totalPeople = targetBillIds.size() + 1;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_189'/>
+189
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_189'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_190'/>
+190
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_190'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        BigDecimal itemTotal = detail.getSoldPrice().multiply(new BigDecimal(detail.getQuantity()));</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_191'/>
+191
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_191'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        BigDecimal splitValue = itemTotal.divide(new BigDecimal(totalPeople), 2, java.math.RoundingMode.HALF_UP);</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_192'/>
+192
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_192'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_193'/>
+193
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_193'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        BigDecimal totalDeduction = splitValue.multiply(new BigDecimal(targetBillIds.size()));</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_194'/>
+194
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_194'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        </span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_195'/>
+195
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_195'>1</a>
+<span>
+1. splitItem : removed call to com/syskewer/api/model/salon/Bill::setTotalAmount &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        originalBill.setTotalAmount(originalBill.getTotalAmount().subtract(totalDeduction));</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_196'/>
+196
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_196'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        billRepository.save(originalBill);</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_197'/>
+197
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_197'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_198'/>
+198
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_198'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        Order financialOrderOriginal = new Order();</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_199'/>
+199
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_199'>1</a>
+<span>
+1. splitItem : removed call to com/syskewer/api/model/salon/Order::setBill &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>        financialOrderOriginal.setBill(originalBill);</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_200'/>
+200
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_200'>1</a>
+<span>
+1. splitItem : removed call to com/syskewer/api/model/salon/Order::setOrigin &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>        financialOrderOriginal.setOrigin(OrderOrigin.WAITER);</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_201'/>
+201
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_201'>1</a>
+<span>
+1. splitItem : removed call to com/syskewer/api/model/salon/Order::setPrepStatus &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>        financialOrderOriginal.setPrepStatus(PrepStatus.DELIVERED);</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_202'/>
+202
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_202'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        financialOrderOriginal = orderRepository.save(financialOrderOriginal);</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_203'/>
+203
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_203'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_204'/>
+204
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_204'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        OrderDetail discountPart = new OrderDetail();</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_205'/>
+205
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_205'>1</a>
+<span>
+1. splitItem : removed call to com/syskewer/api/model/salon/OrderDetail::setOrder &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>        discountPart.setOrder(financialOrderOriginal);</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_206'/>
+206
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_206'>1</a>
+<span>
+1. splitItem : removed call to com/syskewer/api/model/salon/OrderDetail::setMenu &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>        discountPart.setMenu(detail.getMenu());</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_207'/>
+207
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_207'>1</a>
+<span>
+1. splitItem : removed call to com/syskewer/api/model/salon/OrderDetail::setQuantity &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>        discountPart.setQuantity(1);</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_208'/>
+208
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_208'>1</a>
+<span>
+1. splitItem : removed call to com/syskewer/api/model/salon/OrderDetail::setSoldPrice &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>        discountPart.setSoldPrice(totalDeduction.negate()); </span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_209'/>
+209
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_209'>1</a>
+<span>
+1. splitItem : removed call to com/syskewer/api/model/salon/OrderDetail::setNotes &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>        discountPart.setNotes(&#34;Split discount: Item split with &#34; + targetBillIds.size() + &#34; friend(s)&#34;);</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_210'/>
+210
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_210'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        orderDetailRepository.save(discountPart);</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_211'/>
+211
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_211'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_212'/>
+212
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_212'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        for (Integer targetId : targetBillIds) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_213'/>
+213
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_213'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>            Bill targetBill = billRepository.findById(targetId)</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_214'/>
+214
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_214'>1</a>
+<span>
+1. lambda$8 : replaced return value with null for com/syskewer/api/service/salon/OrderService::lambda$8 &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>                    .orElseThrow(() -&#62; new BusinessRuleException(&#34;Target bill ID &#34; + targetId + &#34; not found.&#34;));</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_215'/>
+215
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_215'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>            </span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_216'/>
+216
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_216'>1</a>
+<span>
+1. splitItem : negated conditional &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>            if (targetBill.getStatus() == BillStatus.CLOSED) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_217'/>
+217
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_217'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>                throw new BusinessRuleException(&#34;Target bill &#34; + targetBill.getCustomerName() + &#34; is already closed and cannot be part of the split.&#34;);</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_218'/>
+218
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_218'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>            }</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_219'/>
+219
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_219'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_220'/>
+220
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_220'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>            Order financialOrder = new Order();</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_221'/>
+221
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_221'>1</a>
+<span>
+1. splitItem : removed call to com/syskewer/api/model/salon/Order::setBill &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>            financialOrder.setBill(targetBill);</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_222'/>
+222
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_222'>1</a>
+<span>
+1. splitItem : removed call to com/syskewer/api/model/salon/Order::setOrigin &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>            financialOrder.setOrigin(OrderOrigin.WAITER);</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_223'/>
+223
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_223'>1</a>
+<span>
+1. splitItem : removed call to com/syskewer/api/model/salon/Order::setPrepStatus &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>            financialOrder.setPrepStatus(PrepStatus.DELIVERED);</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_224'/>
+224
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_224'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>            financialOrder = orderRepository.save(financialOrder);</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_225'/>
+225
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_225'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_226'/>
+226
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_226'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>            OrderDetail splitPart = new OrderDetail();</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_227'/>
+227
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_227'>1</a>
+<span>
+1. splitItem : removed call to com/syskewer/api/model/salon/OrderDetail::setOrder &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>            splitPart.setOrder(financialOrder);</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_228'/>
+228
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_228'>1</a>
+<span>
+1. splitItem : removed call to com/syskewer/api/model/salon/OrderDetail::setMenu &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>            splitPart.setMenu(detail.getMenu());</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_229'/>
+229
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_229'>1</a>
+<span>
+1. splitItem : removed call to com/syskewer/api/model/salon/OrderDetail::setQuantity &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>            splitPart.setQuantity(1);</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_230'/>
+230
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_230'>1</a>
+<span>
+1. splitItem : removed call to com/syskewer/api/model/salon/OrderDetail::setSoldPrice &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>            splitPart.setSoldPrice(splitValue);</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_231'/>
+231
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_231'>1</a>
+<span>
+1. splitItem : removed call to com/syskewer/api/model/salon/OrderDetail::setNotes &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>            splitPart.setNotes(&#34;Split fraction: &#34; + detail.getMenu().getName());</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_232'/>
+232
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_232'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>            orderDetailRepository.save(splitPart);</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_233'/>
+233
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_233'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_234'/>
+234
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_234'>1</a>
+<span>
+1. splitItem : removed call to com/syskewer/api/model/salon/Bill::setTotalAmount &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>            targetBill.setTotalAmount(targetBill.getTotalAmount().add(splitValue));</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_235'/>
+235
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_235'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>            billRepository.save(targetBill);</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_236'/>
+236
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_236'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_237'/>
+237
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_237'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>    }</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_238'/>
+238
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_238'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>}</span></pre></td></tr>
+
+
+
+<tr><td></td><td></td><td><h2>Mutations</h2></td></tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_50'>50</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_50'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>placeOrder<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_storeClosed_throws()]</span></span> negated conditional &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_54'>54</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_54'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>lambda$0<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_billNotFound()]</span></span> replaced return value with null for com/syskewer/api/service/salon/OrderService::lambda$0 &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_56'>56</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_56'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>placeOrder<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_outOfStock_throws()]</span></span> negated conditional &rarr; KILLED</span>
+</div> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>placeOrder<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_outOfStock_throws()]</span></span> negated conditional &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_63'>63</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_63'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>placeOrder<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_outOfStock_throws()]</span></span> negated conditional &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_68'>68</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_68'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>placeOrder<br/><b>Killed by : </b>none</span></span> removed call to com/syskewer/api/model/salon/Order::setBill &rarr; SURVIVED</span>
+<a title="Click to view covering tests" class="view-covered-by-tests" onClick="document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=placeOrder,-methodDesc=(Lcom/syskewer/api/dto/salon/OrderRecordDto;)V],-indexes=[87],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display=(document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=placeOrder,-methodDesc=(Lcom/syskewer/api/dto/salon/OrderRecordDto;)V],-indexes=[87],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display == 'block')?'none':'block';">Covering tests</a>
+<div class="covered-tests" id="MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=placeOrder,-methodDesc=(Lcom/syskewer/api/dto/salon/OrderRecordDto;)V],-indexes=[87],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]" style="display:none;">Covered by tests:
+<ul>
+<li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_outOfStock_throws()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_newOrderIsQueued()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_inactiveOrMissingMenu_throws()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_freezesPriceAndUpdatesTotal()]</li> 
+</ul>
+</div></div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_69'>69</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_69'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>placeOrder<br/><b>Killed by : </b>none</span></span> removed call to com/syskewer/api/model/salon/Order::setWaiter &rarr; SURVIVED</span>
+<a title="Click to view covering tests" class="view-covered-by-tests" onClick="document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=placeOrder,-methodDesc=(Lcom/syskewer/api/dto/salon/OrderRecordDto;)V],-indexes=[92],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display=(document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=placeOrder,-methodDesc=(Lcom/syskewer/api/dto/salon/OrderRecordDto;)V],-indexes=[92],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display == 'block')?'none':'block';">Covering tests</a>
+<div class="covered-tests" id="MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=placeOrder,-methodDesc=(Lcom/syskewer/api/dto/salon/OrderRecordDto;)V],-indexes=[92],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]" style="display:none;">Covered by tests:
+<ul>
+<li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_outOfStock_throws()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_newOrderIsQueued()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_inactiveOrMissingMenu_throws()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_freezesPriceAndUpdatesTotal()]</li> 
+</ul>
+</div></div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_70'>70</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_70'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>placeOrder<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_newOrderIsQueued()]</span></span> removed call to com/syskewer/api/model/salon/Order::setOrigin &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_71'>71</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_71'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>placeOrder<br/><b>Killed by : </b>none</span></span> removed call to com/syskewer/api/model/salon/Order::setPrepStatus &rarr; SURVIVED</span>
+<a title="Click to view covering tests" class="view-covered-by-tests" onClick="document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=placeOrder,-methodDesc=(Lcom/syskewer/api/dto/salon/OrderRecordDto;)V],-indexes=[103],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display=(document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=placeOrder,-methodDesc=(Lcom/syskewer/api/dto/salon/OrderRecordDto;)V],-indexes=[103],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display == 'block')?'none':'block';">Covering tests</a>
+<div class="covered-tests" id="MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=placeOrder,-methodDesc=(Lcom/syskewer/api/dto/salon/OrderRecordDto;)V],-indexes=[103],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]" style="display:none;">Covered by tests:
+<ul>
+<li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_outOfStock_throws()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_newOrderIsQueued()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_inactiveOrMissingMenu_throws()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_freezesPriceAndUpdatesTotal()]</li> 
+</ul>
+</div></div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_78'>78</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_78'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>lambda$1<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_inactiveOrMissingMenu_throws()]</span></span> replaced return value with null for com/syskewer/api/service/salon/OrderService::lambda$1 &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_80'>80</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_80'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>placeOrder<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_newOrderIsQueued()]</span></span> negated conditional &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_85'>85</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_85'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>lambda$2<br/><b>Killed by : </b>none</span></span> replaced boolean return with false for com/syskewer/api/service/salon/OrderService::lambda$2 &rarr; SURVIVED</span>
+<a title="Click to view covering tests" class="view-covered-by-tests" onClick="document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=lambda$2,-methodDesc=(Lcom/syskewer/api/model/product/Product;)Z],-indexes=[7],-mutator=org.pitest.mutationtest.engine.gregor.mutators.returns.BooleanFalseReturnValsMutator]').style.display=(document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=lambda$2,-methodDesc=(Lcom/syskewer/api/model/product/Product;)Z],-indexes=[7],-mutator=org.pitest.mutationtest.engine.gregor.mutators.returns.BooleanFalseReturnValsMutator]').style.display == 'block')?'none':'block';">Covering tests</a>
+<div class="covered-tests" id="MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=lambda$2,-methodDesc=(Lcom/syskewer/api/model/product/Product;)Z],-indexes=[7],-mutator=org.pitest.mutationtest.engine.gregor.mutators.returns.BooleanFalseReturnValsMutator]" style="display:none;">Covered by tests:
+<ul>
+<li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_outOfStock_throws()]</li> 
+</ul>
+</div></div> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>placeOrder<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_outOfStock_throws()]</span></span> negated conditional &rarr; KILLED</span>
+</div> <p class='KILLED'><span class='pop'>3.<span><b>3</b><br/><b>Location : </b>lambda$2<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_outOfStock_throws()]</span></span> replaced boolean return with true for com/syskewer/api/service/salon/OrderService::lambda$2 &rarr; KILLED</span>
+</div> <p class='KILLED'><span class='pop'>4.<span><b>4</b><br/><b>Location : </b>placeOrder<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_outOfStock_throws()]</span></span> negated conditional &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_86'>86</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_86'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>placeOrder<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_outOfStock_throws()]</span></span> negated conditional &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_91'>91</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_91'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>placeOrder<br/><b>Killed by : </b>none</span></span> removed call to com/syskewer/api/model/salon/OrderDetail::setOrder &rarr; SURVIVED</span>
+<a title="Click to view covering tests" class="view-covered-by-tests" onClick="document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=placeOrder,-methodDesc=(Lcom/syskewer/api/dto/salon/OrderRecordDto;)V],-indexes=[206],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display=(document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=placeOrder,-methodDesc=(Lcom/syskewer/api/dto/salon/OrderRecordDto;)V],-indexes=[206],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display == 'block')?'none':'block';">Covering tests</a>
+<div class="covered-tests" id="MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=placeOrder,-methodDesc=(Lcom/syskewer/api/dto/salon/OrderRecordDto;)V],-indexes=[206],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]" style="display:none;">Covered by tests:
+<ul>
+<li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_newOrderIsQueued()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_freezesPriceAndUpdatesTotal()]</li> 
+</ul>
+</div></div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_92'>92</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_92'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>placeOrder<br/><b>Killed by : </b>none</span></span> removed call to com/syskewer/api/model/salon/OrderDetail::setMenu &rarr; SURVIVED</span>
+<a title="Click to view covering tests" class="view-covered-by-tests" onClick="document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=placeOrder,-methodDesc=(Lcom/syskewer/api/dto/salon/OrderRecordDto;)V],-indexes=[211],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display=(document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=placeOrder,-methodDesc=(Lcom/syskewer/api/dto/salon/OrderRecordDto;)V],-indexes=[211],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display == 'block')?'none':'block';">Covering tests</a>
+<div class="covered-tests" id="MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=placeOrder,-methodDesc=(Lcom/syskewer/api/dto/salon/OrderRecordDto;)V],-indexes=[211],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]" style="display:none;">Covered by tests:
+<ul>
+<li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_newOrderIsQueued()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_freezesPriceAndUpdatesTotal()]</li> 
+</ul>
+</div></div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_93'>93</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_93'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>placeOrder<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_freezesPriceAndUpdatesTotal()]</span></span> removed call to com/syskewer/api/model/salon/OrderDetail::setQuantity &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_94'>94</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_94'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>placeOrder<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_freezesPriceAndUpdatesTotal()]</span></span> removed call to com/syskewer/api/model/salon/OrderDetail::setSoldPrice &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_95'>95</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_95'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>placeOrder<br/><b>Killed by : </b>none</span></span> removed call to com/syskewer/api/model/salon/OrderDetail::setIsToGo &rarr; SURVIVED</span>
+<a title="Click to view covering tests" class="view-covered-by-tests" onClick="document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=placeOrder,-methodDesc=(Lcom/syskewer/api/dto/salon/OrderRecordDto;)V],-indexes=[232],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display=(document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=placeOrder,-methodDesc=(Lcom/syskewer/api/dto/salon/OrderRecordDto;)V],-indexes=[232],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display == 'block')?'none':'block';">Covering tests</a>
+<div class="covered-tests" id="MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=placeOrder,-methodDesc=(Lcom/syskewer/api/dto/salon/OrderRecordDto;)V],-indexes=[232],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]" style="display:none;">Covered by tests:
+<ul>
+<li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_newOrderIsQueued()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_freezesPriceAndUpdatesTotal()]</li> 
+</ul>
+</div></div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_96'>96</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_96'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>placeOrder<br/><b>Killed by : </b>none</span></span> removed call to com/syskewer/api/model/salon/OrderDetail::setPackagingInstructions &rarr; SURVIVED</span>
+<a title="Click to view covering tests" class="view-covered-by-tests" onClick="document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=placeOrder,-methodDesc=(Lcom/syskewer/api/dto/salon/OrderRecordDto;)V],-indexes=[238],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display=(document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=placeOrder,-methodDesc=(Lcom/syskewer/api/dto/salon/OrderRecordDto;)V],-indexes=[238],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display == 'block')?'none':'block';">Covering tests</a>
+<div class="covered-tests" id="MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=placeOrder,-methodDesc=(Lcom/syskewer/api/dto/salon/OrderRecordDto;)V],-indexes=[238],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]" style="display:none;">Covered by tests:
+<ul>
+<li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_newOrderIsQueued()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_freezesPriceAndUpdatesTotal()]</li> 
+</ul>
+</div></div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_97'>97</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_97'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>placeOrder<br/><b>Killed by : </b>none</span></span> removed call to com/syskewer/api/model/salon/OrderDetail::setNotes &rarr; SURVIVED</span>
+<a title="Click to view covering tests" class="view-covered-by-tests" onClick="document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=placeOrder,-methodDesc=(Lcom/syskewer/api/dto/salon/OrderRecordDto;)V],-indexes=[244],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display=(document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=placeOrder,-methodDesc=(Lcom/syskewer/api/dto/salon/OrderRecordDto;)V],-indexes=[244],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display == 'block')?'none':'block';">Covering tests</a>
+<div class="covered-tests" id="MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=placeOrder,-methodDesc=(Lcom/syskewer/api/dto/salon/OrderRecordDto;)V],-indexes=[244],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]" style="display:none;">Covered by tests:
+<ul>
+<li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_newOrderIsQueued()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_freezesPriceAndUpdatesTotal()]</li> 
+</ul>
+</div></div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_98'>98</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_98'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>placeOrder<br/><b>Killed by : </b>none</span></span> negated conditional &rarr; SURVIVED</span>
+<a title="Click to view covering tests" class="view-covered-by-tests" onClick="document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=placeOrder,-methodDesc=(Lcom/syskewer/api/dto/salon/OrderRecordDto;)V],-indexes=[249],-mutator=org.pitest.mutationtest.engine.gregor.mutators.NegateConditionalsMutator]').style.display=(document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=placeOrder,-methodDesc=(Lcom/syskewer/api/dto/salon/OrderRecordDto;)V],-indexes=[249],-mutator=org.pitest.mutationtest.engine.gregor.mutators.NegateConditionalsMutator]').style.display == 'block')?'none':'block';">Covering tests</a>
+<div class="covered-tests" id="MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=placeOrder,-methodDesc=(Lcom/syskewer/api/dto/salon/OrderRecordDto;)V],-indexes=[249],-mutator=org.pitest.mutationtest.engine.gregor.mutators.NegateConditionalsMutator]" style="display:none;">Covered by tests:
+<ul>
+<li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_newOrderIsQueued()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_freezesPriceAndUpdatesTotal()]</li> 
+</ul>
+</div></div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_99'>99</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_99'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>placeOrder<br/><b>Killed by : </b>none</span></span> removed call to com/syskewer/api/model/salon/OrderDetail::setSideDishes &rarr; SURVIVED</span>
+<a title="Click to view covering tests" class="view-covered-by-tests" onClick="document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=placeOrder,-methodDesc=(Lcom/syskewer/api/dto/salon/OrderRecordDto;)V],-indexes=[255],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display=(document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=placeOrder,-methodDesc=(Lcom/syskewer/api/dto/salon/OrderRecordDto;)V],-indexes=[255],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display == 'block')?'none':'block';">Covering tests</a>
+<div class="covered-tests" id="MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=placeOrder,-methodDesc=(Lcom/syskewer/api/dto/salon/OrderRecordDto;)V],-indexes=[255],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]" style="display:none;">Covered by tests:
+<ul>
+<li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_newOrderIsQueued()]</li> 
+</ul>
+</div></div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_107'>107</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_107'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>placeOrder<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_freezesPriceAndUpdatesTotal()]</span></span> removed call to com/syskewer/api/model/salon/Bill::setTotalAmount &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_115'>115</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_115'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>lambda$3<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:cancelOrderItem_notFound()]</span></span> replaced return value with null for com/syskewer/api/service/salon/OrderService::lambda$3 &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_120'>120</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_120'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>lambda$4<br/><b>Killed by : </b>com.syskewer.api.OrderServiceTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceTest]/[method:cancelOrderItem_ThrowsException_WhenGarcomCancelsPreppingItem()]</span></span> replaced boolean return with true for com/syskewer/api/service/salon/OrderService::lambda$4 &rarr; KILLED</span>
+</div> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>lambda$4<br/><b>Killed by : </b>com.syskewer.api.OrderServiceTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceTest]/[method:cancelOrderItem_ByAdmin_WhenTabClosed()]</span></span> replaced boolean return with false for com/syskewer/api/service/salon/OrderService::lambda$4 &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_122'>122</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_122'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>cancelOrderItem<br/><b>Killed by : </b>com.syskewer.api.OrderServiceTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceTest]/[method:cancelOrderItem_ThrowsException_WhenGarcomCancelsPreppingItem()]</span></span> negated conditional &rarr; KILLED</span>
+</div> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>cancelOrderItem<br/><b>Killed by : </b>com.syskewer.api.OrderServiceTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceTest]/[method:cancelOrderItem_ThrowsException_WhenGarcomCancelsPreppingItem()]</span></span> negated conditional &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_126'>126</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_126'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>cancelOrderItem<br/><b>Killed by : </b>com.syskewer.api.OrderServiceTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceTest]/[method:cancelOrderItem_ByAdmin_WhenTabClosed()]</span></span> negated conditional &rarr; KILLED</span>
+</div> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>cancelOrderItem<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:cancelOrderItem_garcom_queued_ok()]</span></span> negated conditional &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_132'>132</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_132'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>cancelOrderItem<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:cancelOrderItem_garcom_queued_ok()]</span></span> removed call to com/syskewer/api/model/salon/Bill::setTotalAmount &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_134'>134</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_134'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>cancelOrderItem<br/><b>Killed by : </b>com.syskewer.api.OrderServiceTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceTest]/[method:cancelOrderItem_ByAdmin_WhenTabClosed()]</span></span> negated conditional &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_135'>135</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_135'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>cancelOrderItem<br/><b>Killed by : </b>com.syskewer.api.OrderServiceTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceTest]/[method:cancelOrderItem_ByAdmin_WhenTabClosed()]</span></span> removed call to com/syskewer/api/model/salon/Bill::setPaidAmount &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_139'>139</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_139'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>cancelOrderItem<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:cancelOrderItem_garcom_queued_ok()]</span></span> removed call to com/syskewer/api/repository/salon/OrderDetailRepository::delete &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_145'>145</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_145'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>reduceItemQuantity<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:reduceItemQuantity_invalidQuantities()]</span></span> changed conditional boundary &rarr; KILLED</span>
+</div> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>reduceItemQuantity<br/><b>Killed by : </b>com.syskewer.api.OrderServiceTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceTest]/[method:reduceItemQuantity_Success()]</span></span> negated conditional &rarr; KILLED</span>
+</div> <p class='KILLED'><span class='pop'>3.<span><b>3</b><br/><b>Location : </b>reduceItemQuantity<br/><b>Killed by : </b>com.syskewer.api.OrderServiceTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceTest]/[method:reduceItemQuantity_Success()]</span></span> negated conditional &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_150'>150</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_150'/> 
+
+<p class='NO_COVERAGE'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>lambda$5<br/><b>Killed by : </b>none</span></span> replaced return value with null for com/syskewer/api/service/salon/OrderService::lambda$5 &rarr; NO_COVERAGE</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_154'>154</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_154'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>lambda$6<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:reduceItemQuantity_closedBill_refundsPaid()]</span></span> replaced boolean return with false for com/syskewer/api/service/salon/OrderService::lambda$6 &rarr; KILLED</span>
+</div> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>lambda$6<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:reduceItemQuantity_inPrep_adminOnly()]</span></span> replaced boolean return with true for com/syskewer/api/service/salon/OrderService::lambda$6 &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_156'>156</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_156'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>reduceItemQuantity<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:reduceItemQuantity_closedBill_refundsPaid()]</span></span> negated conditional &rarr; KILLED</span>
+</div> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>reduceItemQuantity<br/><b>Killed by : </b>com.syskewer.api.OrderServiceTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceTest]/[method:reduceItemQuantity_Success()]</span></span> negated conditional &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_160'>160</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_160'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>reduceItemQuantity<br/><b>Killed by : </b>com.syskewer.api.OrderServiceTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceTest]/[method:reduceItemQuantity_Success()]</span></span> negated conditional &rarr; KILLED</span>
+</div> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>reduceItemQuantity<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:reduceItemQuantity_invalidQuantities()]</span></span> changed conditional boundary &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_166'>166</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_166'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>reduceItemQuantity<br/><b>Killed by : </b>com.syskewer.api.OrderServiceTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceTest]/[method:reduceItemQuantity_Success()]</span></span> removed call to com/syskewer/api/model/salon/Bill::setTotalAmount &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_168'>168</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_168'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>reduceItemQuantity<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:reduceItemQuantity_closedBill_refundsPaid()]</span></span> negated conditional &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_169'>169</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_169'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>reduceItemQuantity<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:reduceItemQuantity_closedBill_refundsPaid()]</span></span> removed call to com/syskewer/api/model/salon/Bill::setPaidAmount &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_173'>173</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_173'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>reduceItemQuantity<br/><b>Killed by : </b>com.syskewer.api.OrderServiceTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceTest]/[method:reduceItemQuantity_Success()]</span></span> removed call to com/syskewer/api/model/salon/OrderDetail::setQuantity &rarr; KILLED</span>
+</div> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>reduceItemQuantity<br/><b>Killed by : </b>com.syskewer.api.OrderServiceTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceTest]/[method:reduceItemQuantity_Success()]</span></span> Replaced integer subtraction with addition &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_181'>181</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_181'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>lambda$7<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_itemNotFound()]</span></span> replaced return value with null for com/syskewer/api/service/salon/OrderService::lambda$7 &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_183'>183</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_183'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>splitItem<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_invalidTargets()]</span></span> negated conditional &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_188'>188</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_188'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>splitItem<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_invalidTargets()]</span></span> Replaced integer addition with subtraction &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_195'>195</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_195'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>splitItem<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_unevenSplit_preservesGrandTotal()]</span></span> removed call to com/syskewer/api/model/salon/Bill::setTotalAmount &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_199'>199</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_199'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>splitItem<br/><b>Killed by : </b>none</span></span> removed call to com/syskewer/api/model/salon/Order::setBill &rarr; SURVIVED</span>
+<a title="Click to view covering tests" class="view-covered-by-tests" onClick="document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[99],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display=(document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[99],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display == 'block')?'none':'block';">Covering tests</a>
+<div class="covered-tests" id="MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[99],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]" style="display:none;">Covered by tests:
+<ul>
+<li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_invalidTargets()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_unevenSplit_preservesGrandTotal()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_evenSplit()]</li> 
+</ul>
+</div></div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_200'>200</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_200'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>splitItem<br/><b>Killed by : </b>none</span></span> removed call to com/syskewer/api/model/salon/Order::setOrigin &rarr; SURVIVED</span>
+<a title="Click to view covering tests" class="view-covered-by-tests" onClick="document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[104],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display=(document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[104],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display == 'block')?'none':'block';">Covering tests</a>
+<div class="covered-tests" id="MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[104],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]" style="display:none;">Covered by tests:
+<ul>
+<li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_invalidTargets()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_unevenSplit_preservesGrandTotal()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_evenSplit()]</li> 
+</ul>
+</div></div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_201'>201</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_201'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>splitItem<br/><b>Killed by : </b>none</span></span> removed call to com/syskewer/api/model/salon/Order::setPrepStatus &rarr; SURVIVED</span>
+<a title="Click to view covering tests" class="view-covered-by-tests" onClick="document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[109],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display=(document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[109],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display == 'block')?'none':'block';">Covering tests</a>
+<div class="covered-tests" id="MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[109],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]" style="display:none;">Covered by tests:
+<ul>
+<li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_invalidTargets()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_unevenSplit_preservesGrandTotal()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_evenSplit()]</li> 
+</ul>
+</div></div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_205'>205</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_205'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>splitItem<br/><b>Killed by : </b>none</span></span> removed call to com/syskewer/api/model/salon/OrderDetail::setOrder &rarr; SURVIVED</span>
+<a title="Click to view covering tests" class="view-covered-by-tests" onClick="document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[128],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display=(document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[128],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display == 'block')?'none':'block';">Covering tests</a>
+<div class="covered-tests" id="MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[128],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]" style="display:none;">Covered by tests:
+<ul>
+<li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_invalidTargets()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_unevenSplit_preservesGrandTotal()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_evenSplit()]</li> 
+</ul>
+</div></div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_206'>206</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_206'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>splitItem<br/><b>Killed by : </b>none</span></span> removed call to com/syskewer/api/model/salon/OrderDetail::setMenu &rarr; SURVIVED</span>
+<a title="Click to view covering tests" class="view-covered-by-tests" onClick="document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[134],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display=(document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[134],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display == 'block')?'none':'block';">Covering tests</a>
+<div class="covered-tests" id="MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[134],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]" style="display:none;">Covered by tests:
+<ul>
+<li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_invalidTargets()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_unevenSplit_preservesGrandTotal()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_evenSplit()]</li> 
+</ul>
+</div></div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_207'>207</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_207'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>splitItem<br/><b>Killed by : </b>none</span></span> removed call to com/syskewer/api/model/salon/OrderDetail::setQuantity &rarr; SURVIVED</span>
+<a title="Click to view covering tests" class="view-covered-by-tests" onClick="document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[140],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display=(document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[140],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display == 'block')?'none':'block';">Covering tests</a>
+<div class="covered-tests" id="MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[140],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]" style="display:none;">Covered by tests:
+<ul>
+<li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_invalidTargets()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_unevenSplit_preservesGrandTotal()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_evenSplit()]</li> 
+</ul>
+</div></div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_208'>208</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_208'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>splitItem<br/><b>Killed by : </b>none</span></span> removed call to com/syskewer/api/model/salon/OrderDetail::setSoldPrice &rarr; SURVIVED</span>
+<a title="Click to view covering tests" class="view-covered-by-tests" onClick="document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[146],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display=(document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[146],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display == 'block')?'none':'block';">Covering tests</a>
+<div class="covered-tests" id="MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[146],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]" style="display:none;">Covered by tests:
+<ul>
+<li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_invalidTargets()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_unevenSplit_preservesGrandTotal()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_evenSplit()]</li> 
+</ul>
+</div></div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_209'>209</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_209'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>splitItem<br/><b>Killed by : </b>none</span></span> removed call to com/syskewer/api/model/salon/OrderDetail::setNotes &rarr; SURVIVED</span>
+<a title="Click to view covering tests" class="view-covered-by-tests" onClick="document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[153],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display=(document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[153],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display == 'block')?'none':'block';">Covering tests</a>
+<div class="covered-tests" id="MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[153],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]" style="display:none;">Covered by tests:
+<ul>
+<li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_invalidTargets()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_unevenSplit_preservesGrandTotal()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_evenSplit()]</li> 
+</ul>
+</div></div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_214'>214</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_214'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>lambda$8<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_invalidTargets()]</span></span> replaced return value with null for com/syskewer/api/service/salon/OrderService::lambda$8 &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_216'>216</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_216'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>splitItem<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_invalidTargets()]</span></span> negated conditional &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_221'>221</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_221'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>splitItem<br/><b>Killed by : </b>none</span></span> removed call to com/syskewer/api/model/salon/Order::setBill &rarr; SURVIVED</span>
+<a title="Click to view covering tests" class="view-covered-by-tests" onClick="document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[214],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display=(document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[214],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display == 'block')?'none':'block';">Covering tests</a>
+<div class="covered-tests" id="MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[214],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]" style="display:none;">Covered by tests:
+<ul>
+<li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_unevenSplit_preservesGrandTotal()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_evenSplit()]</li> 
+</ul>
+</div></div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_222'>222</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_222'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>splitItem<br/><b>Killed by : </b>none</span></span> removed call to com/syskewer/api/model/salon/Order::setOrigin &rarr; SURVIVED</span>
+<a title="Click to view covering tests" class="view-covered-by-tests" onClick="document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[219],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display=(document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[219],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display == 'block')?'none':'block';">Covering tests</a>
+<div class="covered-tests" id="MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[219],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]" style="display:none;">Covered by tests:
+<ul>
+<li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_unevenSplit_preservesGrandTotal()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_evenSplit()]</li> 
+</ul>
+</div></div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_223'>223</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_223'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>splitItem<br/><b>Killed by : </b>none</span></span> removed call to com/syskewer/api/model/salon/Order::setPrepStatus &rarr; SURVIVED</span>
+<a title="Click to view covering tests" class="view-covered-by-tests" onClick="document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[224],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display=(document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[224],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display == 'block')?'none':'block';">Covering tests</a>
+<div class="covered-tests" id="MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[224],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]" style="display:none;">Covered by tests:
+<ul>
+<li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_unevenSplit_preservesGrandTotal()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_evenSplit()]</li> 
+</ul>
+</div></div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_227'>227</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_227'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>splitItem<br/><b>Killed by : </b>none</span></span> removed call to com/syskewer/api/model/salon/OrderDetail::setOrder &rarr; SURVIVED</span>
+<a title="Click to view covering tests" class="view-covered-by-tests" onClick="document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[243],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display=(document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[243],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display == 'block')?'none':'block';">Covering tests</a>
+<div class="covered-tests" id="MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[243],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]" style="display:none;">Covered by tests:
+<ul>
+<li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_unevenSplit_preservesGrandTotal()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_evenSplit()]</li> 
+</ul>
+</div></div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_228'>228</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_228'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>splitItem<br/><b>Killed by : </b>none</span></span> removed call to com/syskewer/api/model/salon/OrderDetail::setMenu &rarr; SURVIVED</span>
+<a title="Click to view covering tests" class="view-covered-by-tests" onClick="document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[249],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display=(document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[249],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display == 'block')?'none':'block';">Covering tests</a>
+<div class="covered-tests" id="MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[249],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]" style="display:none;">Covered by tests:
+<ul>
+<li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_unevenSplit_preservesGrandTotal()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_evenSplit()]</li> 
+</ul>
+</div></div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_229'>229</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_229'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>splitItem<br/><b>Killed by : </b>none</span></span> removed call to com/syskewer/api/model/salon/OrderDetail::setQuantity &rarr; SURVIVED</span>
+<a title="Click to view covering tests" class="view-covered-by-tests" onClick="document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[255],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display=(document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[255],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display == 'block')?'none':'block';">Covering tests</a>
+<div class="covered-tests" id="MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[255],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]" style="display:none;">Covered by tests:
+<ul>
+<li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_unevenSplit_preservesGrandTotal()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_evenSplit()]</li> 
+</ul>
+</div></div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_230'>230</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_230'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>splitItem<br/><b>Killed by : </b>none</span></span> removed call to com/syskewer/api/model/salon/OrderDetail::setSoldPrice &rarr; SURVIVED</span>
+<a title="Click to view covering tests" class="view-covered-by-tests" onClick="document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[260],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display=(document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[260],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display == 'block')?'none':'block';">Covering tests</a>
+<div class="covered-tests" id="MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[260],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]" style="display:none;">Covered by tests:
+<ul>
+<li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_unevenSplit_preservesGrandTotal()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_evenSplit()]</li> 
+</ul>
+</div></div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_231'>231</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_231'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>splitItem<br/><b>Killed by : </b>none</span></span> removed call to com/syskewer/api/model/salon/OrderDetail::setNotes &rarr; SURVIVED</span>
+<a title="Click to view covering tests" class="view-covered-by-tests" onClick="document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[268],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display=(document.getElementById('MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[268],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]').style.display == 'block')?'none':'block';">Covering tests</a>
+<div class="covered-tests" id="MutationIdentifier-[location=Location-[clazz=com.syskewer.api.service.salon.OrderService,-method=splitItem,-methodDesc=(Ljava/lang/Long;Ljava/util/List;)V],-indexes=[268],-mutator=org.pitest.mutationtest.engine.gregor.mutators.VoidMethodCallMutator]" style="display:none;">Covered by tests:
+<ul>
+<li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_unevenSplit_preservesGrandTotal()]</li> <li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_evenSplit()]</li> 
+</ul>
+</div></div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@7e5c8c80_234'>234</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@7e5c8c80_234'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>splitItem<br/><b>Killed by : </b>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_unevenSplit_preservesGrandTotal()]</span></span> removed call to com/syskewer/api/model/salon/Bill::setTotalAmount &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+
+</table>
+
+
+<h2>Active mutators</h2>
+<ul>
+<li class='mutator'>CONDITIONALS_BOUNDARY</li>
+<li class='mutator'>EMPTY_RETURNS</li>
+<li class='mutator'>FALSE_RETURNS</li>
+<li class='mutator'>INCREMENTS</li>
+<li class='mutator'>INVERT_NEGS</li>
+<li class='mutator'>MATH</li>
+<li class='mutator'>NEGATE_CONDITIONALS</li>
+<li class='mutator'>NULL_RETURNS</li>
+<li class='mutator'>PRIMITIVE_RETURNS</li>
+<li class='mutator'>TRUE_RETURNS</li>
+<li class='mutator'>VOID_METHOD_CALLS</li>
+
+</ul>
+
+<h2>Tests examined</h2>
+<ul>
+<li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_outOfStock_throws()] (4 ms)</li><li>com.syskewer.api.OrderServiceTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceTest]/[method:reduceItemQuantity_Success()] (1 ms)</li><li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:reduceItemQuantity_closedBill_refundsPaid()] (2 ms)</li><li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:reduceItemQuantity_inPrep_adminOnly()] (3 ms)</li><li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:reduceItemQuantity_invalidQuantities()] (6 ms)</li><li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_newOrderIsQueued()] (7 ms)</li><li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_freezesPriceAndUpdatesTotal()] (15 ms)</li><li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_invalidTargets()] (3 ms)</li><li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_unevenSplit_preservesGrandTotal()] (4 ms)</li><li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_evenSplit()] (7 ms)</li><li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_inactiveOrMissingMenu_throws()] (15 ms)</li><li>com.syskewer.api.OrderServiceTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceTest]/[method:cancelOrderItem_ByAdmin_WhenTabClosed()] (4 ms)</li><li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:cancelOrderItem_notFound()] (2 ms)</li><li>com.syskewer.api.OrderServiceTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceTest]/[method:cancelOrderItem_ThrowsException_WhenGarcomCancelsPreppingItem()] (2 ms)</li><li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:cancelOrderItem_garcom_queued_ok()] (4 ms)</li><li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:cancelOrderItem_garcom_closedBill_throws()] (7 ms)</li><li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_closedOrInDebt_throws()] (9 ms)</li><li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_storeClosed_throws()] (2 ms)</li><li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:placeOrder_billNotFound()] (8 ms)</li><li>com.syskewer.api.OrderServiceExtendedTest.[engine:junit-jupiter]/[class:com.syskewer.api.OrderServiceExtendedTest]/[method:splitItem_itemNotFound()] (3 ms)</li>
+</ul>
+
+<br/>
+
+Report generated by <a href='https://pitest.org'>PIT</a> 1.17.0
+
+</body>
+</html>

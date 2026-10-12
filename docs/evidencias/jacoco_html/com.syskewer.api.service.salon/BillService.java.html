@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BillService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">com.syskewer.api.service.salon</a> &gt; <span class="el_source">BillService.java</span></div><h1>BillService.java</h1><pre class="source lang-java linenums">package com.syskewer.api.service.salon;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.syskewer.api.dto.salon.PartialItemDto;
+import com.syskewer.api.dto.salon.BillDeliveryDto;
+import com.syskewer.api.dto.salon.BillOpenDto;
+import com.syskewer.api.dto.salon.BillPartialDto;
+import com.syskewer.api.dto.salon.BillSummaryDto;
+import com.syskewer.api.dto.salon.BillUpdateDto;
+import com.syskewer.api.exception.BusinessRuleException;
+import com.syskewer.api.exception.ResourceNotFoundException;
+import com.syskewer.api.model.salon.ConsumptionType;
+import com.syskewer.api.model.salon.Order;
+import com.syskewer.api.model.salon.OrderDetail;
+import com.syskewer.api.model.salon.Bill;
+import com.syskewer.api.model.salon.BillStatus;
+import com.syskewer.api.model.salon.Table;
+import com.syskewer.api.repository.salon.OrderDetailRepository;
+import com.syskewer.api.repository.salon.OrderRepository;
+import com.syskewer.api.repository.salon.BillRepository;
+import com.syskewer.api.repository.salon.TableRepository;
+
+@Service
+public class BillService {
+
+<span class="fc" id="L38">    private static final BigDecimal COUVERT_VALUE = new BigDecimal(&quot;5.00&quot;);</span>
+<span class="fc" id="L39">    private static final BigDecimal DELIVERY_FEE = new BigDecimal(&quot;5.00&quot;);</span>
+
+    private final BillRepository billRepository;
+    private final OrderRepository orderRepository;
+    private final OrderDetailRepository orderDetailRepository;
+    private final TableRepository tableRepository;
+    private final StoreSettingsService storeSettingsService;
+
+<span class="fc" id="L47">    public BillService(BillRepository billRepository, OrderRepository orderRepository,</span>
+            OrderDetailRepository orderDetailRepository, TableRepository tableRepository,
+            StoreSettingsService storeSettingsService) {
+<span class="fc" id="L50">        this.billRepository = billRepository;</span>
+<span class="fc" id="L51">        this.orderRepository = orderRepository;</span>
+<span class="fc" id="L52">        this.orderDetailRepository = orderDetailRepository;</span>
+<span class="fc" id="L53">        this.tableRepository = tableRepository;</span>
+<span class="fc" id="L54">        this.storeSettingsService = storeSettingsService;</span>
+<span class="fc" id="L55">    }</span>
+
+    // Retorna a lista de todas as contas que estao abertas
+    public List&lt;BillSummaryDto&gt; getOpenTabs() {
+<span class="fc" id="L59">        return billRepository.findByStatus(BillStatus.OPEN).stream().map(bill -&gt; {</span>
+<span class="fc" id="L60">            List&lt;Integer&gt; tableNums = bill.getTables().stream().map(Table::getNumber).collect(Collectors.toList());</span>
+<span class="fc" id="L61">            return new BillSummaryDto(</span>
+<span class="fc" id="L62">                    bill.getId(),</span>
+<span class="fc" id="L63">                    bill.getCustomerName(),</span>
+<span class="fc" id="L64">                    tableNums,</span>
+<span class="fc" id="L65">                    bill.getConsumptionType().name(),</span>
+<span class="fc" id="L66">                    bill.getTotalAmount());</span>
+<span class="fc" id="L67">        }).collect(Collectors.toList());</span>
+    }
+
+    // Calcula e retorna a parcial de consumo e itens da conta
+    public BillPartialDto getTabPartial(Integer billId) {
+<span class="fc" id="L72">        Bill bill = billRepository.findById(billId)</span>
+<span class="fc" id="L73">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Bill ID &quot; + billId + &quot; not found&quot;));</span>
+
+<span class="fc" id="L75">        List&lt;Order&gt; orders = orderRepository.findByBillId(billId);</span>
+<span class="fc" id="L76">        List&lt;PartialItemDto&gt; timeline = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L77">        Map&lt;String, PartialItemDto&gt; groupedItems = new LinkedHashMap&lt;&gt;();</span>
+
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        for (Order order : orders) {</span>
+<span class="fc" id="L80">            List&lt;OrderDetail&gt; details = orderDetailRepository.findByOrderId(order.getId());</span>
+<span class="fc bfc" id="L81" title="All 2 branches covered.">            for (OrderDetail detail : details) {</span>
+<span class="fc" id="L82">                BigDecimal itemTotalPrice = detail.getSoldPrice().multiply(new BigDecimal(detail.getQuantity()));</span>
+                
+<span class="fc" id="L84">                PartialItemDto itemDto = new PartialItemDto(</span>
+<span class="fc" id="L85">                        detail.getMenu().getName(), detail.getQuantity(), detail.getSoldPrice(), itemTotalPrice,</span>
+<span class="fc" id="L86">                        detail.getIsToGo(), order.getPrepStatus().name());</span>
+
+<span class="fc" id="L88">                timeline.add(itemDto);</span>
+
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">                String key = detail.getMenu().getName() + (Boolean.TRUE.equals(detail.getIsToGo()) ? &quot; (ToGo)&quot; : &quot;&quot;);</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">                if (groupedItems.containsKey(key)) {</span>
+<span class="fc" id="L92">                    PartialItemDto existing = groupedItems.get(key);</span>
+<span class="fc" id="L93">                    int newQty = existing.quantity() + detail.getQuantity();</span>
+<span class="fc" id="L94">                    BigDecimal newTotal = existing.totalPrice().add(itemTotalPrice);</span>
+<span class="fc" id="L95">                    groupedItems.put(key, new PartialItemDto(existing.productName(), newQty, existing.unitPrice(),</span>
+<span class="fc" id="L96">                            newTotal, existing.isToGo(), &quot;-&quot;));</span>
+<span class="fc" id="L97">                } else {</span>
+<span class="fc" id="L98">                    groupedItems.put(key, itemDto);</span>
+                }
+            }
+        }
+<span class="fc" id="L102">        return new BillPartialDto(bill.getId(), bill.getCustomerName(), bill.getTotalAmount(), timeline,</span>
+<span class="fc" id="L103">                new ArrayList&lt;&gt;(groupedItems.values()));</span>
+    }
+
+    // Fecha a conta se o saldo estiver quitado
+    @Transactional
+    public void closeTab(Integer billId) {
+<span class="fc" id="L109">        Bill bill = billRepository.findById(billId)</span>
+<span class="fc" id="L110">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Bill not found!&quot;));</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        if (bill.getStatus() == BillStatus.CLOSED) {</span>
+<span class="fc" id="L112">            throw new BusinessRuleException(&quot;This bill is already closed!&quot;);</span>
+        }
+<span class="fc" id="L114">        BigDecimal balance = bill.getTotalAmount().subtract(bill.getPaidAmount());</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        if (balance.compareTo(BigDecimal.ZERO) &gt; 0) {</span>
+<span class="fc" id="L116">            throw new BusinessRuleException(&quot;The bill cannot be closed because it has a remaining balance of R$ &quot;</span>
+<span class="fc" id="L117">                    + balance + &quot;. Use register payment first.&quot;);</span>
+        }
+<span class="fc" id="L119">        bill.setStatus(BillStatus.CLOSED);</span>
+<span class="fc" id="L120">        billRepository.save(bill);</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">        for (Table table : bill.getTables()) {</span>
+<span class="fc" id="L122">            releaseTableIfEmpty(table);</span>
+        }
+<span class="fc" id="L124">    }</span>
+
+    // Aplica o valor de couvert artistico na conta
+    @Transactional
+    public void toggleCoverCharge(Integer billId) {
+<span class="fc" id="L129">        Bill currentBill = billRepository.findById(billId)</span>
+<span class="pc" id="L130">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Bill not found!&quot;));</span>
+<span class="fc bfc" id="L131" title="All 2 branches covered.">        if (currentBill.getStatus() != BillStatus.OPEN) {</span>
+<span class="fc" id="L132">            throw new BusinessRuleException(&quot;Only open bills can have cover charge modified.&quot;);</span>
+        }
+
+<span class="fc bfc" id="L135" title="All 2 branches covered.">        if (!currentBill.getTables().isEmpty()) {</span>
+            // Se tiver mesas associadas, distribui o couvert entre todas as contas abertas nessas mesas
+<span class="fc" id="L137">            List&lt;Bill&gt; tableBills = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L138" title="All 2 branches covered.">            for (Table table : currentBill.getTables()) {</span>
+<span class="fc" id="L139">                tableBills.addAll(billRepository.findByTableIdAndStatus(table.getId(), BillStatus.OPEN));</span>
+            }
+            // Evita duplicatas
+<span class="fc" id="L142">            tableBills = tableBills.stream().distinct().collect(Collectors.toList());</span>
+
+<span class="fc" id="L144">            boolean alreadyApplied = tableBills.stream().anyMatch(Bill::getApplyCoverCharge);</span>
+<span class="pc bpc" id="L145" title="1 of 2 branches missed.">            if (alreadyApplied) {</span>
+<span class="nc" id="L146">                throw new BusinessRuleException(&quot;Cover charge already applied to this table.&quot;);</span>
+            }
+<span class="fc" id="L148">            BigDecimal splitValue = COUVERT_VALUE.divide(new BigDecimal(tableBills.size()), 2, java.math.RoundingMode.HALF_UP);</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">            for (Bill b : tableBills) {</span>
+<span class="fc" id="L150">                b.setApplyCoverCharge(true);</span>
+<span class="fc" id="L151">                b.setTotalAmount(b.getTotalAmount().add(splitValue));</span>
+<span class="fc" id="L152">                billRepository.save(b);</span>
+            }
+<span class="fc" id="L154">        } else {</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">            if (currentBill.getApplyCoverCharge()) {</span>
+<span class="fc" id="L156">                throw new BusinessRuleException(&quot;Cover charge already applied to this bill.&quot;);</span>
+            }
+<span class="fc" id="L158">            currentBill.setApplyCoverCharge(true);</span>
+<span class="fc" id="L159">            currentBill.setTotalAmount(currentBill.getTotalAmount().add(COUVERT_VALUE));</span>
+<span class="fc" id="L160">            billRepository.save(currentBill);</span>
+        }
+<span class="fc" id="L162">    }</span>
+
+    // Remove o valor de couvert artistico da conta
+    @Transactional
+    public void removeCoverCharge(Integer billId) {
+<span class="fc" id="L167">        Bill bill = billRepository.findById(billId)</span>
+<span class="pc" id="L168">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Bill not found!&quot;));</span>
+        
+<span class="fc bfc" id="L170" title="All 2 branches covered.">        if (bill.getStatus() == BillStatus.CLOSED) {</span>
+<span class="fc" id="L171">            throw new BusinessRuleException(&quot;Closed bill.&quot;);</span>
+        }
+
+<span class="pc bpc" id="L174" title="2 of 4 branches missed.">        if (Boolean.TRUE.equals(bill.getApplyCoverCharge()) &amp;&amp; !bill.getTables().isEmpty()) {</span>
+<span class="fc" id="L175">            List&lt;Bill&gt; tableBills = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L176" title="All 2 branches covered.">            for (Table table : bill.getTables()) {</span>
+<span class="fc" id="L177">                tableBills.addAll(billRepository.findByTableIdAndStatus(table.getId(), BillStatus.OPEN));</span>
+            }
+<span class="fc" id="L179">            tableBills = tableBills.stream().distinct().collect(Collectors.toList());</span>
+
+<span class="fc" id="L181">            long count = tableBills.stream().filter(Bill::getApplyCoverCharge).count();</span>
+<span class="pc bpc" id="L182" title="1 of 2 branches missed.">            if (count &gt; 0) {</span>
+<span class="fc" id="L183">                BigDecimal splitValue = COUVERT_VALUE.divide(new BigDecimal(count), 2, java.math.RoundingMode.HALF_UP);</span>
+<span class="fc" id="L184">                bill.setTotalAmount(bill.getTotalAmount().subtract(splitValue));</span>
+<span class="fc" id="L185">                bill.setApplyCoverCharge(false);</span>
+<span class="fc" id="L186">                billRepository.save(bill);</span>
+            }
+        }
+<span class="fc" id="L189">    }</span>
+
+    // Arquiva a conta como fiado vinculando o CPF ou telefone do devedor
+    @Transactional
+    public void archiveAsCredit(Integer billId, String customerDocOrPhone) {
+<span class="fc" id="L194">        Bill bill = billRepository.findById(billId)</span>
+<span class="pc" id="L195">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Bill not found!&quot;));</span>
+<span class="fc bfc" id="L196" title="All 2 branches covered.">        if (bill.getStatus() != BillStatus.OPEN) {</span>
+<span class="fc" id="L197">            throw new BusinessRuleException(&quot;Only open bills can be archived as deferred debt.&quot;);</span>
+        }
+<span class="fc" id="L199">        BigDecimal balance = bill.getTotalAmount().subtract(bill.getPaidAmount());</span>
+<span class="fc bfc" id="L200" title="All 2 branches covered.">        if (balance.compareTo(BigDecimal.ZERO) &lt;= 0) {</span>
+<span class="fc" id="L201">            throw new BusinessRuleException(&quot;Cannot archive a bill as deferred debt without a remaining balance.&quot;);</span>
+        }
+<span class="fc bfc" id="L203" title="All 4 branches covered.">        if (customerDocOrPhone == null || customerDocOrPhone.trim().isEmpty()) {</span>
+<span class="fc" id="L204">            throw new BusinessRuleException(&quot;Document or Phone is required to register deferred debt.&quot;);</span>
+        }
+<span class="fc" id="L206">        bill.setCustomerDocOrPhone(customerDocOrPhone.trim());</span>
+<span class="fc" id="L207">        bill.setStatus(BillStatus.IN_DEBT);</span>
+<span class="fc" id="L208">        bill.setDeferredDate(LocalDateTime.now());</span>
+<span class="fc" id="L209">        billRepository.save(bill);</span>
+<span class="fc bfc" id="L210" title="All 2 branches covered.">        for (Table table : bill.getTables()) {</span>
+<span class="fc" id="L211">            releaseTableIfEmpty(table);</span>
+        }
+<span class="fc" id="L213">    }</span>
+
+    // Abre uma nova conta de mesa ou balcao validando se o estabelecimento esta aberto
+    @Transactional
+    public BillSummaryDto openTab(BillOpenDto dto) {
+<span class="fc bfc" id="L218" title="All 2 branches covered.">        if (!storeSettingsService.isStoreOpen()) {</span>
+<span class="fc" id="L219">            throw new BusinessRuleException(&quot;The store is closed! Cannot open new tables or bills.&quot;);</span>
+        }
+
+<span class="fc" id="L222">        Bill bill = new Bill();</span>
+<span class="fc" id="L223">        bill.setConsumptionType(dto.consumptionType());</span>
+        
+<span class="fc bfc" id="L225" title="All 2 branches covered.">        if (dto.consumptionType() == ConsumptionType.MESA) {</span>
+<span class="fc" id="L226">            Table table = tableRepository.findByNumber(dto.tableNumber())</span>
+<span class="fc" id="L227">                    .orElseThrow(() -&gt; new BusinessRuleException(&quot;Table &quot; + dto.tableNumber() + &quot; not found!&quot;));</span>
+<span class="fc" id="L228">            bill.getTables().add(table);</span>
+            
+<span class="pc bpc" id="L230" title="1 of 2 branches missed.">            if (!table.getOccupied()) {</span>
+<span class="fc" id="L231">                table.setOccupied(true);</span>
+<span class="fc" id="L232">                tableRepository.save(table);</span>
+            }
+        }
+
+<span class="fc bfc" id="L236" title="All 4 branches covered.">        if (dto.customerName() == null || dto.customerName().trim().isEmpty()) {</span>
+<span class="fc bfc" id="L237" title="All 2 branches covered.">            if (dto.consumptionType() == ConsumptionType.MESA) {</span>
+<span class="fc" id="L238">                Table table = bill.getTables().get(0);</span>
+<span class="fc" id="L239">                List&lt;Bill&gt; openBills = billRepository.findByTableIdAndStatus(table.getId(), BillStatus.OPEN);</span>
+<span class="fc" id="L240">                bill.setCustomerName(&quot;Mesa &quot; + dto.tableNumber() + &quot; - Cliente &quot; + (openBills.size() + 1));</span>
+<span class="fc" id="L241">            } else {</span>
+<span class="fc" id="L242">                bill.setCustomerName(&quot;Cliente Balcão&quot;);</span>
+            }
+<span class="fc" id="L244">        } else {</span>
+<span class="fc" id="L245">            bill.setCustomerName(dto.customerName().trim());</span>
+        }
+
+<span class="fc" id="L248">        bill = billRepository.save(bill);</span>
+<span class="fc" id="L249">        List&lt;Integer&gt; tableNums = bill.getTables().stream().map(Table::getNumber).collect(Collectors.toList());</span>
+<span class="fc" id="L250">        return new BillSummaryDto(bill.getId(), bill.getCustomerName(), tableNums, bill.getConsumptionType().name(), bill.getTotalAmount());</span>
+    }
+
+    // Registra um pagamento parcial ou total para diminuir o saldo devedor
+    @Transactional
+    public String registerPayment(Integer billId, BigDecimal amountToPay, BigDecimal discount) {
+<span class="fc" id="L256">        Bill bill = billRepository.findById(billId)</span>
+<span class="fc" id="L257">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Bill not found!&quot;));</span>
+
+<span class="fc bfc" id="L259" title="All 2 branches covered.">        if (bill.getStatus() == BillStatus.CLOSED) {</span>
+<span class="fc" id="L260">            throw new BusinessRuleException(&quot;This bill is already fully paid and closed.&quot;);</span>
+        }
+
+<span class="fc" id="L263">        BigDecimal originalBalance = bill.getTotalAmount().subtract(bill.getPaidAmount());</span>
+
+<span class="fc bfc" id="L265" title="All 4 branches covered.">        if (discount != null &amp;&amp; discount.compareTo(BigDecimal.ZERO) &gt; 0) {</span>
+<span class="fc" id="L266">            Authentication auth = SecurityContextHolder.getContext().getAuthentication();</span>
+<span class="pc bpc" id="L267" title="1 of 4 branches missed.">            boolean isAdmin = auth != null &amp;&amp; auth.getAuthorities().stream().anyMatch(a -&gt; a.getAuthority().equals(&quot;ROLE_ADMINISTRADOR&quot;));</span>
+<span class="fc bfc" id="L268" title="All 2 branches covered.">            if (!isAdmin) {</span>
+<span class="fc" id="L269">                throw new BusinessRuleException(&quot;Only administrators can grant discounts.&quot;);</span>
+            }
+<span class="fc bfc" id="L271" title="All 2 branches covered.">            if (discount.compareTo(originalBalance) &gt; 0) {</span>
+<span class="fc" id="L272">                throw new BusinessRuleException(&quot;The discount amount (R$ &quot; + discount + &quot;) cannot be greater than the remaining balance (R$ &quot; + originalBalance + &quot;).&quot;);</span>
+            }
+<span class="fc" id="L274">            bill.setTotalAmount(bill.getTotalAmount().subtract(discount));</span>
+        }
+
+<span class="fc" id="L277">        BigDecimal balance = bill.getTotalAmount().subtract(bill.getPaidAmount());</span>
+<span class="fc bfc" id="L278" title="All 2 branches covered.">        if (amountToPay.compareTo(balance) &gt; 0) {</span>
+<span class="fc" id="L279">            throw new BusinessRuleException(&quot;The payment amount (R$ &quot; + amountToPay + &quot;) is greater than the remaining balance (R$ &quot; + balance + &quot;).&quot;);</span>
+        }
+
+<span class="fc" id="L282">        bill.setPaidAmount(bill.getPaidAmount().add(amountToPay));</span>
+<span class="fc" id="L283">        BigDecimal newBalance = bill.getTotalAmount().subtract(bill.getPaidAmount());</span>
+
+<span class="fc bfc" id="L285" title="All 2 branches covered.">        if (newBalance.compareTo(BigDecimal.ZERO) == 0) {</span>
+<span class="fc" id="L286">            bill.setStatus(BillStatus.CLOSED);</span>
+<span class="fc" id="L287">            billRepository.save(bill);</span>
+<span class="fc bfc" id="L288" title="All 2 branches covered.">            for (Table table : bill.getTables()) {</span>
+<span class="fc" id="L289">                releaseTableIfEmpty(table);</span>
+            }
+<span class="fc" id="L291">            return &quot;Final payment received successfully. The bill has been closed!&quot;;</span>
+        }
+
+<span class="fc" id="L294">        billRepository.save(bill);</span>
+<span class="fc" id="L295">        return &quot;Partial payment registered. Remaining balance: R$ &quot; + newBalance + &quot;.&quot;;</span>
+    }
+
+    // Abre uma conta de delivery com endereco e taxa de entrega fixa
+    @Transactional
+    public BillSummaryDto openDeliveryTab(BillDeliveryDto dto) {
+<span class="fc" id="L301">        Bill bill = new Bill();</span>
+<span class="fc" id="L302">        bill.setCustomerName(dto.customerName().trim());</span>
+<span class="fc" id="L303">        bill.setConsumptionType(ConsumptionType.DELIVERY);</span>
+<span class="fc" id="L304">        bill.setDeliveryAddress(dto.deliveryAddress().trim());</span>
+<span class="fc" id="L305">        bill.setDeliveryFee(DELIVERY_FEE);</span>
+<span class="fc" id="L306">        bill.setTotalAmount(DELIVERY_FEE);</span>
+<span class="fc" id="L307">        bill = billRepository.save(bill);</span>
+<span class="fc" id="L308">        return new BillSummaryDto(bill.getId(), bill.getCustomerName(), new ArrayList&lt;&gt;(), bill.getConsumptionType().name(), bill.getTotalAmount());</span>
+    }
+
+    // Libera a mesa do salao se nao existirem outras contas abertas nela
+    private void releaseTableIfEmpty(Table table) {
+<span class="pc bpc" id="L313" title="1 of 2 branches missed.">        if (table != null) {</span>
+<span class="fc" id="L314">            boolean hasOpenTabs = billRepository.existsByTableIdAndStatus(table.getId(), BillStatus.OPEN);</span>
+<span class="fc bfc" id="L315" title="All 2 branches covered.">            if (!hasOpenTabs) {</span>
+<span class="fc" id="L316">                table.setOccupied(false);</span>
+<span class="fc" id="L317">                tableRepository.save(table);</span>
+            }
+        }
+<span class="fc" id="L320">    }</span>
+
+    // Cancela e exclui uma conta sem consumo
+    @Transactional
+    public void cancelTab(Integer billId) {
+<span class="fc" id="L325">        Bill bill = billRepository.findById(billId)</span>
+<span class="pc" id="L326">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Bill not found!&quot;));</span>
+<span class="fc bfc" id="L327" title="All 2 branches covered.">        if (bill.getStatus() == BillStatus.CLOSED) {</span>
+<span class="fc" id="L328">            throw new BusinessRuleException(&quot;Cannot delete a closed bill.&quot;);</span>
+        }
+<span class="fc bfc" id="L330" title="All 2 branches covered.">        if (bill.getStatus() == BillStatus.IN_DEBT) {</span>
+<span class="fc" id="L331">            throw new BusinessRuleException(&quot;Cannot delete a bill archived as deferred debt.&quot;);</span>
+        }
+<span class="pc bpc" id="L333" title="1 of 4 branches missed.">        if (bill.getTotalAmount().compareTo(BigDecimal.ZERO) &gt; 0 || bill.getPaidAmount().compareTo(BigDecimal.ZERO) &gt; 0) {</span>
+<span class="fc" id="L334">            throw new BusinessRuleException(&quot;Cannot delete a bill with consumption or payments registered. Cancel items first.&quot;);</span>
+        }
+<span class="fc" id="L336">        List&lt;Table&gt; tables = new ArrayList&lt;&gt;(bill.getTables());</span>
+<span class="fc" id="L337">        bill.getTables().clear();</span>
+<span class="fc" id="L338">        billRepository.save(bill);</span>
+<span class="fc" id="L339">        billRepository.delete(bill);</span>
+<span class="fc bfc" id="L340" title="All 2 branches covered.">        for (Table table : tables) {</span>
+<span class="fc" id="L341">            releaseTableIfEmpty(table);</span>
+        }
+<span class="fc" id="L343">    }</span>
+
+    // Transfere a conta para outra mesa vazia
+    @Transactional
+    public String transferTab(Integer billId, Integer newTableNumber) {
+<span class="fc" id="L348">        Bill bill = billRepository.findById(billId)</span>
+<span class="pc" id="L349">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Bill not found!&quot;));</span>
+<span class="fc bfc" id="L350" title="All 2 branches covered.">        if (bill.getStatus() != BillStatus.OPEN) {</span>
+<span class="fc" id="L351">            throw new BusinessRuleException(&quot;Only open bills can be transferred to another table.&quot;);</span>
+        }
+<span class="fc" id="L353">        Table newTable = tableRepository.findByNumber(newTableNumber)</span>
+<span class="fc" id="L354">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;The target table does not exist.&quot;));</span>
+<span class="fc bfc" id="L355" title="All 2 branches covered.">        if (newTable.getOccupied()) {</span>
+<span class="fc" id="L356">            throw new BusinessRuleException(&quot;Transfer denied: Table &quot; + newTableNumber + &quot; is already occupied!&quot;);</span>
+        }
+<span class="fc" id="L358">        List&lt;Table&gt; oldTables = new ArrayList&lt;&gt;(bill.getTables());</span>
+<span class="fc" id="L359">        newTable.setOccupied(true);</span>
+<span class="fc" id="L360">        tableRepository.save(newTable);</span>
+        
+<span class="fc" id="L362">        bill.getTables().clear();</span>
+<span class="fc" id="L363">        bill.getTables().add(newTable);</span>
+<span class="fc" id="L364">        bill.setConsumptionType(ConsumptionType.MESA);</span>
+<span class="fc" id="L365">        billRepository.save(bill);</span>
+        
+<span class="fc bfc" id="L367" title="All 2 branches covered.">        for (Table oldTable : oldTables) {</span>
+<span class="fc" id="L368">            releaseTableIfEmpty(oldTable);</span>
+        }
+<span class="fc" id="L370">        return &quot;Bill successfully transferred to Table &quot; + newTableNumber;</span>
+    }
+
+    // Liquida o pagamento de varias contas ao mesmo tempo e calcula o troco
+    @Transactional
+    public String payGroupedTabs(List&lt;Integer&gt; billIds, BigDecimal amountReceived) {
+<span class="fc bfc" id="L376" title="All 4 branches covered.">        if (amountReceived == null || amountReceived.compareTo(BigDecimal.ZERO) &lt;= 0) {</span>
+<span class="fc" id="L377">            throw new BusinessRuleException(&quot;Received amount must be greater than zero.&quot;);</span>
+        }
+<span class="fc" id="L379">        List&lt;Bill&gt; bills = billRepository.findAllById(billIds);</span>
+<span class="fc bfc" id="L380" title="All 2 branches covered.">        if (bills.isEmpty()) {</span>
+<span class="fc" id="L381">            throw new BusinessRuleException(&quot;No bills selected.&quot;);</span>
+        }
+<span class="fc" id="L383">        BigDecimal totalBalance = BigDecimal.ZERO;</span>
+<span class="fc bfc" id="L384" title="All 2 branches covered.">        for (Bill bill : bills) {</span>
+<span class="fc bfc" id="L385" title="All 2 branches covered.">            if (bill.getStatus() == BillStatus.CLOSED) {</span>
+<span class="fc" id="L386">                throw new BusinessRuleException(&quot;Bill ID &quot; + bill.getId() + &quot; is already closed and cannot be grouped.&quot;);</span>
+            }
+<span class="fc" id="L388">            BigDecimal balance = bill.getTotalAmount().subtract(bill.getPaidAmount());</span>
+<span class="fc" id="L389">            totalBalance = totalBalance.add(balance);</span>
+        }
+<span class="fc bfc" id="L391" title="All 2 branches covered.">        if (amountReceived.compareTo(totalBalance) &lt; 0) {</span>
+<span class="fc" id="L392">            throw new BusinessRuleException(&quot;Received amount (R$ &quot; + amountReceived + &quot;) is less than the total balance of the bills (R$ &quot; + totalBalance + &quot;).&quot;);</span>
+        }
+<span class="fc" id="L394">        BigDecimal change = amountReceived.subtract(totalBalance);</span>
+<span class="fc bfc" id="L395" title="All 2 branches covered.">        String changeMsg = change.compareTo(BigDecimal.ZERO) &gt; 0 ? &quot; Change: R$ &quot; + change + &quot;.&quot; : &quot;&quot;;</span>
+<span class="fc bfc" id="L396" title="All 2 branches covered.">        for (Bill bill : bills) {</span>
+<span class="fc" id="L397">            bill.setPaidAmount(bill.getTotalAmount()); </span>
+<span class="fc" id="L398">            bill.setStatus(BillStatus.CLOSED);</span>
+<span class="fc" id="L399">            billRepository.save(bill);</span>
+<span class="pc bpc" id="L400" title="1 of 2 branches missed.">            for (Table table : bill.getTables()) {</span>
+<span class="nc" id="L401">                releaseTableIfEmpty(table);</span>
+            }
+        }
+<span class="fc" id="L404">        return &quot;Success! Grouped payment of R$ &quot; + totalBalance + &quot; received, and &quot; + bills.size() + &quot; bills were closed.&quot; + changeMsg;</span>
+    }
+
+    // Reabre uma conta fechada
+    @Transactional
+    public String reopenTab(Integer billId) {
+<span class="fc" id="L410">        Bill bill = billRepository.findById(billId)</span>
+<span class="pc" id="L411">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Bill not found!&quot;));</span>
+
+<span class="fc bfc" id="L413" title="All 2 branches covered.">        if (bill.getStatus() != BillStatus.CLOSED) {</span>
+<span class="fc" id="L414">            throw new BusinessRuleException(&quot;This bill is already open or marked as deferred debt.&quot;);</span>
+        }
+
+<span class="fc" id="L417">        boolean lostTable = false;</span>
+<span class="fc" id="L418">        List&lt;Table&gt; tables = new ArrayList&lt;&gt;(bill.getTables());</span>
+<span class="fc bfc" id="L419" title="All 2 branches covered.">        for (Table table : tables) {</span>
+<span class="fc bfc" id="L420" title="All 2 branches covered.">            if (table.getOccupied()) {</span>
+<span class="fc" id="L421">                lostTable = true;</span>
+<span class="fc" id="L422">                bill.getTables().remove(table);</span>
+<span class="fc" id="L423">            } else {</span>
+<span class="fc" id="L424">                table.setOccupied(true);</span>
+<span class="fc" id="L425">                tableRepository.save(table);</span>
+            }
+        }
+
+<span class="fc" id="L429">        bill.setStatus(BillStatus.OPEN);</span>
+<span class="fc" id="L430">        billRepository.save(bill);</span>
+
+<span class="fc bfc" id="L432" title="All 2 branches covered.">        if (lostTable) {</span>
+<span class="fc" id="L433">            return &quot;Attention: Bill for customer '&quot; + bill.getCustomerName() + &quot;' has been reopened. Note: A table was occupied, so its association was removed.&quot;;</span>
+        }
+<span class="fc" id="L435">        return &quot;Attention: Bill for customer '&quot; + bill.getCustomerName() + &quot;' has been reopened.&quot;;</span>
+    }
+
+    // Atualiza os dados cadastrais da conta como o nome do cliente
+    @Transactional
+    public BillSummaryDto patchTab(Integer billId, BillUpdateDto dto) {
+<span class="fc" id="L441">        Bill bill = billRepository.findById(billId)</span>
+<span class="pc" id="L442">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Bill not found!&quot;));</span>
+
+<span class="fc bfc" id="L444" title="All 2 branches covered.">        if (dto.customerName() != null) {</span>
+<span class="fc" id="L445">            bill.setCustomerName(dto.customerName().trim());</span>
+        }
+
+<span class="fc" id="L448">        bill = billRepository.save(bill);</span>
+<span class="fc" id="L449">        List&lt;Integer&gt; tableNums = bill.getTables().stream().map(Table::getNumber).collect(Collectors.toList());</span>
+<span class="fc" id="L450">        return new BillSummaryDto(bill.getId(), bill.getCustomerName(), tableNums, bill.getConsumptionType().name(), bill.getTotalAmount());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

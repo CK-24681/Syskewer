@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserRecordDto.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">com.syskewer.api.dto.user</a> &gt; <span class="el_source">UserRecordDto.java</span></div><h1>UserRecordDto.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">package com.syskewer.api.dto.user;</span>
+
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+public record UserRecordDto(
+        @Schema(example = &quot;João Silva&quot;)
+        @NotBlank(message = &quot;O nome não pode estar em branco&quot;)
+        String name,
+
+        @Schema(example = &quot;joaosilva&quot;)
+        @NotBlank(message = &quot;O nome de usuário não pode estar em branco&quot;)
+        String username,
+
+        @Schema(example = &quot;joao@email.com&quot;)
+        @NotBlank(message = &quot;O email não pode estar em branco&quot;)
+        @Email(message = &quot;O formato do email é inválido&quot;)
+        String email,
+
+        @Schema(example = &quot;senha123&quot;, type = &quot;string&quot;, format = &quot;password&quot;)
+        @NotBlank(message = &quot;A senha não pode estar em branco&quot;)
+        String password,
+
+        @Schema(example = &quot;1&quot;)
+        @NotNull(message = &quot;O ID do cargo é obrigatório&quot;) 
+        Integer roleId
+) {
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

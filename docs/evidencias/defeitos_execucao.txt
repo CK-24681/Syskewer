@@ -1,0 +1,36 @@
+[ERROR] Tests run: 5, Failures: 5, Errors: 0, Skipped: 0, Time elapsed: 11.46 s <<< FAILURE! -- in com.syskewer.api.WebLayerKnownDefectsTest
+[ERROR] com.syskewer.api.WebLayerKnownDefectsTest.garcom_archiveAsCredit_shouldBe403 -- Time elapsed: 0.421 s <<< FAILURE!
+java.lang.AssertionError: Status expected:<403> but was:<500>
+[ERROR] com.syskewer.api.WebLayerKnownDefectsTest.unknownRoute_shouldBe404 -- Time elapsed: 0.048 s <<< FAILURE!
+java.lang.AssertionError: Status expected:<404> but was:<500>
+[ERROR] com.syskewer.api.WebLayerKnownDefectsTest.openBalcao_withoutTableNumber_shouldBe201 -- Time elapsed: 0.377 s <<< FAILURE!
+java.lang.AssertionError: Status expected:<201> but was:<400>
+[ERROR] com.syskewer.api.WebLayerKnownDefectsTest.garcom_toggleStore_shouldBe403 -- Time elapsed: 0.040 s <<< FAILURE!
+java.lang.AssertionError: Status expected:<403> but was:<500>
+[ERROR] com.syskewer.api.WebLayerKnownDefectsTest.unauthenticated_shouldBe401 -- Time elapsed: 0.015 s <<< FAILURE!
+java.lang.AssertionError: Status expected:<401> but was:<403>
+[ERROR] Tests run: 7, Failures: 7, Errors: 0, Skipped: 0, Time elapsed: 1.061 s <<< FAILURE! -- in com.syskewer.api.KnownDefectsTest
+[ERROR] com.syskewer.api.KnownDefectsTest.splitItem_toSameBill_shouldBeBlocked -- Time elapsed: 0.900 s <<< FAILURE!
+[ERROR] com.syskewer.api.KnownDefectsTest.removeCoverCharge_threeBills_eachRefundMatchesCharge -- Time elapsed: 0.024 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: conta 2 ficou com -0.83 ==> expected: <0> but was: <1>
+[ERROR] com.syskewer.api.KnownDefectsTest.registerPayment_negativeAmount_shouldBeRejected -- Time elapsed: 0.009 s <<< FAILURE!
+[ERROR] com.syskewer.api.KnownDefectsTest.removeCoverCharge_balcao_shouldRemoveCharge -- Time elapsed: 0.030 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <10.00> but was: <15.00>
+[ERROR] com.syskewer.api.KnownDefectsTest.toggleCoverCharge_threeBills_sumMustEqualCouvert -- Time elapsed: 0.015 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: soma cobrada: 5.01 ==> expected: <0> but was: <-1>
+[ERROR] com.syskewer.api.KnownDefectsTest.splitItem_toInDebtBill_shouldBeBlocked -- Time elapsed: 0.019 s <<< FAILURE!
+[ERROR] com.syskewer.api.KnownDefectsTest.payGroupedTabs_unknownId_shouldBeRejected -- Time elapsed: 0.023 s <<< FAILURE!
+[ERROR]   KnownDefectsTest.payGroupedTabs_unknownId_shouldBeRejected:147 Expected com.syskewer.api.exception.BusinessRuleException to be thrown, but nothing was thrown.
+[ERROR]   KnownDefectsTest.registerPayment_negativeAmount_shouldBeRejected:178 Expected com.syskewer.api.exception.BusinessRuleException to be thrown, but nothing was thrown.
+[ERROR]   KnownDefectsTest.removeCoverCharge_balcao_shouldRemoveCharge:110 expected: <10.00> but was: <15.00>
+[ERROR]   KnownDefectsTest.removeCoverCharge_threeBills_eachRefundMatchesCharge:97 conta 2 ficou com -0.83 ==> expected: <0> but was: <1>
+[ERROR]   KnownDefectsTest.splitItem_toInDebtBill_shouldBeBlocked:125 Expected com.syskewer.api.exception.BusinessRuleException to be thrown, but nothing was thrown.
+[ERROR]   KnownDefectsTest.splitItem_toSameBill_shouldBeBlocked:137 Expected com.syskewer.api.exception.BusinessRuleException to be thrown, but nothing was thrown.
+[ERROR]   KnownDefectsTest.toggleCoverCharge_threeBills_sumMustEqualCouvert:168 soma cobrada: 5.01 ==> expected: <0> but was: <-1>
+[ERROR]   WebLayerKnownDefectsTest.garcom_archiveAsCredit_shouldBe403:62 Status expected:<403> but was:<500>
+[ERROR]   WebLayerKnownDefectsTest.garcom_toggleStore_shouldBe403:55 Status expected:<403> but was:<500>
+[ERROR]   WebLayerKnownDefectsTest.openBalcao_withoutTableNumber_shouldBe201:87 Status expected:<201> but was:<400>
+[ERROR]   WebLayerKnownDefectsTest.unauthenticated_shouldBe401:68 Status expected:<401> but was:<403>
+[ERROR]   WebLayerKnownDefectsTest.unknownRoute_shouldBe404:75 Status expected:<404> but was:<500>
+[ERROR] Tests run: 12, Failures: 12, Errors: 0, Skipped: 0
+[INFO] BUILD FAILURE

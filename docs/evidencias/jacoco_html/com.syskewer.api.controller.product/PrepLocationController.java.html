@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PrepLocationController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">com.syskewer.api.controller.product</a> &gt; <span class="el_source">PrepLocationController.java</span></div><h1>PrepLocationController.java</h1><pre class="source lang-java linenums">package com.syskewer.api.controller.product;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.syskewer.api.dto.product.PrepLocationRequestDto;
+import com.syskewer.api.dto.product.PrepLocationResponseDto;
+import com.syskewer.api.model.product.PrepLocation;
+import com.syskewer.api.service.product.PrepLocationService;
+
+import jakarta.validation.Valid;
+
+@RestController
+@RequestMapping(&quot;/prep-locations&quot;)
+@io.swagger.v3.oas.annotations.tags.Tag(name = &quot;Locais de Preparo&quot;, description = &quot;Gestão de locais de preparo (Cozinha, Churrasqueira, etc.)&quot;)
+public class PrepLocationController {
+    private final PrepLocationService service;
+<span class="nc" id="L26">    public PrepLocationController(PrepLocationService service) { this.service = service; }</span>
+
+    @PostMapping
+    public ResponseEntity&lt;PrepLocationResponseDto&gt; create(@RequestBody @Valid PrepLocationRequestDto dto) {
+<span class="nc" id="L30">        PrepLocation saved = service.create(dto.name());</span>
+<span class="nc" id="L31">        return ResponseEntity.status(HttpStatus.CREATED).body(new PrepLocationResponseDto(saved));</span>
+    }
+
+    @GetMapping
+    public ResponseEntity&lt;List&lt;PrepLocationResponseDto&gt;&gt; listAll() {
+<span class="nc" id="L36">        List&lt;PrepLocationResponseDto&gt; list = service.listAll().stream()</span>
+<span class="nc" id="L37">                .map(PrepLocationResponseDto::new)</span>
+<span class="nc" id="L38">                .collect(Collectors.toList());</span>
+<span class="nc" id="L39">        return ResponseEntity.ok(list);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

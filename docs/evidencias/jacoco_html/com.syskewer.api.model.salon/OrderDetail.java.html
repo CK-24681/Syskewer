@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrderDetail.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">com.syskewer.api.model.salon</a> &gt; <span class="el_source">OrderDetail.java</span></div><h1>OrderDetail.java</h1><pre class="source lang-java linenums">package com.syskewer.api.model.salon;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.syskewer.api.model.BaseEntity;
+import com.syskewer.api.model.product.Menu;
+
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = &quot;tb_order_detail&quot;)
+public class OrderDetail extends BaseEntity&lt;Long&gt; {
+
+    @ManyToOne
+    @JoinColumn(name = &quot;order_id&quot;, nullable = false)
+    @JsonIgnore
+    private Order order;
+
+    @ManyToOne
+    @JoinColumn(name = &quot;menu_id&quot;, nullable = false)
+    private Menu menu;
+
+    @Column(nullable = false)
+    private Integer quantity;
+
+    @Column(name = &quot;sold_price&quot;, nullable = false, precision = 10, scale = 2)
+    private BigDecimal soldPrice;
+
+    @Column(name = &quot;is_to_go&quot;, nullable = false)
+<span class="fc" id="L39">    private Boolean isToGo = false;</span>
+
+    @Column(name = &quot;packaging_instructions&quot;, length = 255)
+    private String packagingInstructions;
+
+    @Column(length = 255)
+    private String notes;
+
+    @ElementCollection
+    @CollectionTable(name = &quot;tb_order_detail_sides&quot;, joinColumns = @JoinColumn(name = &quot;order_detail_id&quot;))
+    @Column(name = &quot;side_dish&quot;)
+<span class="fc" id="L50">    private List&lt;String&gt; sideDishes = new ArrayList&lt;&gt;();</span>
+
+<span class="fc" id="L52">    public OrderDetail() {}</span>
+
+<span class="fc" id="L54">    public Order getOrder() { return order; }</span>
+<span class="fc" id="L55">    public void setOrder(Order order) { this.order = order; }</span>
+
+<span class="fc" id="L57">    public Menu getMenu() { return menu; }</span>
+<span class="fc" id="L58">    public void setMenu(Menu menu) { this.menu = menu; }</span>
+
+<span class="fc" id="L60">    public Integer getQuantity() { return quantity; }</span>
+<span class="fc" id="L61">    public void setQuantity(Integer quantity) { this.quantity = quantity; }</span>
+
+<span class="fc" id="L63">    public BigDecimal getSoldPrice() { return soldPrice; }</span>
+<span class="fc" id="L64">    public void setSoldPrice(BigDecimal soldPrice) { this.soldPrice = soldPrice; }</span>
+
+<span class="fc" id="L66">    public Boolean getIsToGo() { return isToGo; }</span>
+<span class="fc" id="L67">    public void setIsToGo(Boolean toGo) { isToGo = toGo; }</span>
+
+<span class="fc" id="L69">    public String getPackagingInstructions() { return packagingInstructions; }</span>
+<span class="fc" id="L70">    public void setPackagingInstructions(String packagingInstructions) { this.packagingInstructions = packagingInstructions; }</span>
+
+<span class="fc" id="L72">    public String getNotes() { return notes; }</span>
+<span class="fc" id="L73">    public void setNotes(String notes) { this.notes = notes; }</span>
+
+<span class="fc" id="L75">    public List&lt;String&gt; getSideDishes() { return sideDishes; }</span>
+<span class="fc" id="L76">    public void setSideDishes(List&lt;String&gt; sideDishes) { this.sideDishes = sideDishes; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

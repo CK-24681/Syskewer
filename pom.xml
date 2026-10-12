@@ -74,6 +74,16 @@
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.6.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -84,5 +94,64 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<!-- Medicao de criterios de saida (atividade 6 - Avaliacao de Saida):
+		     ./mvnw -Pquality test -Dtest='!ApiApplicationTests'   -> cobertura JaCoCo (target/site/jacoco)
+		     ./mvnw -Pquality test-compile org.pitest:pitest-maven:mutationCoverage -> mutacao PIT (target/pit-reports) -->
+		<profile>
+			<id>quality</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.jacoco</groupId>
+						<artifactId>jacoco-maven-plugin</artifactId>
+						<version>0.8.12</version>
+						<executions>
+							<execution>
+								<id>prepare-agent</id>
+								<goals>
+									<goal>prepare-agent</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>report</id>
+								<phase>test</phase>
+								<goals>
+									<goal>report</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.pitest</groupId>
+						<artifactId>pitest-maven</artifactId>
+						<version>1.17.0</version>
+						<dependencies>
+							<dependency>
+								<groupId>org.pitest</groupId>
+								<artifactId>pitest-junit5-plugin</artifactId>
+								<version>1.2.1</version>
+							</dependency>
+						</dependencies>
+						<configuration>
+							<targetClasses>
+								<param>com.syskewer.api.service.*</param>
+							</targetClasses>
+							<targetTests>
+								<param>com.syskewer.api.*ServiceTest</param>
+								<param>com.syskewer.api.*ServiceExtendedTest</param>
+							</targetTests>
+							<outputFormats>
+								<outputFormat>HTML</outputFormat>
+								<outputFormat>XML</outputFormat>
+							</outputFormats>
+							<timestampedReports>false</timestampedReports>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>

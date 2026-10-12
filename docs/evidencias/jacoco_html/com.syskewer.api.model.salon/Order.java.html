@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Order.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">com.syskewer.api.model.salon</a> &gt; <span class="el_source">Order.java</span></div><h1>Order.java</h1><pre class="source lang-java linenums">package com.syskewer.api.model.salon;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.syskewer.api.model.BaseEntity;
+import com.syskewer.api.model.user.User;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = &quot;tb_order&quot;)
+public class Order extends BaseEntity&lt;Long&gt; {
+
+    @ManyToOne
+    @JoinColumn(name = &quot;bill_id&quot;, nullable = false)
+    @JsonIgnore
+    private Bill bill;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = &quot;waiter_id&quot;)
+    private User waiter;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = &quot;prep_status&quot;, nullable = false)
+<span class="fc" id="L37">    private PrepStatus prepStatus = PrepStatus.QUEUED;</span>
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+<span class="fc" id="L41">    private OrderOrigin origin = OrderOrigin.WAITER;</span>
+
+    @Column(name = &quot;created_at&quot;, nullable = false, updatable = false)
+<span class="fc" id="L44">    private LocalDateTime createdAt = LocalDateTime.now();</span>
+
+    @OneToMany(mappedBy = &quot;order&quot;, cascade = CascadeType.ALL)
+    @JsonIgnore
+<span class="fc" id="L48">    private List&lt;OrderDetail&gt; details = new ArrayList&lt;&gt;();</span>
+
+<span class="fc" id="L50">    public Order() {}</span>
+
+<span class="fc" id="L52">    public Bill getBill() { return bill; }</span>
+<span class="fc" id="L53">    public void setBill(Bill bill) { this.bill = bill; }</span>
+
+<span class="fc" id="L55">    public User getWaiter() { return waiter; }</span>
+<span class="fc" id="L56">    public void setWaiter(User waiter) { this.waiter = waiter; }</span>
+
+<span class="fc" id="L58">    public PrepStatus getPrepStatus() { return prepStatus; }</span>
+<span class="fc" id="L59">    public void setPrepStatus(PrepStatus prepStatus) { this.prepStatus = prepStatus; }</span>
+
+<span class="fc" id="L61">    public OrderOrigin getOrigin() { return origin; }</span>
+<span class="fc" id="L62">    public void setOrigin(OrderOrigin origin) { this.origin = origin; }</span>
+
+<span class="fc" id="L64">    public LocalDateTime getCreatedAt() { return createdAt; }</span>
+<span class="fc" id="L65">    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }</span>
+
+<span class="nc" id="L67">    public List&lt;OrderDetail&gt; getDetails() { return details; }</span>
+<span class="nc" id="L68">    public void setDetails(List&lt;OrderDetail&gt; details) { this.details = details; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

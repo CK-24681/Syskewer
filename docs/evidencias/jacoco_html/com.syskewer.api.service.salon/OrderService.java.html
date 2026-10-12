@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrderService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">com.syskewer.api.service.salon</a> &gt; <span class="el_source">OrderService.java</span></div><h1>OrderService.java</h1><pre class="source lang-java linenums">package com.syskewer.api.service.salon;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.syskewer.api.dto.salon.OrderDetailRecordDto;
+import com.syskewer.api.dto.salon.OrderRecordDto;
+import com.syskewer.api.exception.BusinessRuleException;
+import com.syskewer.api.exception.ResourceNotFoundException;
+import com.syskewer.api.model.product.Menu;
+import com.syskewer.api.model.salon.Order;
+import com.syskewer.api.model.salon.OrderDetail;
+import com.syskewer.api.model.salon.OrderOrigin;
+import com.syskewer.api.model.salon.PrepStatus;
+import com.syskewer.api.model.salon.Bill;
+import com.syskewer.api.model.salon.BillStatus;
+import com.syskewer.api.model.user.User;
+import com.syskewer.api.repository.product.MenuRepository;
+import com.syskewer.api.repository.salon.OrderDetailRepository;
+import com.syskewer.api.repository.salon.OrderRepository;
+import com.syskewer.api.repository.salon.BillRepository;
+
+@Service
+public class OrderService {
+
+    private final OrderRepository orderRepository;
+    private final OrderDetailRepository orderDetailRepository;
+    private final BillRepository billRepository;
+    private final MenuRepository menuRepository;
+    private final StoreSettingsService storeSettingsService;
+
+<span class="fc" id="L37">    public OrderService(OrderRepository orderRepository, OrderDetailRepository orderDetailRepository,</span>
+            BillRepository billRepository, MenuRepository menuRepository,
+            StoreSettingsService storeSettingsService) {
+<span class="fc" id="L40">        this.orderRepository = orderRepository;</span>
+<span class="fc" id="L41">        this.orderDetailRepository = orderDetailRepository;</span>
+<span class="fc" id="L42">        this.billRepository = billRepository;</span>
+<span class="fc" id="L43">        this.menuRepository = menuRepository;</span>
+<span class="fc" id="L44">        this.storeSettingsService = storeSettingsService;</span>
+<span class="fc" id="L45">    }</span>
+
+    // Launch a new order ticket on a bill
+    @Transactional
+    public void placeOrder(OrderRecordDto dto) {
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        if (!storeSettingsService.isStoreOpen()) {</span>
+<span class="fc" id="L51">            throw new BusinessRuleException(&quot;The store is closed! Order placement is suspended.&quot;);</span>
+        }
+<span class="fc" id="L53">        Bill bill = billRepository.findById(dto.billId())</span>
+<span class="fc" id="L54">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Bill not found!&quot;));</span>
+        
+<span class="fc bfc" id="L56" title="All 4 branches covered.">        if (bill.getStatus() == BillStatus.CLOSED || bill.getStatus() == BillStatus.IN_DEBT) {</span>
+<span class="fc" id="L57">            throw new BusinessRuleException(</span>
+<span class="fc" id="L58">                    &quot;Cannot place orders on a closed bill or a bill marked as deferred debt.&quot;);</span>
+        }
+
+<span class="fc" id="L61">        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();</span>
+<span class="fc" id="L62">        User waiter = null;</span>
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">        if (principal instanceof User user) {</span>
+<span class="nc" id="L64">            waiter = user;</span>
+        }
+
+<span class="fc" id="L67">        Order order = new Order();</span>
+<span class="fc" id="L68">        order.setBill(bill);</span>
+<span class="fc" id="L69">        order.setWaiter(waiter);</span>
+<span class="fc" id="L70">        order.setOrigin(dto.origin());</span>
+<span class="fc" id="L71">        order.setPrepStatus(PrepStatus.QUEUED);</span>
+<span class="fc" id="L72">        order = orderRepository.save(order);</span>
+
+<span class="fc" id="L74">        BigDecimal totalOrderAmount = BigDecimal.ZERO;</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">        for (OrderDetailRecordDto itemDto : dto.items()) {</span>
+<span class="fc" id="L76">            Menu menu = menuRepository.findById(itemDto.menuId())</span>
+<span class="fc" id="L77">                    .orElseThrow(() -&gt; new ResourceNotFoundException(</span>
+<span class="fc" id="L78">                            &quot;Product ID &quot; + itemDto.menuId() + &quot; not found in the menu!&quot;));</span>
+            
+<span class="fc bfc" id="L80" title="All 2 branches covered.">            if (Boolean.FALSE.equals(menu.getActive())) {</span>
+<span class="fc" id="L81">                throw new BusinessRuleException(&quot;The product '&quot; + menu.getName() + &quot;' is inactive and cannot be sold.&quot;);</span>
+            }
+
+            // A menu item is in stock if all its physical ingredients are in stock
+<span class="pc bpc" id="L85" title="1 of 4 branches missed.">            boolean inStock = menu.getProducts().isEmpty() || menu.getProducts().stream().allMatch(p -&gt; Boolean.TRUE.equals(p.getInStock()));</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">            if (!inStock) {</span>
+<span class="fc" id="L87">                throw new BusinessRuleException(&quot;The product '&quot; + menu.getName() + &quot;' is currently out of stock.&quot;);</span>
+            }
+
+<span class="fc" id="L90">            OrderDetail detail = new OrderDetail();</span>
+<span class="fc" id="L91">            detail.setOrder(order);</span>
+<span class="fc" id="L92">            detail.setMenu(menu);</span>
+<span class="fc" id="L93">            detail.setQuantity(itemDto.quantity());</span>
+<span class="fc" id="L94">            detail.setSoldPrice(menu.getPrice());</span>
+<span class="fc" id="L95">            detail.setIsToGo(Boolean.TRUE.equals(itemDto.isToGo()));</span>
+<span class="fc" id="L96">            detail.setPackagingInstructions(itemDto.packagingInstructions());</span>
+<span class="fc" id="L97">            detail.setNotes(itemDto.notes());</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">            if (itemDto.sideDishes() != null) {</span>
+<span class="fc" id="L99">                detail.setSideDishes(itemDto.sideDishes());</span>
+            }
+
+<span class="fc" id="L102">            orderDetailRepository.save(detail);</span>
+<span class="fc" id="L103">            BigDecimal itemTotal = menu.getPrice().multiply(new BigDecimal(itemDto.quantity()));</span>
+<span class="fc" id="L104">            totalOrderAmount = totalOrderAmount.add(itemTotal);</span>
+        }
+
+<span class="fc" id="L107">        bill.setTotalAmount(bill.getTotalAmount().add(totalOrderAmount));</span>
+<span class="fc" id="L108">        billRepository.save(bill);</span>
+<span class="fc" id="L109">    }</span>
+
+    // Cancel an item from an order and update the bill total
+    @Transactional
+    public void cancelOrderItem(Long itemId) {
+<span class="fc" id="L114">        OrderDetail detail = orderDetailRepository.findById(itemId)</span>
+<span class="fc" id="L115">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Item not found!&quot;));</span>
+<span class="fc" id="L116">        Order order = detail.getOrder();</span>
+<span class="fc" id="L117">        Bill bill = order.getBill();</span>
+
+<span class="fc" id="L119">        Authentication auth = SecurityContextHolder.getContext().getAuthentication();</span>
+<span class="fc" id="L120">        boolean isAdmin = auth.getAuthorities().stream().anyMatch(a -&gt; a.getAuthority().equals(&quot;ROLE_ADMINISTRADOR&quot;));</span>
+
+<span class="fc bfc" id="L122" title="All 4 branches covered.">        if (order.getPrepStatus() != PrepStatus.QUEUED &amp;&amp; !isAdmin) {</span>
+<span class="fc" id="L123">            throw new BusinessRuleException(&quot;Only items with 'QUEUED' status can be canceled by waiters. Call manager to refund item currently in prep or delivered.&quot;);</span>
+        }
+
+<span class="fc bfc" id="L126" title="All 4 branches covered.">        if (bill.getStatus() == BillStatus.CLOSED &amp;&amp; !isAdmin) {</span>
+<span class="fc" id="L127">            throw new BusinessRuleException(&quot;The bill is closed. Only managers can refund items from a closed bill.&quot;);</span>
+        }
+
+<span class="fc" id="L130">        BigDecimal itemTotal = detail.getSoldPrice().multiply(new BigDecimal(detail.getQuantity()));</span>
+        
+<span class="fc" id="L132">        bill.setTotalAmount(bill.getTotalAmount().subtract(itemTotal));</span>
+
+<span class="fc bfc" id="L134" title="All 2 branches covered.">        if (bill.getStatus() == BillStatus.CLOSED) {</span>
+<span class="fc" id="L135">            bill.setPaidAmount(bill.getPaidAmount().subtract(itemTotal));</span>
+        }
+
+<span class="fc" id="L138">        billRepository.save(bill);</span>
+<span class="fc" id="L139">        orderDetailRepository.delete(detail);</span>
+<span class="fc" id="L140">    }</span>
+
+    // Reduce quantity of a specific item from the order
+    @Transactional
+    public void reduceItemQuantity(Long itemId, Integer quantityToRemove) {
+<span class="fc bfc" id="L145" title="All 4 branches covered.">        if (quantityToRemove == null || quantityToRemove &lt;= 0) {</span>
+<span class="fc" id="L146">            throw new BusinessRuleException(&quot;Quantity to remove must be greater than zero.&quot;);</span>
+        }
+
+<span class="fc" id="L149">        OrderDetail detail = orderDetailRepository.findById(itemId)</span>
+<span class="pc" id="L150">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Item not found!&quot;));</span>
+        
+<span class="fc" id="L152">        Order order = detail.getOrder();</span>
+<span class="fc" id="L153">        Authentication auth = SecurityContextHolder.getContext().getAuthentication();</span>
+<span class="fc" id="L154">        boolean isAdmin = auth.getAuthorities().stream().anyMatch(a -&gt; a.getAuthority().equals(&quot;ROLE_ADMINISTRADOR&quot;));</span>
+
+<span class="fc bfc" id="L156" title="All 4 branches covered.">        if (order.getPrepStatus() != PrepStatus.QUEUED &amp;&amp; !isAdmin) {</span>
+<span class="fc" id="L157">            throw new BusinessRuleException(&quot;Preparation already started. Only managers can decrease quantity now.&quot;);</span>
+        }
+
+<span class="fc bfc" id="L160" title="All 2 branches covered.">        if (quantityToRemove &gt;= detail.getQuantity()) {</span>
+<span class="fc" id="L161">            throw new BusinessRuleException(&quot;To remove all items, use the cancel item function.&quot;);</span>
+        }
+
+<span class="fc" id="L164">        BigDecimal refundAmount = detail.getSoldPrice().multiply(new BigDecimal(quantityToRemove));</span>
+<span class="fc" id="L165">        Bill bill = order.getBill();</span>
+<span class="fc" id="L166">        bill.setTotalAmount(bill.getTotalAmount().subtract(refundAmount));</span>
+        
+<span class="fc bfc" id="L168" title="All 2 branches covered.">        if (bill.getStatus() == BillStatus.CLOSED) {</span>
+<span class="fc" id="L169">            bill.setPaidAmount(bill.getPaidAmount().subtract(refundAmount));</span>
+        }
+<span class="fc" id="L171">        billRepository.save(bill);</span>
+
+<span class="fc" id="L173">        detail.setQuantity(detail.getQuantity() - quantityToRemove);</span>
+<span class="fc" id="L174">        orderDetailRepository.save(detail);</span>
+<span class="fc" id="L175">    }</span>
+
+    // Split the cost of an item among multiple bills
+    @Transactional
+    public void splitItem(Long itemId, List&lt;Integer&gt; targetBillIds) {
+<span class="fc" id="L180">        OrderDetail detail = orderDetailRepository.findById(itemId)</span>
+<span class="fc" id="L181">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Item not found!&quot;));</span>
+        
+<span class="fc bfc" id="L183" title="All 2 branches covered.">        if (targetBillIds.isEmpty()) {</span>
+<span class="fc" id="L184">            throw new BusinessRuleException(&quot;No target bills selected for splitting.&quot;);</span>
+        }
+
+<span class="fc" id="L187">        Bill originalBill = detail.getOrder().getBill();</span>
+<span class="fc" id="L188">        int totalPeople = targetBillIds.size() + 1;</span>
+
+<span class="fc" id="L190">        BigDecimal itemTotal = detail.getSoldPrice().multiply(new BigDecimal(detail.getQuantity()));</span>
+<span class="fc" id="L191">        BigDecimal splitValue = itemTotal.divide(new BigDecimal(totalPeople), 2, java.math.RoundingMode.HALF_UP);</span>
+
+<span class="fc" id="L193">        BigDecimal totalDeduction = splitValue.multiply(new BigDecimal(targetBillIds.size()));</span>
+        
+<span class="fc" id="L195">        originalBill.setTotalAmount(originalBill.getTotalAmount().subtract(totalDeduction));</span>
+<span class="fc" id="L196">        billRepository.save(originalBill);</span>
+
+<span class="fc" id="L198">        Order financialOrderOriginal = new Order();</span>
+<span class="fc" id="L199">        financialOrderOriginal.setBill(originalBill);</span>
+<span class="fc" id="L200">        financialOrderOriginal.setOrigin(OrderOrigin.WAITER);</span>
+<span class="fc" id="L201">        financialOrderOriginal.setPrepStatus(PrepStatus.DELIVERED);</span>
+<span class="fc" id="L202">        financialOrderOriginal = orderRepository.save(financialOrderOriginal);</span>
+
+<span class="fc" id="L204">        OrderDetail discountPart = new OrderDetail();</span>
+<span class="fc" id="L205">        discountPart.setOrder(financialOrderOriginal);</span>
+<span class="fc" id="L206">        discountPart.setMenu(detail.getMenu());</span>
+<span class="fc" id="L207">        discountPart.setQuantity(1);</span>
+<span class="fc" id="L208">        discountPart.setSoldPrice(totalDeduction.negate()); </span>
+<span class="fc" id="L209">        discountPart.setNotes(&quot;Split discount: Item split with &quot; + targetBillIds.size() + &quot; friend(s)&quot;);</span>
+<span class="fc" id="L210">        orderDetailRepository.save(discountPart);</span>
+
+<span class="fc bfc" id="L212" title="All 2 branches covered.">        for (Integer targetId : targetBillIds) {</span>
+<span class="fc" id="L213">            Bill targetBill = billRepository.findById(targetId)</span>
+<span class="fc" id="L214">                    .orElseThrow(() -&gt; new BusinessRuleException(&quot;Target bill ID &quot; + targetId + &quot; not found.&quot;));</span>
+            
+<span class="fc bfc" id="L216" title="All 2 branches covered.">            if (targetBill.getStatus() == BillStatus.CLOSED) {</span>
+<span class="fc" id="L217">                throw new BusinessRuleException(&quot;Target bill &quot; + targetBill.getCustomerName() + &quot; is already closed and cannot be part of the split.&quot;);</span>
+            }
+
+<span class="fc" id="L220">            Order financialOrder = new Order();</span>
+<span class="fc" id="L221">            financialOrder.setBill(targetBill);</span>
+<span class="fc" id="L222">            financialOrder.setOrigin(OrderOrigin.WAITER);</span>
+<span class="fc" id="L223">            financialOrder.setPrepStatus(PrepStatus.DELIVERED);</span>
+<span class="fc" id="L224">            financialOrder = orderRepository.save(financialOrder);</span>
+
+<span class="fc" id="L226">            OrderDetail splitPart = new OrderDetail();</span>
+<span class="fc" id="L227">            splitPart.setOrder(financialOrder);</span>
+<span class="fc" id="L228">            splitPart.setMenu(detail.getMenu());</span>
+<span class="fc" id="L229">            splitPart.setQuantity(1);</span>
+<span class="fc" id="L230">            splitPart.setSoldPrice(splitValue);</span>
+<span class="fc" id="L231">            splitPart.setNotes(&quot;Split fraction: &quot; + detail.getMenu().getName());</span>
+<span class="fc" id="L232">            orderDetailRepository.save(splitPart);</span>
+
+<span class="fc" id="L234">            targetBill.setTotalAmount(targetBill.getTotalAmount().add(splitValue));</span>
+<span class="fc" id="L235">            billRepository.save(targetBill);</span>
+        }
+<span class="fc" id="L237">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

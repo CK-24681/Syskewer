@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CategoryService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">com.syskewer.api.service.product</a> &gt; <span class="el_source">CategoryService.java</span></div><h1>CategoryService.java</h1><pre class="source lang-java linenums">package com.syskewer.api.service.product;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.syskewer.api.dto.product.CategoryUpdateDto;
+import com.syskewer.api.exception.BusinessRuleException;
+import com.syskewer.api.exception.ResourceNotFoundException;
+import com.syskewer.api.model.product.Category;
+import com.syskewer.api.repository.product.CategoryRepository;
+
+// Servico para gerenciar as categorias de produtos no cardapio
+@Service
+public class CategoryService {
+    private final CategoryRepository repository;
+    
+<span class="nc" id="L18">    public CategoryService(CategoryRepository repository) { this.repository = repository; }</span>
+    
+    // Cadastra uma nova categoria permitindo vincular a uma categoria pai
+    public Category create(String name, Integer parentId) {
+<span class="nc" id="L22">        Category category = new Category();</span>
+<span class="nc" id="L23">        category.setName(name);</span>
+
+        // Se mandou um parentId, a gente vincula na hora de criar
+<span class="nc bnc" id="L26" title="All 2 branches missed.">        if (parentId != null) {</span>
+<span class="nc" id="L27">            Category parent = repository.findById(parentId)</span>
+<span class="nc" id="L28">                    .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Categoria pai não encontrada com ID: &quot; + parentId));</span>
+<span class="nc" id="L29">            category.setParent(parent);</span>
+        }
+
+<span class="nc" id="L32">        return repository.save(category);</span>
+    }
+    
+    // Lista todas as categorias cadastradas
+<span class="nc" id="L36">    public List&lt;Category&gt; listAll() { return repository.findAll(); }</span>
+
+    // Atualiza o nome ou a categoria pai de uma categoria existente
+    public Category update(Integer id, CategoryUpdateDto dto) {
+<span class="nc" id="L40">        Category category = repository.findById(id)</span>
+<span class="nc" id="L41">                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Categoria não encontrada com ID: &quot; + id));</span>
+
+<span class="nc bnc" id="L43" title="All 2 branches missed.">        if (dto.name() != null) {</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">            if (dto.name().trim().isEmpty()) {</span>
+<span class="nc" id="L45">                throw new BusinessRuleException(&quot;O nome da categoria não pode ser vazio.&quot;);</span>
+            }
+<span class="nc" id="L47">            category.setName(dto.name().trim());</span>
+        }
+
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        if (dto.parentId() != null) {</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">            if (dto.parentId().equals(id)) {</span>
+<span class="nc" id="L52">                throw new BusinessRuleException(&quot;Uma categoria não pode ser sua própria categoria pai.&quot;);</span>
+            }
+<span class="nc" id="L54">            Category parent = repository.findById(dto.parentId())</span>
+<span class="nc" id="L55">                    .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;Categoria pai não encontrada com ID: &quot; + dto.parentId()));</span>
+<span class="nc" id="L56">            category.setParent(parent);</span>
+        }
+
+<span class="nc" id="L59">        return repository.save(category);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

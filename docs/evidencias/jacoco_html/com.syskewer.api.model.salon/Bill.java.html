@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Bill.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">com.syskewer.api.model.salon</a> &gt; <span class="el_source">Bill.java</span></div><h1>Bill.java</h1><pre class="source lang-java linenums">package com.syskewer.api.model.salon;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.syskewer.api.model.BaseEntity;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = &quot;tb_bill&quot;)
+public class Bill extends BaseEntity&lt;Integer&gt; {
+
+    @Column(name = &quot;customer_name&quot;, length = 100)
+    private String customerName;
+
+    @ManyToMany
+    @JoinTable(
+        name = &quot;tb_bill_table&quot;,
+        joinColumns = @JoinColumn(name = &quot;bill_id&quot;),
+        inverseJoinColumns = @JoinColumn(name = &quot;table_id&quot;)
+    )
+<span class="fc" id="L35">    private List&lt;com.syskewer.api.model.salon.Table&gt; tables = new ArrayList&lt;&gt;();</span>
+
+    @OneToMany(mappedBy = &quot;bill&quot;, cascade = CascadeType.ALL)
+    @JsonIgnore
+<span class="fc" id="L39">    private List&lt;Order&gt; orders = new ArrayList&lt;&gt;();</span>
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+<span class="fc" id="L43">    private BillStatus status = BillStatus.OPEN;</span>
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = &quot;consumption_type&quot;, nullable = false, length = 20)
+    private ConsumptionType consumptionType;
+
+    @Column(name = &quot;total_amount&quot;, nullable = false, precision = 10, scale = 2)
+<span class="fc" id="L50">    private BigDecimal totalAmount = BigDecimal.ZERO;</span>
+
+    @Column(name = &quot;paid_amount&quot;, nullable = false, precision = 10, scale = 2)
+<span class="fc" id="L53">    private BigDecimal paidAmount = BigDecimal.ZERO;</span>
+
+    @Column(name = &quot;delivery_fee&quot;, precision = 10, scale = 2)
+    private BigDecimal deliveryFee;
+
+    @Column(name = &quot;delivery_address&quot;)
+    private String deliveryAddress;
+
+    @Column(name = &quot;customer_doc_or_phone&quot;, length = 100)
+    private String customerDocOrPhone;
+
+    @Column(name = &quot;apply_cover_charge&quot;, nullable = false)
+<span class="fc" id="L65">    private Boolean applyCoverCharge = false;</span>
+
+    @Column(name = &quot;opened_at&quot;, nullable = false, updatable = false)
+<span class="fc" id="L68">    private LocalDateTime openedAt = LocalDateTime.now();</span>
+
+    @Column(name = &quot;deferred_date&quot;)
+    private LocalDateTime deferredDate;
+
+<span class="fc" id="L73">    public Bill() {}</span>
+
+<span class="fc" id="L75">    public String getCustomerName() { return customerName; }</span>
+<span class="fc" id="L76">    public void setCustomerName(String customerName) { this.customerName = customerName; }</span>
+
+<span class="fc" id="L78">    public List&lt;com.syskewer.api.model.salon.Table&gt; getTables() { return tables; }</span>
+<span class="nc" id="L79">    public void setTables(List&lt;com.syskewer.api.model.salon.Table&gt; tables) { this.tables = tables; }</span>
+
+<span class="nc" id="L81">    public List&lt;Order&gt; getOrders() { return orders; }</span>
+<span class="nc" id="L82">    public void setOrders(List&lt;Order&gt; orders) { this.orders = orders; }</span>
+
+<span class="fc" id="L84">    public BillStatus getStatus() { return status; }</span>
+<span class="fc" id="L85">    public void setStatus(BillStatus status) { this.status = status; }</span>
+
+<span class="fc" id="L87">    public ConsumptionType getConsumptionType() { return consumptionType; }</span>
+<span class="fc" id="L88">    public void setConsumptionType(ConsumptionType consumptionType) { this.consumptionType = consumptionType; }</span>
+
+<span class="fc" id="L90">    public BigDecimal getTotalAmount() { return totalAmount; }</span>
+<span class="fc" id="L91">    public void setTotalAmount(BigDecimal totalAmount) { this.totalAmount = totalAmount; }</span>
+
+<span class="fc" id="L93">    public BigDecimal getPaidAmount() { return paidAmount; }</span>
+<span class="fc" id="L94">    public void setPaidAmount(BigDecimal paidAmount) { this.paidAmount = paidAmount; }</span>
+
+<span class="nc" id="L96">    public BigDecimal getDeliveryFee() { return deliveryFee; }</span>
+<span class="fc" id="L97">    public void setDeliveryFee(BigDecimal deliveryFee) { this.deliveryFee = deliveryFee; }</span>
+
+<span class="nc" id="L99">    public String getDeliveryAddress() { return deliveryAddress; }</span>
+<span class="fc" id="L100">    public void setDeliveryAddress(String deliveryAddress) { this.deliveryAddress = deliveryAddress; }</span>
+
+<span class="fc" id="L102">    public Boolean getApplyCoverCharge() { return applyCoverCharge; }</span>
+<span class="fc" id="L103">    public void setApplyCoverCharge(Boolean applyCoverCharge) { this.applyCoverCharge = applyCoverCharge; }</span>
+
+<span class="nc" id="L105">    public LocalDateTime getOpenedAt() { return openedAt; }</span>
+<span class="nc" id="L106">    public void setOpenedAt(LocalDateTime openedAt) { this.openedAt = openedAt; }</span>
+
+<span class="fc" id="L108">    public LocalDateTime getDeferredDate() { return deferredDate; }</span>
+<span class="fc" id="L109">    public void setDeferredDate(LocalDateTime deferredDate) { this.deferredDate = deferredDate; }</span>
+
+<span class="fc" id="L111">    public String getCustomerDocOrPhone() { return customerDocOrPhone; }</span>
+<span class="fc" id="L112">    public void setCustomerDocOrPhone(String customerDocOrPhone) { this.customerDocOrPhone = customerDocOrPhone; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

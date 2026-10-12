@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Menu.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">com.syskewer.api.model.product</a> &gt; <span class="el_source">Menu.java</span></div><h1>Menu.java</h1><pre class="source lang-java linenums">package com.syskewer.api.model.product;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.syskewer.api.model.BaseEntity;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = &quot;tb_menu&quot;)
+public class Menu extends BaseEntity&lt;Integer&gt; {
+
+    @Column(nullable = false, length = 255)
+    private String name;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal price;
+
+    @ManyToOne
+    @JoinColumn(name = &quot;prep_location_id&quot;)
+    private PrepLocation prepLocation;
+
+    @ManyToOne
+    @JoinColumn(name = &quot;category_id&quot;)
+    private Category category;
+
+    @Column(nullable = false)
+    private Boolean active;
+
+    @ManyToMany
+    @JoinTable(
+        name = &quot;tb_menu_product&quot;,
+        joinColumns = @JoinColumn(name = &quot;menu_id&quot;),
+        inverseJoinColumns = @JoinColumn(name = &quot;product_id&quot;)
+    )
+<span class="pc" id="L44">    private List&lt;Product&gt; products = new ArrayList&lt;&gt;();</span>
+
+<span class="fc" id="L46">    public Menu() {}</span>
+
+<span class="nc" id="L48">    public Menu(String name, BigDecimal price, PrepLocation prepLocation, Category category, Boolean active) {</span>
+<span class="nc" id="L49">        this.name = name;</span>
+<span class="nc" id="L50">        this.price = price;</span>
+<span class="nc" id="L51">        this.prepLocation = prepLocation;</span>
+<span class="nc" id="L52">        this.category = category;</span>
+<span class="nc" id="L53">        this.active = active;</span>
+<span class="nc" id="L54">    }</span>
+
+<span class="fc" id="L56">    public String getName() { return name; }</span>
+<span class="fc" id="L57">    public void setName(String name) { this.name = name; }</span>
+
+<span class="fc" id="L59">    public BigDecimal getPrice() { return price; }</span>
+<span class="fc" id="L60">    public void setPrice(BigDecimal price) { this.price = price; }</span>
+
+<span class="fc" id="L62">    public PrepLocation getPrepLocation() { return prepLocation; }</span>
+<span class="fc" id="L63">    public void setPrepLocation(PrepLocation prepLocation) { this.prepLocation = prepLocation; }</span>
+
+<span class="nc" id="L65">    public Category getCategory() { return category; }</span>
+<span class="fc" id="L66">    public void setCategory(Category category) { this.category = category; }</span>
+
+<span class="fc" id="L68">    public Boolean getActive() { return active; }</span>
+<span class="fc" id="L69">    public void setActive(Boolean active) { this.active = active; }</span>
+
+<span class="fc" id="L71">    public List&lt;Product&gt; getProducts() { return products; }</span>
+<span class="fc" id="L72">    public void setProducts(List&lt;Product&gt; products) { this.products = products; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
